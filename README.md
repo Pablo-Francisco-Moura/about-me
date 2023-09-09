@@ -1,16 +1,14 @@
-### Hi there 👋
+```typescript
 
-<!--
-**Pablo-Francisco-Moura/Pablo-Francisco-Moura** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+import Developer from "Pablo-Francisco-Moura";
 
-Here are some ideas to get you started:
+class AboutMe extends Developer {
+  name = "Pablo Francisco Moura";
+  workspace = "Fullstack Developer";
+  company = "Unny.ai";
+  location = "Belo Horizonte - MG";
+}
 
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+class Skills extends Developer {
+  technologies  = ["HTML", "JavaScript", "TypeScript", "CSS", "ReactJS", "NodeJS", "PostgreSQL"];
+}
