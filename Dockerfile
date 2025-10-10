@@ -1,5 +1,5 @@
-# Dockerfile multi-stage: dev e prod
-FROM node:20-alpine AS base
+# Dockerfile multi-stage: dev and prod
+FROM node:20 AS base
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
