@@ -44,13 +44,13 @@ function App() {
             src={profile}
             alt="Avatar"
             style={{
-              width: 120,
-              height: 120,
+              width: 150,
+              height: 150,
               borderRadius: "50%",
               marginBottom: 16,
             }}
           />
-          <h1>Pablo Moura</h1>
+          <h1>Pablo Francisco Moura</h1>
           <h2 style={{ color: "#646cff", fontWeight: 400 }}>Programador</h2>
           <p>Bem-vindo ao meu portfólio!</p>
           <p>
@@ -61,7 +61,6 @@ function App() {
 
         <section
           style={{
-            flex: 1,
             width: "100%",
             border: "1px solid #ccc",
             padding: "12px",
@@ -99,7 +98,6 @@ function App() {
 
         <section
           style={{
-            flex: 1,
             width: "100%",
             border: "1px solid #ccc",
             padding: "12px",
@@ -158,8 +156,8 @@ function App() {
                 src={contact.image}
                 alt={contact.name}
                 style={{
-                  width: 45,
-                  height: 45,
+                  width: "60px",
+                  height: "60px",
                   marginRight: 8,
                   backgroundColor: "red",
                 }}
