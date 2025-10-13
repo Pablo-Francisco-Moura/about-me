@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { CONTACTS, SKILLS, WORKS } from "./constants/app";
-import { Alert, Button, Tooltip, Typography } from "@mui/material";
+import { Alert, Button, Tooltip, Typography, Fade } from "@mui/material";
 import profile from "./assets/profile.jpg";
 
 function App() {
-  const [alert, setAlert] = useState(true);
+  const [alert, setAlert] = useState(false);
 
   useEffect(() => {
+    setAlert(true);
     const timer = setTimeout(() => setAlert(false), 10000);
     return () => clearTimeout(timer);
   }, []);
@@ -42,22 +43,24 @@ function App() {
           backgroundColor: "#f9f9f9",
         }}
       >
-        <Alert
-          sx={{
-            display: alert ? "flex" : "none",
-            top: "30px",
-            left: "235px",
-            width: "calc(100% - 40px)",
-            zIndex: 1000,
-            position: "fixed",
-            maxWidth: 400,
-            transform: "translateX(-50%)",
-            boxShadow: "0 2px 8px rgba(0, 0, 0, 0.15)",
-          }}
-          severity="info"
-        >
-          Este é um portfólio em desenvolvimento. Logo teremos mais novidades!
-        </Alert>
+        <Fade in={alert} timeout={3000}>
+          <Alert
+            sx={{
+              top: "30px",
+              left: "235px",
+              width: "calc(100% - 40px)",
+              zIndex: 1000,
+              position: "fixed",
+              maxWidth: 400,
+              transform: "translateX(-50%)",
+              boxShadow: "0 2px 8px rgba(0, 0, 0, 0.15)",
+              transition: "all 0.6s cubic-bezier(.4,0,.2,1)",
+            }}
+            severity="info"
+          >
+            Este é um portfólio em desenvolvimento. Logo teremos mais novidades!
+          </Alert>
+        </Fade>
         <section
           style={{
             textAlign: "center",
