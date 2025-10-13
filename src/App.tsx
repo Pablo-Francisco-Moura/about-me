@@ -56,11 +56,12 @@ function App() {
         <Fade in={alert} timeout={3000}>
           <Alert
             sx={{
-              top: "30px",
-              left: "235px",
+              fontSize: isMobile ? "10px" : "14px",
+              top: isMobile ? "0px" : "30px",
+              left: isMobile ? "100px" : "235px",
               width: "calc(100% - 40px)",
               zIndex: 1000,
-              position: "fixed",
+              position: isMobile ? "relative" : "absolute",
               maxWidth: 400,
               transform: "translateX(-50%)",
               boxShadow: "0 2px 8px rgba(0, 0, 0, 0.15)",
@@ -243,7 +244,13 @@ function App() {
           </ul>
         </section>
 
-        <Typography align="center" variant="h6">
+        <Typography
+          sx={{
+            marginTop: "auto",
+          }}
+          align="center"
+          variant="h6"
+        >
           Thank you for visiting my portfolio!
         </Typography>
 
@@ -307,7 +314,7 @@ function App() {
             isMobile ? "Moura" : "Francisco Moura"
           } - 2025`}
         </Typography>
-        <Typography fontSize={10}>{`Versão 1.0.1${
+        <Typography fontSize={10}>{`Versão 1.0.2${
           isMobile ? "" : " - Última atualização: 13/10/2025"
         }`}</Typography>
       </div>
