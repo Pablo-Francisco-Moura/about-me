@@ -1,0 +1,16 @@
+version: "3.8"
+services:
+  pablo-francisco-moura:
+    build:
+      context: .
+      target: dev
+    ports:
+      - "5175:5175"
+    volumes:
+      - ./src:/app/src
+      - ./public:/app/public
+    working_dir: /app
+    command: npm run dev -- --host --port 5175
+    restart: unless-stopped
+    environment:
+      - CHOKIDAR_USEPOLLING=true
