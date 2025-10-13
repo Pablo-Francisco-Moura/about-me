@@ -15,6 +15,6 @@ export type TypeWork = {
   link: string;
   image: string;
   description: string;
-  information: string;
+  information: string[];
   files?: TypeFile[];
 };
