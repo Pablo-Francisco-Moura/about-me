@@ -1,8 +1,8 @@
 import type { TypeContact, TypeWork } from "../types/app";
-import emailImage from "../assets/email.jpg";
+import gmailImage from "../assets/gmail.png";
 import gitHubImage from "../assets/gitHub.png";
-import whatsappImage from "../assets/whatsapp.jpg";
-import linkedInImage from "../assets/linkedIn.png";
+import whatsappImage from "../assets/whatsapp.png";
+import linkedInImage from "../assets/linkedin.png";
 
 export const SKILLS: string[] = [
   "React",
@@ -25,24 +25,28 @@ export const SKILLS: string[] = [
 
 export const CONTACTS: TypeContact[] = [
   {
-    name: "whatsapp",
+    name: "Whatsapp",
     link: "https://wa.me/5531975994719",
     image: whatsappImage,
+    tooltip: "Entre em contato pelo WhatsApp",
   },
   {
-    name: "email",
+    name: "Gmail",
     link: "mailto:pablo.f.moura17@gmail.com",
-    image: emailImage,
+    image: gmailImage,
+    tooltip: "Envie um email",
   },
   {
-    name: "gitHub",
+    name: "GitHub",
     link: "https://github.com/Pablo-Francisco-Moura",
     image: gitHubImage,
+    tooltip: "Acesse meu GitHub",
   },
   {
-    name: "linkedIn",
+    name: "LinkedIn",
     link: "https://www.linkedin.com/in/pablo-francisco-moura/",
     image: linkedInImage,
+    tooltip: "Acesse meu LinkedIn",
   },
 ] as const;
 

@@ -147,16 +147,21 @@ function App() {
                 style={{
                   gap: "12px",
                   display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "start",
                   padding: "12px",
+                  alignItems: "start",
                   background: "#dadae5ff",
                   fontWeight: 500,
                   borderRadius: 8,
+                  flexDirection: "column",
+                  justifyContent: "center",
                 }}
               >
-                <Button variant="contained">{work.name}</Button>
+                <Button
+                  variant="contained"
+                  onClick={() => window.open(work.link, "_blank")}
+                >
+                  {work.name}
+                </Button>
                 <Typography color="text.primary">{work.description}</Typography>
                 <Typography color="text.primary">{work.information}</Typography>
               </div>
@@ -164,29 +169,45 @@ function App() {
           </ul>
         </section>
 
-        <section style={{ marginTop: "auto", textAlign: "center" }}>
+        <section
+          style={{
+            gap: 8,
+            display: "flex",
+            flexWrap: "wrap",
+            marginTop: "auto",
+            textAlign: "center",
+            justifyContent: "center",
+          }}
+        >
           {CONTACTS.map((contact) => (
-            <a
-              key={contact.name}
-              rel="noopener noreferrer"
-              href={contact.link}
-              style={{
-                marginRight: 16,
-                textTransform: "capitalize",
-              }}
-              target="_blank"
-            >
-              <img
-                src={contact.image}
-                alt={contact.name}
+            <Tooltip title={contact.tooltip} arrow>
+              <div
+                key={contact.name}
                 style={{
-                  width: "60px",
-                  height: "60px",
-                  marginRight: 8,
-                  backgroundColor: "red",
+                  border: "1px solid #ccc",
+                  cursor: "pointer",
+                  display: "flex",
+                  padding: "12px",
+                  alignItems: "center",
+                  borderRadius: "12px",
+                  flexDirection: "column",
+                  justifyContent: "center",
                 }}
-              />
-            </a>
+                onClick={() => {
+                  window.open(contact.link, "_blank");
+                }}
+              >
+                <img
+                  src={contact.image}
+                  alt={contact.name}
+                  style={{
+                    width: "60px",
+                    height: "60px",
+                  }}
+                />
+                <Typography>{contact.name}</Typography>
+              </div>
+            </Tooltip>
           ))}
         </section>
       </div>
