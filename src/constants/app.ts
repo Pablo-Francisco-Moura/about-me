@@ -57,7 +57,7 @@ export const WORKS: TypeWork[] = [
     description: "Plataforma de gestão financeira para controle de despesas.",
     image:
       "https://logodownload.org/wp-content/uploads/2019/07/easynvest-logo-1.png",
-    information: "Para logar use: user: admin | password: 123",
+    information: ["Para logar use:", "user: admin", "password: 123"],
     files: [
       {
         name: "Vídeo explicativo 1",

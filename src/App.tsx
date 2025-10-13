@@ -1,9 +1,18 @@
+import {
+  Fade,
+  Alert,
+  Button,
+  Tooltip,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
 import { useEffect, useState } from "react";
 import { CONTACTS, SKILLS, WORKS } from "./constants/app";
-import { Alert, Button, Tooltip, Typography, Fade } from "@mui/material";
 import profile from "./assets/profile.jpg";
 
 function App() {
+  const isMobile = useMediaQuery("(max-width: 500px)");
+
   const [alert, setAlert] = useState(false);
 
   useEffect(() => {
@@ -30,6 +39,7 @@ function App() {
           gap: "12px",
           flex: 1,
           border: "1px solid #ccc",
+          // border: `1px solid ${isMobile ? "red" : "#ccc"}`,
           display: "flex",
           padding: "20px",
           minWidth: "calc(100vw - 40px)",
@@ -64,7 +74,6 @@ function App() {
         <section
           style={{
             textAlign: "center",
-            marginBottom: 40,
           }}
         >
           <img
@@ -154,8 +163,9 @@ function App() {
                   alignItems: "start",
                   background: "#dadae5ff",
                   fontWeight: 500,
-                  borderRadius: 8,
+                  borderRadius: "10px",
                   justifyContent: "center",
+                  flexDirection: isMobile ? "column" : "row",
                 }}
               >
                 <div
@@ -169,8 +179,8 @@ function App() {
                   <Typography
                     color="text.primary"
                     sx={{
-                      display: "flex",
                       gap: "12px",
+                      display: "flex",
                       alignItems: "center",
                     }}
                   >
@@ -184,20 +194,34 @@ function App() {
                       </Button>
                     </Tooltip>
                   </Typography>
-                  <div>
-                    <Typography color="text.primary">
-                      {work.description}
-                    </Typography>
-                    <Typography color="text.primary">
-                      {work.information}
-                    </Typography>
+                  <Typography color="text.primary">
+                    {work.description}
+                  </Typography>
+                  <div
+                    style={{
+                      border: `${isMobile ? "1px" : "0px"} solid #bbbbbbff`,
+                      padding: "12px",
+                      borderRadius: "10px",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {work.information.map((info, index) => (
+                      <Typography key={index} color="text.primary">
+                        {info}
+                      </Typography>
+                    ))}
                   </div>
                 </div>
-                <div>
+                <div
+                  style={{
+                    minWidth: isMobile ? "100%" : undefined,
+                    maxWidth: "200px",
+                  }}
+                >
                   {work.files && (
                     <div
                       style={{
-                        gap: 8,
+                        gap: "8px",
                         display: "flex",
                         flexDirection: "column",
                       }}
@@ -219,12 +243,15 @@ function App() {
           </ul>
         </section>
 
+        <Typography align="center" variant="h6">
+          Thank you for visiting my portfolio!
+        </Typography>
+
         <section
           style={{
             gap: 8,
             display: "flex",
             flexWrap: "wrap",
-            marginTop: "auto",
             textAlign: "center",
             justifyContent: "center",
           }}
@@ -234,7 +261,9 @@ function App() {
               <div
                 key={contact.name}
                 style={{
-                  border: "1px solid #ccc",
+                  width: `${isMobile ? 60 : 80}px`,
+                  height: `${isMobile ? 60 : 80}px`,
+                  border: "1px solid #646cff",
                   cursor: "pointer",
                   display: "flex",
                   padding: "12px",
@@ -251,15 +280,36 @@ function App() {
                   src={contact.image}
                   alt={contact.name}
                   style={{
-                    width: "60px",
-                    height: "60px",
+                    width: "40px",
+                    height: "40px",
                   }}
                 />
-                <Typography>{contact.name}</Typography>
+                <Typography fontSize={isMobile ? 10 : 14}>
+                  {contact.name}
+                </Typography>
               </div>
             </Tooltip>
           ))}
         </section>
+      </div>
+      <div
+        style={{
+          flex: 1,
+          bottom: "0px",
+          display: "flex",
+          position: "absolute",
+          minWidth: "calc(100% - 40px)",
+          justifyContent: "space-between",
+        }}
+      >
+        <Typography fontSize={10}>
+          {`Desenvolvido por Pablo ${
+            isMobile ? "Moura" : "Francisco Moura"
+          } - 2025`}
+        </Typography>
+        <Typography fontSize={10}>{`Versão 1.0.1${
+          isMobile ? "" : " - Última atualização: 13/10/2025"
+        }`}</Typography>
       </div>
     </div>
   );
