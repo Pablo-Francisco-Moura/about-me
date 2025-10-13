@@ -152,18 +152,65 @@ function App() {
                   background: "#dadae5ff",
                   fontWeight: 500,
                   borderRadius: 8,
-                  flexDirection: "column",
                   justifyContent: "center",
                 }}
               >
-                <Button
-                  variant="contained"
-                  onClick={() => window.open(work.link, "_blank")}
+                <div
+                  style={{
+                    flex: 1,
+                    gap: "12px",
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
                 >
-                  {work.name}
-                </Button>
-                <Typography color="text.primary">{work.description}</Typography>
-                <Typography color="text.primary">{work.information}</Typography>
+                  <Typography
+                    color="text.primary"
+                    sx={{
+                      display: "flex",
+                      gap: "12px",
+                      alignItems: "center",
+                    }}
+                  >
+                    <strong>{work.name}</strong>
+                    <Tooltip title={"Acessar App"} arrow>
+                      <Button
+                        variant="contained"
+                        onClick={() => window.open(work.link, "_blank")}
+                      >
+                        Acessar
+                      </Button>
+                    </Tooltip>
+                  </Typography>
+                  <div>
+                    <Typography color="text.primary">
+                      {work.description}
+                    </Typography>
+                    <Typography color="text.primary">
+                      {work.information}
+                    </Typography>
+                  </div>
+                </div>
+                <div>
+                  {work.files && (
+                    <div
+                      style={{
+                        gap: 8,
+                        display: "flex",
+                        flexDirection: "column",
+                      }}
+                    >
+                      {work.files.map((file) => (
+                        <Button
+                          key={file.name}
+                          variant="outlined"
+                          onClick={() => window.open(file.link, "_blank")}
+                        >
+                          {file.name}
+                        </Button>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
             ))}
           </ul>

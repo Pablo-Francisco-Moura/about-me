@@ -5,10 +5,16 @@ export type TypeContact = {
   tooltip: string;
 };
 
+type TypeFile = {
+  name: string;
+  link: string;
+};
+
 export type TypeWork = {
   name: string;
   link: string;
-  description: string;
   image: string;
+  description: string;
   information: string;
+  files?: TypeFile[];
 };
