@@ -1,4 +1,5 @@
 import {
+  Box,
   Fade,
   Alert,
   Button,
@@ -57,13 +58,8 @@ function App() {
           <Alert
             sx={{
               fontSize: isMobile ? "10px" : "14px",
-              top: isMobile ? "0px" : "30px",
-              left: isMobile ? "100px" : "235px",
-              width: "calc(100% - 40px)",
-              zIndex: 1000,
-              position: isMobile ? "relative" : "absolute",
-              maxWidth: 400,
-              transform: "translateX(-50%)",
+              top: "30px",
+              width: "auto",
               boxShadow: "0 2px 8px rgba(0, 0, 0, 0.15)",
               transition: "all 0.6s cubic-bezier(.4,0,.2,1)",
             }}
@@ -188,8 +184,15 @@ function App() {
                     <strong>{work.name}</strong>
                     <Tooltip title={"Acessar App"} arrow>
                       <Button
-                        variant="contained"
+                        variant="outlined"
                         onClick={() => window.open(work.link, "_blank")}
+                        sx={{
+                          ":hover": {
+                            backgroundColor: "#646cff",
+                            color: "#fff",
+                          },
+                          transition: "background-color 1s, color 1s",
+                        }}
                       >
                         Acessar
                       </Button>
@@ -202,8 +205,8 @@ function App() {
                     style={{
                       border: `${isMobile ? "1px" : "0px"} solid #bbbbbbff`,
                       padding: "12px",
-                      borderRadius: "10px",
                       whiteSpace: "nowrap",
+                      borderRadius: "10px",
                     }}
                   >
                     {work.information.map((info, index) => (
@@ -229,6 +232,13 @@ function App() {
                     >
                       {work.files.map((file) => (
                         <Button
+                          sx={{
+                            ":hover": {
+                              color: "#fff",
+                              backgroundColor: "#646cff",
+                            },
+                            transition: "background-color 1s, color 1s",
+                          }}
                           key={file.name}
                           variant="outlined"
                           onClick={() => window.open(file.link, "_blank")}
@@ -265,9 +275,8 @@ function App() {
         >
           {CONTACTS.map((contact) => (
             <Tooltip title={contact.tooltip} arrow>
-              <div
-                key={contact.name}
-                style={{
+              <Box
+                sx={{
                   width: `${isMobile ? 60 : 80}px`,
                   height: `${isMobile ? 60 : 80}px`,
                   border: "1px solid #646cff",
@@ -278,7 +287,12 @@ function App() {
                   borderRadius: "12px",
                   flexDirection: "column",
                   justifyContent: "center",
+                  ":hover": {
+                    backgroundColor: "#646cff",
+                  },
+                  transition: "background-color 1s",
                 }}
+                key={contact.name}
                 onClick={() => {
                   window.open(contact.link, "_blank");
                 }}
@@ -294,27 +308,28 @@ function App() {
                 <Typography fontSize={isMobile ? 10 : 14}>
                   {contact.name}
                 </Typography>
-              </div>
+              </Box>
             </Tooltip>
           ))}
         </section>
       </div>
       <div
         style={{
+          gap: "12px",
           flex: 1,
           bottom: "0px",
           display: "flex",
-          position: "absolute",
+          position: "fixed",
           minWidth: "calc(100% - 40px)",
           justifyContent: "space-between",
         }}
       >
-        <Typography fontSize={10}>
+        <Typography noWrap fontSize={10}>
           {`Desenvolvido por Pablo ${
             isMobile ? "Moura" : "Francisco Moura"
           } - 2025`}
         </Typography>
-        <Typography fontSize={10}>{`Versão 1.0.2${
+        <Typography noWrap fontSize={10}>{`Versão 1.0.3${
           isMobile ? "" : " - Última atualização: 13/10/2025"
         }`}</Typography>
       </div>
