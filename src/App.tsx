@@ -2,13 +2,14 @@ import {
   Box,
   Fade,
   Alert,
-  Button,
   Tooltip,
   Typography,
   useMediaQuery,
 } from "@mui/material";
+import { Works } from "./components/works";
+import { Copyright } from "./components/Copyright";
+import { CONTACTS, SKILLS } from "./constants/app";
 import { useEffect, useState } from "react";
-import { CONTACTS, SKILLS, WORKS } from "./constants/app";
 import profile from "./assets/profile.jpg";
 
 function App() {
@@ -40,7 +41,6 @@ function App() {
           gap: "12px",
           flex: 1,
           border: "1px solid #ccc",
-          // border: `1px solid ${isMobile ? "red" : "#ccc"}`,
           display: "flex",
           padding: "20px",
           minWidth: "calc(100vw - 40px)",
@@ -150,107 +150,7 @@ function App() {
               flexDirection: "column",
             }}
           >
-            {WORKS.map((work) => (
-              <div
-                key={work.name}
-                style={{
-                  gap: "12px",
-                  display: "flex",
-                  padding: "12px",
-                  alignItems: "start",
-                  background: "#dadae5ff",
-                  fontWeight: 500,
-                  borderRadius: "10px",
-                  justifyContent: "center",
-                  flexDirection: isMobile ? "column" : "row",
-                }}
-              >
-                <div
-                  style={{
-                    flex: 1,
-                    gap: "12px",
-                    display: "flex",
-                    flexDirection: "column",
-                  }}
-                >
-                  <Typography
-                    color="text.primary"
-                    sx={{
-                      gap: "12px",
-                      display: "flex",
-                      alignItems: "center",
-                    }}
-                  >
-                    <strong>{work.name}</strong>
-                    <Tooltip title={"Acessar App"} arrow>
-                      <Button
-                        variant="outlined"
-                        onClick={() => window.open(work.link, "_blank")}
-                        sx={{
-                          ":hover": {
-                            backgroundColor: "#646cff",
-                            color: "#fff",
-                          },
-                          transition: "background-color 1s, color 1s",
-                        }}
-                      >
-                        Acessar
-                      </Button>
-                    </Tooltip>
-                  </Typography>
-                  <Typography color="text.primary">
-                    {work.description}
-                  </Typography>
-                  <div
-                    style={{
-                      border: `${isMobile ? "1px" : "0px"} solid #bbbbbbff`,
-                      padding: "12px",
-                      whiteSpace: "nowrap",
-                      borderRadius: "10px",
-                    }}
-                  >
-                    {work.information.map((info, index) => (
-                      <Typography key={index} color="text.primary">
-                        {info}
-                      </Typography>
-                    ))}
-                  </div>
-                </div>
-                <div
-                  style={{
-                    minWidth: isMobile ? "100%" : undefined,
-                    maxWidth: "200px",
-                  }}
-                >
-                  {work.files && (
-                    <div
-                      style={{
-                        gap: "8px",
-                        display: "flex",
-                        flexDirection: "column",
-                      }}
-                    >
-                      {work.files.map((file) => (
-                        <Button
-                          sx={{
-                            ":hover": {
-                              color: "#fff",
-                              backgroundColor: "#646cff",
-                            },
-                            transition: "background-color 1s, color 1s",
-                          }}
-                          key={file.name}
-                          variant="outlined"
-                          onClick={() => window.open(file.link, "_blank")}
-                        >
-                          {file.name}
-                        </Button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </div>
-            ))}
+            <Works />
           </ul>
         </section>
 
@@ -329,9 +229,7 @@ function App() {
             isMobile ? "Moura" : "Francisco Moura"
           } - 2025`}
         </Typography>
-        <Typography noWrap fontSize={10}>{`Versão 1.0.3${
-          isMobile ? "" : " - Última atualização: 13/10/2025"
-        }`}</Typography>
+        <Copyright isMobile={isMobile} />
       </div>
     </div>
   );
