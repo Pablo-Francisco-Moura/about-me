@@ -56,10 +56,14 @@ export function Works() {
   };
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div
+      style={{
+        padding: "20px",
+      }}
+    >
       <Slider {...settings}>
-        {WORKS.map((work) => (
-          <div key={work.title}>
+        {WORKS.map((work, idx) => (
+          <div key={work.title + idx}>
             <Work work={work} />
           </div>
         ))}
