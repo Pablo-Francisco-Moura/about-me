@@ -3,6 +3,8 @@ import gmailImage from "../assets/gmail.png";
 import gitHubImage from "../assets/gitHub.png";
 import whatsappImage from "../assets/whatsapp.png";
 import linkedInImage from "../assets/linkedin.png";
+import myGuidelinesImage from "../assets/myGuidelines.png";
+import financeManagerImage from "../assets/financeManager.png";
 
 export const SKILLS: string[] = [
   "React",
@@ -52,11 +54,10 @@ export const CONTACTS: TypeContact[] = [
 
 export const WORKS: TypeWork[] = [
   {
-    name: "Gestão Financeira",
     link: "https://finance-manager-eight-beta.vercel.app",
+    title: "Gestão Financeira",
+    image: financeManagerImage,
     description: "Plataforma de gestão financeira para controle de despesas.",
-    image:
-      "https://logodownload.org/wp-content/uploads/2019/07/easynvest-logo-1.png",
     information: ["Para logar use:", "user: admin", "password: 123"],
     files: [
       {
@@ -72,5 +73,14 @@ export const WORKS: TypeWork[] = [
         link: "https://www.loom.com/share/66b2f90ee3d14e75b80e0b3e5e200706?sid=49dca3f7-ca74-46b6-aa01-ab7ce4ff8d29",
       },
     ],
+  },
+  {
+    title: "Minhas diretrizes",
+    link: "https://my-guidelines.vercel.app",
+    image: myGuidelinesImage,
+    description:
+      "Guia Pessoal (Programador): Organize e acompanhe suas diretrizes.",
+    information: [],
+    files: [],
   },
 ] as const;

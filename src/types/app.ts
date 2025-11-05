@@ -11,9 +11,9 @@ type TypeFile = {
 };
 
 export type TypeWork = {
-  name: string;
+  title: string;
   link: string;
-  image: string;
+  image?: string;
   description: string;
   information: string[];
   files?: TypeFile[];
