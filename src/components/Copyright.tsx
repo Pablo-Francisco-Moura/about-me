@@ -6,14 +6,26 @@ interface Props {
 
 export function Copyright({ isMobile }: Props) {
   return (
-    <Typography
-      sx={{
-        color: "#fff",
+    <div
+      style={{
+        gap: "12px",
+        flex: 1,
+        bottom: "0px",
+        display: "flex",
+        position: "fixed",
+        minWidth: "calc(100% - 40px)",
+        justifyContent: "space-between",
       }}
-      noWrap
-      fontSize={10}
-    >{`Versão 1.0.5${
-      isMobile ? "" : " - Última atualização: 05/11/2025"
-    }`}</Typography>
+    >
+      <Typography noWrap fontSize={10}>
+        {`Desenvolvido por Pablo ${
+          isMobile ? "Moura" : "Francisco Moura"
+        } - 2025`}
+      </Typography>
+
+      <Typography noWrap fontSize={10}>{`Versão 1.0.5${
+        isMobile ? "" : " - Última atualização: 05/11/2025"
+      }`}</Typography>
+    </div>
   );
 }
