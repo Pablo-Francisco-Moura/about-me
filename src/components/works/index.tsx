@@ -1,10 +1,13 @@
 import { Work } from "./Work";
 import { WORKS } from "../../constants/app";
+import { useTranslation } from "react-i18next";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 export function Works() {
+  const { t } = useTranslation();
+
   const settings = {
     dots: true,
     infinite: true,
@@ -56,18 +59,30 @@ export function Works() {
   };
 
   return (
-    <div
+    <section
       style={{
-        padding: "20px",
+        border: "1px solid #ccc",
+        margin: "20px auto",
+        padding: "12px",
+        maxWidth: "1000px",
+        borderRadius: "10px",
+        backgroundColor: "#edeaeaff",
       }}
     >
-      <Slider {...settings}>
-        {WORKS.map((work, idx) => (
-          <div key={work.title + idx}>
-            <Work work={work} />
-          </div>
-        ))}
-      </Slider>
-    </div>
+      <h3>{t("works")}</h3>
+      <div
+        style={{
+          padding: "20px",
+        }}
+      >
+        <Slider {...settings}>
+          {WORKS.map((work, idx) => (
+            <div key={work.title + idx}>
+              <Work work={work} />
+            </div>
+          ))}
+        </Slider>
+      </div>
+    </section>
   );
 }
