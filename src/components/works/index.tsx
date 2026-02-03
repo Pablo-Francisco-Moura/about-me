@@ -1,6 +1,6 @@
-import Slider from "react-slick";
 import { Work } from "./Work";
 import { WORKS } from "../../constants/app";
+import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 

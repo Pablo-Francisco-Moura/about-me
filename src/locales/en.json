@@ -1,0 +1,39 @@
+{
+  "alert": {
+    "message": "This portfolio is under development. More updates coming soon!"
+  },
+  "description": {
+    "welcome": "Welcome to my portfolio!",
+    "role": "Full Stack Developer",
+    "intro": "Here you can find my main skills, works, and ways to contact me."
+  },
+  "skills": "Skills",
+  "works": "Works",
+  "work": {
+    "share": "Share",
+    "link_copied": "Link copied!",
+    "open": "Open",
+    "share_info": "Click to copy the link",
+    "open_info": "Click to access the project"
+  },
+  "finance_manager": {
+    "title": "Finance Manager",
+    "description": "Financial management platform for expense control."
+  },
+  "my_guidelines": {
+    "title": "My Guidelines",
+    "description": "Personal Guide (Developer): Organize and track your guidelines."
+  },
+  "thanks": "Thank you for visiting my portfolio!",
+  "contacts": {
+    "whatsapp": "Contact me via WhatsApp",
+    "email": "Send an email",
+    "gitHub": "Visit my GitHub",
+    "linkedIn": "Visit my LinkedIn"
+  },
+  "copyright": {
+    "developed_by": "Developed by",
+    "version": "Version",
+    "last_updated": "Last updated"
+  }
+}

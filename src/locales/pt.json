@@ -1,0 +1,39 @@
+{
+  "alert": {
+    "message": "Este é um portfólio em desenvolvimento. Logo teremos mais novidades!"
+  },
+  "description": {
+    "welcome": "Bem-vindo ao meu portfólio!",
+    "role": "Programador Full Stack",
+    "intro": "Aqui você encontra minhas principais habilidades, trabalhos e formas de contato."
+  },
+  "skills": "Habilidades",
+  "works": "Trabalhos",
+  "work": {
+    "share": "Compartilhar",
+    "link_copied": "Link copiado!",
+    "open": "Abrir",
+    "share_info": "Clique para copiar o link",
+    "open_info": "Clique para acessar o projeto"
+  },
+  "finance_manager": {
+    "title": "Gerenciador Financeiro",
+    "description": "Plataforma de gestão financeira para controle de despesas."
+  },
+  "my_guidelines": {
+    "title": "Minhas Diretrizes",
+    "description": "Guia Pessoal (Programador): Organize e acompanhe suas diretrizes."
+  },
+  "thanks": "Obrigado por visitar meu portfólio!",
+  "contacts": {
+    "whatsapp": "Entre em contato pelo WhatsApp",
+    "email": "Envie um email",
+    "gitHub": "Acesse meu GitHub",
+    "linkedIn": "Acesse meu LinkedIn"
+  },
+  "copyright": {
+    "developed_by": "Desenvolvido por",
+    "version": "Versão",
+    "last_updated": "Última atualização"
+  }
+}

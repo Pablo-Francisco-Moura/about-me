@@ -1,4 +1,6 @@
+import { Tooltip } from "@mui/material";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import type { TypeWork } from "../../types/app";
 import Card from "@mui/material/Card";
 import Button from "@mui/material/Button";
@@ -13,6 +15,8 @@ interface Props {
 }
 
 export function Work({ work }: Props) {
+  const { t } = useTranslation();
+
   const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {
@@ -40,22 +44,50 @@ export function Work({ work }: Props) {
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
-            {work.title}
+            {t(work.title)}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            {work.description}
+            {t(work.description)}
           </Typography>
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Button size="small" color="primary" onClick={handleCopy}>
-          Compartilhar
-        </Button>
-        {copied && (
-          <Typography variant="body2" color="success.main" sx={{ ml: 2 }}>
-            Link copiado!
-          </Typography>
-        )}
+        <Tooltip title={t("work.share_info")} arrow>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <Button size="small" color="primary" onClick={handleCopy}>
+              {t("work.share")}
+            </Button>
+            {copied && (
+              <Typography
+                variant="caption"
+                color="success.main"
+                sx={{
+                  textAlign: "center",
+                  ml: "8px",
+                  mt: "20px",
+                  position: "absolute",
+                }}
+              >
+                {t("work.link_copied")}
+              </Typography>
+            )}
+          </div>
+        </Tooltip>
+
+        <Tooltip title={t("work.open_info")} arrow>
+          <Button
+            size="small"
+            color="primary"
+            onClick={() => window.open(work.link, "_blank")}
+          >
+            {t("work.open")}
+          </Button>
+        </Tooltip>
       </CardActions>
     </Card>
   );

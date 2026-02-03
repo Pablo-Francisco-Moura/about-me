@@ -8,6 +8,7 @@ import {
 } from "@mui/material";
 import { Works } from "./components/works";
 import { Copyright } from "./components/Copyright";
+import { useTranslation } from "react-i18next";
 import { CONTACTS, SKILLS } from "./constants/app";
 import { useEffect, useState } from "react";
 import profile from "./assets/profile.jpg";
@@ -16,6 +17,7 @@ import "simplebar-react/dist/simplebar.min.css";
 
 function App() {
   const isMobile = useMediaQuery("(max-width: 500px)");
+  const { t } = useTranslation();
 
   const [alert, setAlert] = useState(false);
 
@@ -63,7 +65,7 @@ function App() {
             }}
             severity="info"
           >
-            Este é um portfólio em desenvolvimento. Logo teremos mais novidades!
+            {t("alert.message")}
           </Alert>
         </Fade>
 
@@ -84,24 +86,24 @@ function App() {
             }}
           />
           <h1>Pablo Francisco Moura</h1>
-          <h2 style={{ color: "#646cff", fontWeight: 400 }}>Programador</h2>
-          <p>Bem-vindo ao meu portfólio!</p>
-          <p>
-            Aqui você encontra minhas principais habilidades, trabalhos e formas
-            de contato.
-          </p>
+          <h2 style={{ color: "#646cff", fontWeight: 400 }}>
+            {t("description.role")}
+          </h2>
+          <p>{t("description.welcome")}</p>
+          <p>{t("description.intro")}</p>
         </section>
 
         <section
           style={{
+            margin: "auto",
             border: "1px solid #ccc",
             padding: "12px",
-            minWidth: "100%",
+            maxWidth: "1000px",
             borderRadius: "10px",
             backgroundColor: "#edeaeaff",
           }}
         >
-          <h3>Habilidades</h3>
+          <h3>{t("skills")}</h3>
           <ul
             style={{
               gap: 12,
@@ -130,16 +132,15 @@ function App() {
 
         <section
           style={{
-            width: "100%",
             border: "1px solid #ccc",
-            margin: "20px 0px",
+            margin: "20px auto",
             padding: "12px",
-            minWidth: "100%",
+            maxWidth: "1000px",
             borderRadius: "10px",
             backgroundColor: "#edeaeaff",
           }}
         >
-          <h3>Trabalhos</h3>
+          <h3>{t("works")}</h3>
           <Works />
         </section>
 
@@ -151,7 +152,7 @@ function App() {
           align="center"
           variant="h6"
         >
-          Thank you for visiting my portfolio!
+          {t("thanks")}
         </Typography>
 
         <section
@@ -164,7 +165,7 @@ function App() {
           }}
         >
           {CONTACTS.map((contact) => (
-            <Tooltip title={contact.tooltip} arrow>
+            <Tooltip title={t(`${contact.tooltip}`)} arrow>
               <Box
                 sx={{
                   width: `${isMobile ? 60 : 80}px`,
