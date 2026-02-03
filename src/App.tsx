@@ -13,7 +13,7 @@ import { useTranslation } from "react-i18next";
 import { CONTACTS, SKILLS } from "./constants/app";
 import { useEffect, useState } from "react";
 import type { TypeLanguageCode } from "./types/app";
-import i18n from "./i18n";
+import i18n from "./settings/i18n";
 import profile from "./assets/profile.jpg";
 import SimpleBar from "simplebar-react";
 import "simplebar-react/dist/simplebar.min.css";
