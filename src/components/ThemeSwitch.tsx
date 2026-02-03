@@ -1,4 +1,3 @@
-import { t } from "i18next";
 import { styled } from "@mui/material/styles";
 import { FormControlLabel, Switch } from "@mui/material";
 import type { TypeMode } from "../types/app.ts";
