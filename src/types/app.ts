@@ -1,3 +1,5 @@
+import type { ThemeOptions } from "@mui/material";
+
 export type TypeContact = {
   name: string;
   link: string;
@@ -20,3 +22,5 @@ export type TypeLanguage = {
 };
 
 export type TypeLanguageCode = "pt" | "en";
+
+export type TypeMode = "light" | "dark";

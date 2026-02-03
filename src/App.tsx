@@ -2,18 +2,24 @@ import { Works } from "./components/works";
 import { Skills } from "./components/Skills";
 import { Thanks } from "./components/Thanks";
 import { Contacts } from "./components/Contacts";
-import { Language } from "./components/Language";
 import { Copyright } from "./components/Copyright";
 import { Description } from "./components/Description";
+import { ThemeSwitch } from "./components/ThemeSwitch";
 import { AlertMessage } from "./components/Alert";
 import { useMediaQuery } from "@mui/material";
+import { LanguageSwitch } from "./components/LanguageSwitch";
 import { useEffect, useState } from "react";
-import type { TypeLanguageCode } from "./types/app";
+import type { TypeLanguageCode, TypeMode } from "./types/app";
 import i18n from "./settings/i18n";
 import SimpleBar from "simplebar-react";
 import "simplebar-react/dist/simplebar.min.css";
 
-function App() {
+interface AppProps {
+  mode: TypeMode;
+  setMode: (mode: TypeMode) => void;
+}
+
+function App({ mode, setMode }: AppProps) {
   const isMobile = useMediaQuery("(max-width: 500px)");
 
   const [lang, setLang] = useState(i18n.language as TypeLanguageCode);
@@ -56,7 +62,19 @@ function App() {
         flexDirection: "column",
       }}
     >
-      <Language lang={lang} handleChangeLanguage={handleChangeLanguage} />
+      <div
+        style={{
+          maxHeight: "32px",
+          marginLeft: "auto",
+        }}
+      >
+        <ThemeSwitch mode={mode} setMode={setMode} />
+
+        <LanguageSwitch
+          lang={lang}
+          handleChangeLanguage={handleChangeLanguage}
+        />
+      </div>
 
       <SimpleBar
         style={{
@@ -66,7 +84,7 @@ function App() {
           minHeight: `calc(100vh - ${padding * 2 + 44}px)`,
           maxHeight: `calc(100vh - ${padding * 2 + 44}px)`,
           borderRadius: "25px",
-          backgroundColor: "#f9f9f9",
+          backgroundColor: mode === "dark" ? "#232323" : "#f9f9f9",
         }}
       >
         <AlertMessage alert={alert} isMobile={isMobile} showAlert={showAlert} />

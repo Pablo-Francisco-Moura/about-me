@@ -7,12 +7,11 @@ interface Props {
   handleChangeLanguage: (lng: TypeLanguageCode) => void;
 }
 
-export function Language({ lang, handleChangeLanguage }: Props) {
+export function LanguageSwitch({ lang, handleChangeLanguage }: Props) {
   return (
     <ButtonGroup
       sx={{
         maxHeight: "32px",
-        marginLeft: "auto",
       }}
     >
       {LANGUAGES.map((language) => (

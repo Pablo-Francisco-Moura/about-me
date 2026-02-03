@@ -26,7 +26,11 @@ export function Work({ work }: Props) {
   };
 
   return (
-    <Card>
+    <Card
+      sx={{
+        backgroundColor: "background.b2",
+      }}
+    >
       <CardActionArea
         style={{
           display: "flex",

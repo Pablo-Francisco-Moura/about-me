@@ -1,11 +1,14 @@
 import { Work } from "./Work";
 import { WORKS } from "../../constants/app";
+import { useTheme } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 export function Works() {
+  const theme = useTheme();
+
   const { t } = useTranslation();
 
   const settings = {
@@ -52,7 +55,6 @@ export function Works() {
           width: "24px",
           height: "4px",
           borderRadius: "2px",
-          background: "#bdbdbd",
         }}
       />
     ),
@@ -66,7 +68,7 @@ export function Works() {
         padding: "12px",
         maxWidth: "1000px",
         borderRadius: "10px",
-        backgroundColor: "#edeaeaff",
+        backgroundColor: theme.palette.background.b1,
       }}
     >
       <h3>{t("works")}</h3>
