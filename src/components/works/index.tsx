@@ -1,10 +1,16 @@
-import Slider from "react-slick";
 import { Work } from "./Work";
 import { WORKS } from "../../constants/app";
+import { useTheme } from "@mui/material";
+import { useTranslation } from "react-i18next";
+import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 export function Works() {
+  const theme = useTheme();
+
+  const { t } = useTranslation();
+
   const settings = {
     dots: true,
     infinite: true,
@@ -49,25 +55,36 @@ export function Works() {
           width: "24px",
           height: "4px",
           borderRadius: "2px",
-          background: "#bdbdbd",
         }}
       />
     ),
   };
 
   return (
-    <div
+    <section
       style={{
-        padding: "20px",
+        border: "1px solid #ccc",
+        margin: "20px auto",
+        padding: "12px",
+        maxWidth: "1000px",
+        borderRadius: "10px",
+        backgroundColor: theme.palette.background.b1,
       }}
     >
-      <Slider {...settings}>
-        {WORKS.map((work, idx) => (
-          <div key={work.title + idx}>
-            <Work work={work} />
-          </div>
-        ))}
-      </Slider>
-    </div>
+      <h3>{t("works")}</h3>
+      <div
+        style={{
+          padding: "20px",
+        }}
+      >
+        <Slider {...settings}>
+          {WORKS.map((work, idx) => (
+            <div key={work.title + idx}>
+              <Work work={work} />
+            </div>
+          ))}
+        </Slider>
+      </div>
+    </section>
   );
 }
