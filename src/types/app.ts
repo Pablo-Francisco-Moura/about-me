@@ -11,3 +11,12 @@ export type TypeWork = {
   image?: string;
   description: string;
 };
+
+export type TypeLanguage = {
+  code: TypeLanguageCode;
+  label: string;
+  color: string;
+  countryCode: string;
+};
+
+export type TypeLanguageCode = "pt" | "en";

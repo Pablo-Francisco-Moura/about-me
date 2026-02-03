@@ -21,13 +21,13 @@ export function Copyright({ isMobile }: Props) {
       }}
     >
       <Typography noWrap fontSize={10}>
-        {`${t("developed_by")} Pablo ${
+        {`${t("copyright.developed_by")} Pablo ${
           isMobile ? "Moura" : "Francisco Moura"
         } - 2025`}
       </Typography>
 
-      <Typography noWrap fontSize={10}>{`${t("version")} 1.0.6${
-        isMobile ? "" : ` - ${t("last_updated")} 03/02/2026`
+      <Typography noWrap fontSize={10}>{`${t("copyright.version")}: 1.0.6${
+        isMobile ? "" : ` - ${t("copyright.last_updated")}: 03/02/2026`
       }`}</Typography>
     </div>
   );

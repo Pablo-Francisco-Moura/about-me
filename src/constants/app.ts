@@ -1,4 +1,4 @@
-import type { TypeContact, TypeWork } from "../types/app";
+import type { TypeContact, TypeLanguage, TypeWork } from "../types/app";
 import gmailImage from "../assets/gmail.png";
 import gitHubImage from "../assets/gitHub.png";
 import whatsappImage from "../assets/whatsapp.png";
@@ -65,4 +65,9 @@ export const WORKS: TypeWork[] = [
     image: myGuidelinesImage,
     description: "my_guidelines.description",
   },
+] as const;
+
+export const LANGUAGES: TypeLanguage[] = [
+  { code: "pt", label: "Português", countryCode: "br", color: "#3E9A00" },
+  { code: "en", label: "English", countryCode: "us", color: "#3C3B6E" },
 ] as const;
