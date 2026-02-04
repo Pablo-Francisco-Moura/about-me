@@ -24,7 +24,7 @@ export function LanguageSwitch({ lang, handleChangeLanguage }: Props) {
           variant={lang === language.code ? "contained" : "outlined"}
         >
           <img
-            src={`/src/assets/flag-${language.countryCode}.svg`}
+            src={language.image}
             alt={language.label}
             style={{
               width: 24,

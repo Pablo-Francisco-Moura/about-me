@@ -16,6 +16,7 @@ export type TypeLanguage = {
   code: TypeLanguageCode;
   label: string;
   color: string;
+  image: string;
   countryCode: string;
 };
 

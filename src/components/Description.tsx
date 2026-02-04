@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import imgProfile from "../assets/profile.jpg";
+import profileImage from "../assets/profile.jpg";
 
 export function Description() {
   const { t } = useTranslation();
@@ -12,7 +12,7 @@ export function Description() {
       }}
     >
       <img
-        src={imgProfile}
+        src={profileImage}
         alt="Avatar"
         style={{
           width: 150,

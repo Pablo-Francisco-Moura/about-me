@@ -5,6 +5,8 @@ import whatsappImage from "../assets/whatsapp.png";
 import linkedInImage from "../assets/linkedin.png";
 import myGuidelinesImage from "../assets/myGuidelines.png";
 import financeManagerImage from "../assets/financeManager.png";
+import brImage from "../assets/flag-br.svg";
+import usImage from "../assets/flag-us.svg";
 
 export const SKILLS: string[] = [
   "React",
@@ -68,6 +70,18 @@ export const WORKS: TypeWork[] = [
 ] as const;
 
 export const LANGUAGES: TypeLanguage[] = [
-  { code: "pt", label: "Português", countryCode: "br", color: "#3E9A00" },
-  { code: "en", label: "English", countryCode: "us", color: "#3C3B6E" },
+  {
+    code: "pt",
+    label: "Português",
+    image: brImage,
+    color: "#3E9A00",
+    countryCode: "br",
+  },
+  {
+    code: "en",
+    label: "English",
+    image: usImage,
+    color: "#3C3B6E",
+    countryCode: "us",
+  },
 ] as const;
