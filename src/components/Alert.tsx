@@ -1,14 +1,26 @@
-import { Alert, Fade } from "@mui/material";
 import { useTranslation } from "react-i18next";
+import { useEffect, useState } from "react";
+import { Alert, Fade, useMediaQuery } from "@mui/material";
 
-interface Props {
-  alert: boolean;
-  isMobile: boolean;
-  showAlert: boolean;
-}
-
-export function AlertMessage({ alert, isMobile, showAlert }: Props) {
+export function AlertMessage() {
   const { t } = useTranslation();
+  const isMobile = useMediaQuery("(max-width: 500px)");
+
+  const [alert, setAlert] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+
+  useEffect(() => {
+    setAlert(true);
+    const timer = setTimeout(() => setAlert(false), 10000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    setAlert(true);
+    const timer = setTimeout(() => setShowAlert(true), 13500);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <Fade
       style={{
@@ -20,7 +32,6 @@ export function AlertMessage({ alert, isMobile, showAlert }: Props) {
     >
       <Alert
         sx={{
-          mb: "20px",
           marginX: "auto",
           maxWidth: "530px",
           fontSize: isMobile ? "10px" : "14px",

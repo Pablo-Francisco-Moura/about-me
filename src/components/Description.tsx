@@ -18,7 +18,6 @@ export function Description() {
           width: 150,
           height: 150,
           borderRadius: "50%",
-          marginBottom: 16,
         }}
       />
       <h1>Pablo Francisco Moura</h1>

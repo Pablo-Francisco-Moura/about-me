@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import { usePreferencesStore } from "./store/storePreferences";
 import { useMediaQuery, useTheme } from "@mui/material";
 import SimpleBar from "simplebar-react";
+import MainLayout from "./components/MainLayout";
 import "simplebar-react/dist/simplebar.min.css";
 
 function App() {
@@ -18,22 +19,9 @@ function App() {
   const isMobile = useMediaQuery("(max-width: 500px)");
   const { mode } = usePreferencesStore();
 
-  const [alert, setAlert] = useState(false);
-  const [showAlert, setShowAlert] = useState(false);
-
-  useEffect(() => {
-    setAlert(true);
-    const timer = setTimeout(() => setAlert(false), 10000);
-    return () => clearTimeout(timer);
-  }, []);
-
-  useEffect(() => {
-    setAlert(true);
-    const timer = setTimeout(() => setShowAlert(true), 13500);
-    return () => clearTimeout(timer);
-  }, []);
-
   const padding: number = 20;
+
+  return <MainLayout />;
 
   return (
     <div
@@ -49,15 +37,6 @@ function App() {
         flexDirection: "column",
       }}
     >
-      <div
-        style={{
-          maxHeight: "32px",
-          marginLeft: "auto",
-        }}
-      >
-        <ThemeSwitch />
-        <LanguageSwitch />
-      </div>
       <SimpleBar
         style={{
           flex: 1,
@@ -69,8 +48,8 @@ function App() {
           backgroundColor: mode === "dark" ? "#232323" : "#f9f9f9",
         }}
       >
-        <AlertMessage alert={alert} isMobile={isMobile} showAlert={showAlert} />
-        <Description />
+        {/* <AlertMessage alert={alert} isMobile={isMobile} showAlert={showAlert} />
+        <Description /> */}
         <Skills />
         <Works />
         <Thanks />
