@@ -19,8 +19,12 @@ export function Contacts({ isMobile }: Props) {
         justifyContent: "center",
       }}
     >
-      {CONTACTS.map((contact) => (
-        <Tooltip title={t(`${contact.tooltip}`)} arrow>
+      {CONTACTS.map((contact, index) => (
+        <Tooltip
+          key={`${index}-${contact.name}`}
+          title={t(`${contact.tooltip}`)}
+          arrow
+        >
           <Box
             sx={{
               width: `${isMobile ? 60 : 80}px`,
@@ -38,7 +42,6 @@ export function Contacts({ isMobile }: Props) {
               },
               transition: "background-color 1s",
             }}
-            key={contact.name}
             onClick={() => {
               window.open(contact.link, "_blank");
             }}
