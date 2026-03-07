@@ -1,6 +1,7 @@
 import { Work } from "./Work";
 import { WORKS } from "../../constants/app";
 import { useTheme } from "@mui/material";
+import { Subtitle } from "../Subtitle";
 import { useTranslation } from "react-i18next";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -63,7 +64,7 @@ export function Works() {
   return (
     <section
       style={{
-        border: "1px solid #ccc",
+        border: `1px solid ${theme.palette.divider}`,
         margin: "20px auto",
         padding: "12px",
         maxWidth: "1000px",
@@ -71,7 +72,10 @@ export function Works() {
         backgroundColor: theme.palette.background.b1,
       }}
     >
-      <h3>{t("works")}</h3>
+      <Subtitle
+        subtitle={t("works.title")}
+        description={t("works.description")}
+      />
       <div
         style={{
           padding: "20px",

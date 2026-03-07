@@ -1,7 +1,6 @@
 # About Me – Portfólio Pessoal
 
 > Projeto front-end para portfólio pessoal, desenvolvido com React, Vite e TypeScript.
->
 > Permite apresentar seus trabalhos, habilidades e informações profissionais de forma moderna e responsiva.
 
 ---

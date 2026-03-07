@@ -7,8 +7,18 @@
     "role": "Full Stack Developer",
     "intro": "Here you can find my main skills, works, and ways to contact me."
   },
-  "skills": "Skills",
-  "works": "Works",
+  "skills": {
+    "title": "Skills",
+    "close": "Close",
+    "description": "Explore my technical skills and expertise.",
+    "the_website_of": "The website of",
+    "cannot_displayed": "it cannot be displayed here for security reasons.",
+    "open_in_new_tab": "Open in new tab"
+  },
+  "works": {
+    "title": "Works",
+    "description": "Discover my projects and professional experience."
+  },
   "work": {
     "share": "Share",
     "link_copied": "Link copied!",
@@ -23,6 +33,10 @@
   "my_guidelines": {
     "title": "My Guidelines",
     "description": "Personal Guide (Developer): Organize and track your guidelines."
+  },
+  "miniKanban": {
+    "title": "Mini Kanban",
+    "description": "A simple and intuitive Kanban board for task management."
   },
   "thanks": "Thank you for visiting my portfolio!",
   "contacts": {

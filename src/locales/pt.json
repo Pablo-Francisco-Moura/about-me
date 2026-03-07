@@ -7,8 +7,18 @@
     "role": "Desenvolvedor Full Stack",
     "intro": "Aqui você encontra minhas principais habilidades, trabalhos e formas de contato."
   },
-  "skills": "Habilidades",
-  "works": "Trabalhos",
+  "skills": {
+    "title": "Habilidades",
+    "close": "Fechar",
+    "description": "Explore minhas habilidades técnicas e experiência.",
+    "the_website_of": "O site do",
+    "cannot_displayed": "não pode ser exibido aqui por questões de segurança.",
+    "open_in_new_tab": "Abrir em nova aba"
+  },
+  "works": {
+    "title": "Trabalhos",
+    "description": "Descubra meus projetos e experiência profissional."
+  },
   "work": {
     "share": "Compartilhar",
     "link_copied": "Link copiado!",
@@ -23,6 +33,10 @@
   "my_guidelines": {
     "title": "Minhas Diretrizes",
     "description": "Guia Pessoal (Programador): Organize e acompanhe suas diretrizes."
+  },
+  "miniKanban": {
+    "title": "Mini Kanban",
+    "description": "Um quadro Kanban simples e intuitivo para gerenciamento de tarefas."
   },
   "thanks": "Obrigado por visitar meu portfólio!",
   "contacts": {

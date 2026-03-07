@@ -1,13 +1,10 @@
 import { styled } from "@mui/material/styles";
+import { usePreferencesStore } from "../store/storePreferences.ts";
 import { FormControlLabel, Switch } from "@mui/material";
-import type { TypeMode } from "../types/app.ts";
 
-interface Props {
-  mode: TypeMode;
-  setMode: (mode: TypeMode) => void;
-}
+export function ThemeSwitch() {
+  const { mode, setMode } = usePreferencesStore();
 
-export function ThemeSwitch({ mode, setMode }: Props) {
   const StyleThemeSwitch = styled(Switch)(({ theme }) => ({
     width: 62,
     height: 34,

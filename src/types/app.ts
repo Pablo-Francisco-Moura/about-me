@@ -23,3 +23,10 @@ export type TypeLanguage = {
 export type TypeLanguageCode = "pt" | "en";
 
 export type TypeMode = "light" | "dark";
+
+export type TypeSkill = {
+  name: string;
+  link: string;
+  image: string;
+  blocked: boolean;
+};
