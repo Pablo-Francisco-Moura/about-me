@@ -24,7 +24,8 @@
     "react-slick": "^0.31.0",
     "simplebar": "^6.3.2",
     "simplebar-react": "^3.3.2",
-    "slick-carousel": "^1.8.1"
+    "slick-carousel": "^1.8.1",
+    "zustand": "^5.0.11"
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",
