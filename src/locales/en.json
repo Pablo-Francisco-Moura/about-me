@@ -7,8 +7,15 @@
     "role": "Full Stack Developer",
     "intro": "Here you can find my main skills, works, and ways to contact me."
   },
-  "skills": "Skills",
-  "works": "Works",
+  "skills": {
+    "title": "Skills",
+    "close": "Close",
+    "description": "Explore my technical skills and expertise."
+  },
+  "works": {
+    "title": "Works",
+    "description": "Discover my projects and professional experience."
+  },
   "work": {
     "share": "Share",
     "link_copied": "Link copied!",

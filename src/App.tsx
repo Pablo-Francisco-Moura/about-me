@@ -1,5 +1,5 @@
 import { Works } from "./components/works";
-import { Skills } from "./components/Skills";
+import { Skills } from "./components/skills";
 import { Thanks } from "./components/Thanks";
 import { Contacts } from "./components/Contacts";
 import { Copyright } from "./components/Copyright";

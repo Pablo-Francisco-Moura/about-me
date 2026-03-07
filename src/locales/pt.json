@@ -7,8 +7,15 @@
     "role": "Desenvolvedor Full Stack",
     "intro": "Aqui você encontra minhas principais habilidades, trabalhos e formas de contato."
   },
-  "skills": "Habilidades",
-  "works": "Trabalhos",
+  "skills": {
+    "title": "Habilidades",
+    "close": "Fechar",
+    "description": "Explore minhas habilidades técnicas e experiência."
+  },
+  "works": {
+    "title": "Trabalhos",
+    "description": "Descubra meus projetos e experiência profissional."
+  },
   "work": {
     "share": "Compartilhar",
     "link_copied": "Link copiado!",
