@@ -15,7 +15,7 @@ export function Subtitle({ subtitle, description }: Props) {
       <h3>{subtitle}</h3>
       <p
         style={{
-          opacity: 0.7,
+          opacity: 0.5,
         }}
       >
         {description}

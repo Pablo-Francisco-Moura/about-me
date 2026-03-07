@@ -6,9 +6,9 @@ import { Copyright } from "./components/Copyright";
 import { Description } from "./components/Description";
 import { ThemeSwitch } from "./components/ThemeSwitch";
 import { AlertMessage } from "./components/Alert";
-import { useMediaQuery } from "@mui/material";
 import { LanguageSwitch } from "./components/LanguageSwitch";
 import { useEffect, useState } from "react";
+import { useMediaQuery, useTheme } from "@mui/material";
 import type { TypeLanguageCode, TypeMode } from "./types/app";
 import i18n from "./settings/i18n";
 import SimpleBar from "simplebar-react";
@@ -20,6 +20,7 @@ interface AppProps {
 }
 
 function App({ mode, setMode }: AppProps) {
+  const theme = useTheme();
   const isMobile = useMediaQuery("(max-width: 500px)");
 
   const [lang, setLang] = useState(i18n.language as TypeLanguageCode);
@@ -79,7 +80,7 @@ function App({ mode, setMode }: AppProps) {
       <SimpleBar
         style={{
           flex: 1,
-          border: "1px solid #ccc",
+          border: `1px solid ${theme.palette.divider}`,
           padding: `${padding}px`,
           minHeight: `calc(100vh - ${padding * 2 + 44}px)`,
           maxHeight: `calc(100vh - ${padding * 2 + 44}px)`,

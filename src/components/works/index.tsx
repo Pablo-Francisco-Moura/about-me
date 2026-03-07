@@ -64,7 +64,7 @@ export function Works() {
   return (
     <section
       style={{
-        border: "1px solid #ccc",
+        border: `1px solid ${theme.palette.divider}`,
         margin: "20px auto",
         padding: "12px",
         maxWidth: "1000px",
