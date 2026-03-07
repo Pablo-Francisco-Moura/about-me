@@ -10,7 +10,10 @@
   "skills": {
     "title": "Habilidades",
     "close": "Fechar",
-    "description": "Explore minhas habilidades técnicas e experiência."
+    "description": "Explore minhas habilidades técnicas e experiência.",
+    "the_website_of": "O site do",
+    "cannot_displayed": "não pode ser exibido aqui por questões de segurança.",
+    "open_in_new_tab": "Abrir em nova aba"
   },
   "works": {
     "title": "Trabalhos",

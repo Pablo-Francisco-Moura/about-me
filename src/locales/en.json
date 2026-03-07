@@ -10,7 +10,10 @@
   "skills": {
     "title": "Skills",
     "close": "Close",
-    "description": "Explore my technical skills and expertise."
+    "description": "Explore my technical skills and expertise.",
+    "the_website_of": "The website of",
+    "cannot_displayed": "it cannot be displayed here for security reasons.",
+    "open_in_new_tab": "Open in new tab"
   },
   "works": {
     "title": "Works",

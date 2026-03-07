@@ -4,29 +4,30 @@ import { useState } from "react";
 import { SkillSideBar } from "./SkillSideBar";
 import { useTranslation } from "react-i18next";
 import { Button, useTheme } from "@mui/material";
+import type { TypeSkill } from "../../types/app";
 
 export function Skills() {
   const theme = useTheme();
   const { t } = useTranslation();
 
-  const [sideBarUrl, setSideBarUrl] = useState<string>();
+  const [sideBarSkill, setSideBarSkill] = useState<TypeSkill>();
 
-  const handleSideBarUrl = (url: string) => {
-    if (url === sideBarUrl) {
+  const handleSideBarSkill = (skill: TypeSkill) => {
+    if (skill === sideBarSkill) {
       handleCloseSideBar();
     } else {
-      setSideBarUrl(url);
+      setSideBarSkill(skill);
     }
   };
 
   const handleCloseSideBar = () => {
-    setSideBarUrl(undefined);
+    setSideBarSkill(undefined);
   };
 
   return (
     <>
-      {sideBarUrl && (
-        <SkillSideBar url={sideBarUrl} onClose={handleCloseSideBar} />
+      {sideBarSkill && (
+        <SkillSideBar skill={sideBarSkill} onClose={handleCloseSideBar} />
       )}
       <section
         style={{
@@ -64,7 +65,7 @@ export function Skills() {
                 textTransform: "none",
               }}
               variant="outlined"
-              onClick={() => handleSideBarUrl(skill.link)}
+              onClick={() => handleSideBarSkill(skill)}
             >
               <img
                 src={skill.image}

@@ -28,4 +28,5 @@ export type TypeSkill = {
   name: string;
   link: string;
   image: string;
+  blocked: boolean;
 };
