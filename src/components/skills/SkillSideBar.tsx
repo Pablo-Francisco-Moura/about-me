@@ -1,5 +1,6 @@
 import { t } from "i18next";
 import { Button } from "@mui/material";
+import { useEffect, useState } from "react";
 
 interface Props {
   url: string;
@@ -7,6 +8,13 @@ interface Props {
 }
 
 export function SkillSideBar({ url, onClose }: Props) {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    setVisible(true);
+    return () => setVisible(false);
+  }, [url]);
+
   if (!url) return null;
 
   return (
@@ -20,6 +28,9 @@ export function SkillSideBar({ url, onClose }: Props) {
         display: "flex",
         position: "fixed",
         boxShadow: "2px 0 8px rgba(0,0,0,0.1)",
+        transform: visible ? "translateX(0)" : "translateX(-100%)",
+        transition: "transform 1s cubic-bezier(.4,0,.2,1)",
+        background: "#fff",
         borderRight: "1px solid #eee",
         flexDirection: "column",
       }}
