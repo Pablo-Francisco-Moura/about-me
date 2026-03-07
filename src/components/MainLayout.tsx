@@ -4,21 +4,18 @@ import { Works } from "./works";
 import { Header } from "./Header";
 import { Skills } from "./skills";
 import { Thanks } from "./Thanks";
+import { Profile } from "./Profile";
 import { Contacts } from "./Contacts";
 import { useState } from "react";
+import { Copyright } from "./Copyright";
 import { Description } from "./Description";
 import { AlertMessage } from "./Alert";
-import { usePreferencesStore } from "../store/storePreferences";
-import { useMediaQuery, useTheme } from "@mui/material";
+import { useMediaQuery } from "@mui/material";
 import { motion, useScroll, useMotionValueEvent } from "motion/react";
-import SimpleBar from "simplebar-react";
-import { Copyright } from "./Copyright";
 
 export default function MainLayout() {
-  const theme = useTheme();
   const isMobile = useMediaQuery("(max-width: 500px)");
 
-  const { mode } = usePreferencesStore();
   const { scrollY } = useScroll();
 
   const [hidden, setHidden] = useState(false);
@@ -31,8 +28,6 @@ export default function MainLayout() {
       setHidden(false);
     }
   });
-
-  const padding: number = 20;
 
   return (
     <div id="example">
@@ -55,70 +50,25 @@ export default function MainLayout() {
         >
           <Header />
           <AlertMessage />
-          <Description />
+          <Profile />
         </div>
       </motion.header>
 
       <main className="content">
-        <section className="hero">
-          <p>
-            Scroll down to hide header.
-            <br />
-            Scroll up to reveal header.
-          </p>
-        </section>
+        <section className="hero"></section>
 
-        {/* <SimpleBar
-          style={{
-            flex: 1,
-            border: `1px solid ${theme.palette.divider}`,
-            padding: `${padding}px`,
-            minHeight: `calc(100vh - ${padding * 2 + 44}px)`,
-            maxHeight: `calc(100vh - ${padding * 2 + 44}px)`,
-            borderRadius: "25px",
-            backgroundColor: mode === "dark" ? "#232323" : "#f9f9f9",
-          }}
-        > */}
-        {/* <AlertMessage alert={alert} isMobile={isMobile} showAlert={showAlert} />
-        <Description /> */}
+        <Description />
         <Skills />
         <Works />
         <Thanks />
         <Contacts isMobile={isMobile} />
-        {/* </SimpleBar> */}
         <Copyright isMobile={isMobile} />
-
-        {/* {Array.from({ length: 6 }).map((_, i) => (
-          <section key={i} className="placeholder-section">
-            <MotionLogo className="placeholder-logo" />
-          </section>
-        ))} */}
       </main>
 
       <StyleSheet />
     </div>
   );
 }
-
-// function MotionLogo({ className }: { className?: string }) {
-//   return (
-//     <svg
-//       xmlns="http://www.w3.org/2000/svg"
-//       viewBox="0 0 1260 454"
-//       className={className}
-//       fill="currentColor"
-//     >
-//       <path d="M475.753 0L226.8 453.6L0 453.6L194.392 99.4116C224.526 44.5081 299.724 0 362.353 0L475.753 0Z" />
-//       <path d="M1031.93 113.4C1031.93 50.7709 1082.7 0 1145.33 0C1207.96 0 1258.73 50.7709 1258.73 113.4C1258.73 176.029 1207.96 226.8 1145.33 226.8C1082.7 226.8 1031.93 176.029 1031.93 113.4Z" />
-//       <path d="M518.278 0L745.078 0L496.125 453.6L269.325 453.6L518.278 0Z" />
-//       <path d="M786.147 0L1012.95 0L818.555 354.188C788.422 409.092 713.223 453.6 650.594 453.6L537.194 453.6L786.147 0Z" />
-//     </svg>
-//   );
-// }
-
-/**
- * ==============   Styles   ================
- */
 
 function StyleSheet() {
   return (
@@ -142,7 +92,7 @@ function StyleSheet() {
 
             .header-content {
                 margin: 0 auto;
-                height: 450px;
+                height: 350px;
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
@@ -182,7 +132,7 @@ function StyleSheet() {
             }
 
             .hero {
-                height: 40vh;
+                height: 250px;
                 display: flex;
                 justify-content: center;
                 align-items: center;
