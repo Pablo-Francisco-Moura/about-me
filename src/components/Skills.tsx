@@ -1,6 +1,6 @@
 import { SKILLS } from "../constants/app";
-import { useTheme } from "@mui/material";
 import { useTranslation } from "react-i18next";
+import { Button, useTheme } from "@mui/material";
 
 export function Skills() {
   const theme = useTheme();
@@ -28,19 +28,33 @@ export function Skills() {
           listStyle: "none",
         }}
       >
-        {SKILLS.map((skill) => (
-          <li
-            key={skill}
+        {SKILLS.map((skill, index) => (
+          <Button
+            key={`${index}-${skill.name}`}
+            variant="outlined"
+            color="primary"
+            size="small"
             style={{
-              color: "#646cff",
-              padding: "8px 16px",
-              background: "#646cff22",
+              display: "flex",
+              flexDirection: "column",
               fontWeight: 500,
               borderRadius: 8,
+              textTransform: "none",
+            }}
+            onClick={() => {
+              window.open(skill.link, "_blank");
             }}
           >
-            {skill}
-          </li>
+            <img
+              src={skill.image}
+              alt={skill.name}
+              style={{
+                width: "40px",
+                height: "40px",
+              }}
+            />
+            {skill.name}
+          </Button>
         ))}
       </ul>
     </section>
