@@ -8,39 +8,25 @@ import { ThemeSwitch } from "./components/ThemeSwitch";
 import { AlertMessage } from "./components/Alert";
 import { LanguageSwitch } from "./components/LanguageSwitch";
 import { useEffect, useState } from "react";
+import { usePreferencesStore } from "./store/storePreferences";
 import { useMediaQuery, useTheme } from "@mui/material";
-import type { TypeLanguageCode, TypeMode } from "./types/app";
-import i18n from "./settings/i18n";
 import SimpleBar from "simplebar-react";
 import "simplebar-react/dist/simplebar.min.css";
 
-interface AppProps {
-  mode: TypeMode;
-  setMode: (mode: TypeMode) => void;
-}
-
-function App({ mode, setMode }: AppProps) {
+function App() {
   const theme = useTheme();
   const isMobile = useMediaQuery("(max-width: 500px)");
-
-  const [lang, setLang] = useState(i18n.language as TypeLanguageCode);
-
-  const handleChangeLanguage = (lng: TypeLanguageCode) => {
-    i18n.changeLanguage(lng);
-    setLang(lng);
-  };
+  const { mode } = usePreferencesStore();
 
   const [alert, setAlert] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
 
-  // Show alert on load.
   useEffect(() => {
     setAlert(true);
     const timer = setTimeout(() => setAlert(false), 10000);
     return () => clearTimeout(timer);
   }, []);
 
-  // Handle alert visibility.
   useEffect(() => {
     setAlert(true);
     const timer = setTimeout(() => setShowAlert(true), 13500);
@@ -69,14 +55,9 @@ function App({ mode, setMode }: AppProps) {
           marginLeft: "auto",
         }}
       >
-        <ThemeSwitch mode={mode} setMode={setMode} />
-
-        <LanguageSwitch
-          lang={lang}
-          handleChangeLanguage={handleChangeLanguage}
-        />
+        <ThemeSwitch />
+        <LanguageSwitch />
       </div>
-
       <SimpleBar
         style={{
           flex: 1,
@@ -89,18 +70,12 @@ function App({ mode, setMode }: AppProps) {
         }}
       >
         <AlertMessage alert={alert} isMobile={isMobile} showAlert={showAlert} />
-
         <Description />
-
         <Skills />
-
         <Works />
-
         <Thanks />
-
         <Contacts isMobile={isMobile} />
       </SimpleBar>
-
       <Copyright isMobile={isMobile} />
     </div>
   );

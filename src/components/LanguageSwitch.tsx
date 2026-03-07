@@ -1,13 +1,17 @@
 import { LANGUAGES } from "../constants/app";
 import { Button, ButtonGroup } from "@mui/material";
+import { usePreferencesStore } from "../store/storePreferences";
 import type { TypeLanguageCode } from "../types/app";
+import i18n from "../settings/i18n";
 
-interface Props {
-  lang: TypeLanguageCode;
-  handleChangeLanguage: (lng: TypeLanguageCode) => void;
-}
+export function LanguageSwitch() {
+  const { lang, setLang } = usePreferencesStore();
 
-export function LanguageSwitch({ lang, handleChangeLanguage }: Props) {
+  const handleChangeLanguage = (lng: TypeLanguageCode) => {
+    i18n.changeLanguage(lng);
+    setLang(lng);
+  };
+
   return (
     <ButtonGroup
       sx={{
