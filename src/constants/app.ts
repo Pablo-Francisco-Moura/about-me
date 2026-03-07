@@ -3,6 +3,7 @@ import gmailImage from "../assets/gmail.png";
 import gitHubImage from "../assets/gitHub.png";
 import whatsappImage from "../assets/whatsapp.png";
 import linkedInImage from "../assets/linkedin.png";
+import miniKanbanImage from "../assets/miniKanban.png";
 import myGuidelinesImage from "../assets/myGuidelines.png";
 import financeManagerImage from "../assets/financeManager.png";
 import brImage from "../assets/flag-br.svg";
@@ -62,8 +63,14 @@ export const WORKS: TypeWork[] = [
     description: "finance_manager.description",
   },
   {
-    title: "Minhas diretrizes",
+    link: "https://mini-kanban-portal.vercel.app/",
+    title: "miniKanban.title",
+    image: miniKanbanImage,
+    description: "miniKanban.description",
+  },
+  {
     link: "https://my-guidelines.vercel.app",
+    title: "my_guidelines.title",
     image: myGuidelinesImage,
     description: "my_guidelines.description",
   },

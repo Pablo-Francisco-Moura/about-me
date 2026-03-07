@@ -24,6 +24,10 @@
     "title": "My Guidelines",
     "description": "Personal Guide (Developer): Organize and track your guidelines."
   },
+  "miniKanban": {
+    "title": "Mini Kanban",
+    "description": "A simple and intuitive Kanban board for task management."
+  },
   "thanks": "Thank you for visiting my portfolio!",
   "contacts": {
     "whatsapp": "Contact me via WhatsApp",

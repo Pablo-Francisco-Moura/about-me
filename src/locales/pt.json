@@ -24,6 +24,10 @@
     "title": "Minhas Diretrizes",
     "description": "Guia Pessoal (Programador): Organize e acompanhe suas diretrizes."
   },
+  "miniKanban": {
+    "title": "Mini Kanban",
+    "description": "Um quadro Kanban simples e intuitivo para gerenciamento de tarefas."
+  },
   "thanks": "Obrigado por visitar meu portfólio!",
   "contacts": {
     "whatsapp": "Entre em contato pelo WhatsApp",
