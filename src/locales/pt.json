@@ -39,6 +39,43 @@
     "description": "Um quadro Kanban simples e intuitivo para gerenciamento de tarefas."
   },
   "thanks": "Obrigado por visitar meu portfólio!",
+  "terminal": {
+    "open": "Abrir terminal",
+    "welcome_title": "PABLO_OS [v1.0] — Terminal de bordo",
+    "welcome_help": "Digite 'help' para listar os comandos disponíveis.",
+    "prompt": "pablo@terminal:~$",
+    "cursor": "|",
+    "close": "Fechar terminal",
+    "command": {
+      "help": {
+        "translation": "Ajuda",
+        "description": "Mostra esta lista"
+      },
+      "about": {
+        "translation": "Sobre",
+        "description": "Exibe informações sobre o desenvolvedor",
+        "content": "Desenvolvedor Full Stack focado em ecossistemas modernos."
+      },
+      "projects": {
+        "translation": "Projetos",
+        "description": "Lista os projetos em destaque"
+      },
+      "skills": {
+        "translation": "Habilidades",
+        "description": "Mostra as habilidades técnicas"
+      },
+      "clear": {
+        "translation": "Limpar",
+        "description": "Limpa o histórico do terminal"
+      }
+    },
+    "available_commands": "Comandos disponíveis:",
+    "projects_title": "Projetos em Destaque:",
+    "window_title": "PABLO_OS / TERMINAL",
+    "errors": {
+      "command_not_found": "comando não encontrado: {{cmd}}. Digite '{{help}}' para ver os comandos."
+    }
+  },
   "contacts": {
     "whatsapp": "Entre em contato pelo WhatsApp",
     "email": "Envie um email",
