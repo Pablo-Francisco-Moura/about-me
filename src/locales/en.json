@@ -39,6 +39,43 @@
     "description": "A simple and intuitive Kanban board for task management."
   },
   "thanks": "Thank you for visiting my portfolio!",
+  "terminal": {
+    "open": "Open terminal",
+    "welcome_title": "PABLO_OS [v1.0] — Dashboard terminal",
+    "welcome_help": "Type 'help' to list the available commands.",
+    "prompt": "pablo@terminal:~$",
+    "cursor": "|",
+    "close": "Close terminal",
+    "command": {
+      "help": {
+        "translation": "Help",
+        "description": "Shows this list"
+      },
+      "about": {
+        "translation": "About",
+        "description": "Displays information about the developer",
+        "content": "Full Stack Developer focused on modern ecosystems."
+      },
+      "projects": {
+        "translation": "Projects",
+        "description": "Lists the featured projects"
+      },
+      "skills": {
+        "translation": "Skills",
+        "description": "Shows technical skills"
+      },
+      "clear": {
+        "translation": "Clear",
+        "description": "Clears the terminal history"
+      }
+    },
+    "available_commands": "Available commands:",
+    "projects_title": "Featured projects:",
+    "window_title": "PABLO_OS / TERMINAL",
+    "errors": {
+      "command_not_found": "command not found: {{cmd}}. Type '{{help}}' to see the commands."
+    }
+  },
   "contacts": {
     "whatsapp": "Contact me via WhatsApp",
     "email": "Send an email",

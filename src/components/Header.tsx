@@ -1,3 +1,4 @@
+import { Terminal } from "./Terminal";
 import { ThemeSwitch } from "./ThemeSwitch";
 import { LanguageSwitch } from "./LanguageSwitch";
 
@@ -11,6 +12,7 @@ export function Header() {
         marginLeft: "auto",
       }}
     >
+      <Terminal />
       <ThemeSwitch />
       <LanguageSwitch />
     </div>
