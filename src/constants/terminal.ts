@@ -27,4 +27,14 @@ export const CMDS: TypeCMD[] = [
     tooltip: "terminal.command.clear.translation",
     description: "terminal.command.clear.description",
   },
+  {
+    name: "history",
+    tooltip: "terminal.command.history.translation",
+    description: "terminal.command.history.description",
+  },
+  {
+    name: "quit",
+    tooltip: "terminal.command.quit.translation",
+    description: "terminal.command.quit.description",
+  },
 ] as const;
