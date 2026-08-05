@@ -1,11 +1,12 @@
-import profileImage from "../assets/profile.jpg";
+import profileImage from "../../assets/profile.jpg";
 
 export function Profile() {
   return (
     <section
       style={{
-        width: "100%",
         display: "flex",
+        minWidth: "150px",
+        maxWidth: "150px",
         position: "relative",
         textAlign: "center",
         alignItems: "center",

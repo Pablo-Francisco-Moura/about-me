@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import { Profile } from "../Profile";
+import { Profile } from "./Profile";
 import { Controls } from "./Controls";
 import { AlertMessage } from "../Alert";
 
