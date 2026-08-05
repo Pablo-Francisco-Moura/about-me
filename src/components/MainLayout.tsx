@@ -4,7 +4,7 @@ import { Skills } from "./skills";
 import { Thanks } from "./Thanks";
 import { motion } from "motion/react";
 import { Profile } from "./Profile";
-import { Controls } from "./headers/Controls";
+import { Header } from "./headers";
 import { Projects } from "./projects";
 import { Contacts } from "./Contacts";
 import { Copyright } from "./Copyright";
@@ -42,39 +42,7 @@ export default function MainLayout() {
 
   return (
     <div id="example" ref={exampleRef}>
-      <motion.header
-        className="header"
-        animate={{
-          y: hidden ? -240 : 0,
-          opacity: hidden ? 0 : 1,
-        }}
-        transition={{ duration: 0.3, ease: "easeInOut" }}
-        onWheel={(event) => {
-          event.stopPropagation();
-          event.currentTarget.closest("#example")?.scrollBy({
-            top: event.deltaY,
-            behavior: "auto",
-          });
-        }}
-      >
-        <div
-          className="header-content"
-          style={{
-            gap: "12px",
-            width: "100%",
-            display: "flex",
-            position: "relative",
-            marginTop: "12px",
-            alignItems: "center",
-            flexDirection: "column",
-            justifyContent: "center",
-          }}
-        >
-          <Controls />
-          <AlertMessage />
-          <Profile />
-        </div>
-      </motion.header>
+      <Header hidden={hidden} />
 
       <main className="content">
         <section className="hero" />
