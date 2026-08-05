@@ -67,6 +67,15 @@
       "clear": {
         "translation": "Clear",
         "description": "Clears the terminal history"
+      },
+      "history": {
+        "translation": "History",
+        "description": "Shows all typed commands during this session",
+        "empty": "No history available."
+      },
+      "quit": {
+        "translation": "Quit",
+        "description": "Closes the terminal"
       }
     },
     "available_commands": "Available commands:",

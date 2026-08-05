@@ -67,6 +67,15 @@
       "clear": {
         "translation": "Limpar",
         "description": "Limpa o histórico do terminal"
+      },
+      "history": {
+        "translation": "Histórico",
+        "description": "Mostra todos os comandos digitados nesta sessão",
+        "empty": "Nenhum histórico disponível."
+      },
+      "quit": {
+        "translation": "Sair",
+        "description": "Fecha o terminal"
       }
     },
     "available_commands": "Comandos disponíveis:",

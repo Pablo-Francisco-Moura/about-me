@@ -18,6 +18,7 @@ interface ICommandOutput {
   id: number;
   type: "user" | "system" | "error";
   content: string | string[] | ReactNode;
+  timestamp?: number;
 }
 
 interface Props {
@@ -112,7 +113,13 @@ export function TerminalModal({ isOpen, onClose }: Props) {
 
   const executeCommand = (cmd: string) => {
     const cleanCmd = cmd.trim().toLowerCase();
-    const userEntry = { id: Date.now(), type: "user" as const, content: cmd };
+    const timestamp = Date.now();
+    const userEntry = {
+      id: timestamp,
+      type: "user" as const,
+      content: cmd,
+      timestamp,
+    };
     const newSessionHistory: ICommandOutput[] = [...sessionHistory, userEntry];
     const newHistory: ICommandOutput[] = [...history, userEntry];
 
@@ -189,6 +196,54 @@ export function TerminalModal({ isOpen, onClose }: Props) {
         resetVisibleHistory();
         setInput("");
         setIsCursorActive(true);
+        return;
+
+      case "history": {
+        const userCommands = [...newSessionHistory]
+          .filter((item) => item.type === "user")
+          .map((item, index) => {
+            const executedAt = item.timestamp ? new Date(item.timestamp) : new Date(item.id);
+            return (
+              <Typography key={item.id} variant="body2">
+                {index + 1}. [{executedAt.toLocaleString()}] {item.content}
+              </Typography>
+            );
+          });
+
+        newHistory.push({
+          id: Date.now() + 1,
+          type: "system",
+          content: (
+            <Box sx={{ mt: 1, color: "#d0d7de" }}>
+              <Typography sx={{ color: "#f2cc60", fontWeight: 700 }}>
+                {t("terminal.command.history.translation")}
+              </Typography>
+              {userCommands.length > 0 ? (
+                userCommands
+              ) : (
+                <Typography variant="body2">
+                  {t("terminal.command.history.empty")}
+                </Typography>
+              )}
+            </Box>
+          ),
+        });
+
+        setHistory(newHistory);
+        setInput("");
+        setIsCursorActive(true);
+        return;
+      }
+
+      case "quit":
+        newHistory.push({
+          id: Date.now() + 1,
+          type: "system",
+          content: t("terminal.command.quit.translation"),
+        });
+        setHistory(newHistory);
+        setInput("");
+        onClose();
         return;
 
       default:
@@ -333,10 +388,27 @@ export function TerminalModal({ isOpen, onClose }: Props) {
             minHeight: 0,
             px: 2.2,
             py: 2,
+            pr: 1.2,
             overflowY: "auto",
             bgcolor: "#090c10",
             overscrollBehavior: "contain",
             cursor: "text",
+            scrollbarWidth: "thin",
+            scrollbarColor: "#3fb950 transparent",
+            "&::-webkit-scrollbar": {
+              width: 8,
+            },
+            "&::-webkit-scrollbar-track": {
+              background: "transparent",
+            },
+            "&::-webkit-scrollbar-thumb": {
+              backgroundColor: "rgba(63, 185, 80, 0.55)",
+              borderRadius: 999,
+              border: "1px solid rgba(255,255,255,0.08)",
+            },
+            "&::-webkit-scrollbar-thumb:hover": {
+              backgroundColor: "rgba(126, 231, 135, 0.8)",
+            },
           }}
         >
           <Stack spacing={1}>
