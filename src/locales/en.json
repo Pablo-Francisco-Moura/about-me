@@ -5,7 +5,7 @@
   "description": {
     "welcome": "Welcome to my portfolio!",
     "role": "Full Stack Developer",
-    "intro": "Here you can find my main skills, works, and ways to contact me."
+    "intro": "Here you can find my main skills, projects, and ways to contact me."
   },
   "skills": {
     "title": "Skills",
@@ -15,11 +15,11 @@
     "cannot_displayed": "it cannot be displayed here for security reasons.",
     "open_in_new_tab": "Open in new tab"
   },
-  "works": {
-    "title": "Works",
+  "projects": {
+    "title": "Projects",
     "description": "Discover my projects and professional experience."
   },
-  "work": {
+  "project": {
     "share": "Share",
     "link_copied": "Link copied!",
     "open": "Open",
