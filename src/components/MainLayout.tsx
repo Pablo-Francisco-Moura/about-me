@@ -1,27 +1,23 @@
 "use client";
 
-import { Header } from "./Header";
 import { Skills } from "./skills";
 import { Thanks } from "./Thanks";
-import { motion } from "motion/react";
-import { Profile } from "./Profile";
+import { Header } from "./headers";
 import { Projects } from "./projects";
 import { Contacts } from "./Contacts";
 import { Copyright } from "./Copyright";
 import { Description } from "./Description";
-import { AlertMessage } from "./Alert";
 import { useMediaQuery } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
-import bannerProfile from "../assets/bannerProfile.png";
 
 export default function MainLayout() {
-  const exampleRef = useRef<HTMLDivElement | null>(null);
+  const mainLayoutRef = useRef<HTMLDivElement | null>(null);
   const isMobile = useMediaQuery("(max-width: 500px)");
 
   const [hidden, setHidden] = useState(false);
 
   useEffect(() => {
-    const element = exampleRef.current;
+    const element = mainLayoutRef.current;
     if (!element) return;
 
     let previous = 0;
@@ -41,40 +37,8 @@ export default function MainLayout() {
   }, []);
 
   return (
-    <div id="example" ref={exampleRef}>
-      <motion.header
-        className="header"
-        animate={{
-          y: hidden ? -240 : 0,
-          opacity: hidden ? 0 : 1,
-        }}
-        transition={{ duration: 0.3, ease: "easeInOut" }}
-        onWheel={(event) => {
-          event.stopPropagation();
-          event.currentTarget.closest("#example")?.scrollBy({
-            top: event.deltaY,
-            behavior: "auto",
-          });
-        }}
-      >
-        <div
-          className="header-content"
-          style={{
-            gap: "12px",
-            width: "100%",
-            display: "flex",
-            position: "relative",
-            marginTop: "12px",
-            alignItems: "center",
-            flexDirection: "column",
-            justifyContent: "center",
-          }}
-        >
-          <Header />
-          <AlertMessage />
-          <Profile />
-        </div>
-      </motion.header>
+    <div id="main-layout" ref={mainLayoutRef}>
+      <Header hidden={hidden} />
 
       <main className="content">
         <section className="hero" />
@@ -99,7 +63,7 @@ function StyleSheet() {
                 overflow: hidden;
             }
 
-            #example {
+            #main-layout {
                 height: 100vh;
                 width: 100vw;
                 min-width: 100vw;
@@ -110,37 +74,37 @@ function StyleSheet() {
                 scrollbar-color: rgba(82, 120, 255, 0.65) transparent;
             }
 
-            #example::-webkit-scrollbar {
+            #main-layout::-webkit-scrollbar {
                 width: 8px;
                 height: 8px;
             }
 
-            #example::-webkit-scrollbar-button,
-            #example::-webkit-scrollbar-button:vertical:start,
-            #example::-webkit-scrollbar-button:vertical:end,
-            #example::-webkit-scrollbar-button:horizontal:start,
-            #example::-webkit-scrollbar-button,
-            #example::-webkit-scrollbar-button:horizontal:start,
-            #example::-webkit-scrollbar-button:horizontal:end,
-            #example::-webkit-scrollbar-button:vertical:start,
-            #example::-webkit-scrollbar-button:vertical:end {
+            #main-layout::-webkit-scrollbar-button,
+            #main-layout::-webkit-scrollbar-button:vertical:start,
+            #main-layout::-webkit-scrollbar-button:vertical:end,
+            #main-layout::-webkit-scrollbar-button:horizontal:start,
+            #main-layout::-webkit-scrollbar-button,
+            #main-layout::-webkit-scrollbar-button:horizontal:start,
+            #main-layout::-webkit-scrollbar-button:horizontal:end,
+            #main-layout::-webkit-scrollbar-button:vertical:start,
+            #main-layout::-webkit-scrollbar-button:vertical:end {
                 display: none !important;
                 width: 0 !important;
                 height: 0 !important;
                 background: transparent !important;
             }
 
-            #example::-webkit-scrollbar-track {
+            #main-layout::-webkit-scrollbar-track {
                 background: transparent;
             }
 
-            #example::-webkit-scrollbar-thumb {
+            #main-layout::-webkit-scrollbar-thumb {
                 background-color: rgba(82, 120, 255, 0.65);
                 border-radius: 999px;
                 border: 1px solid rgba(255, 255, 255, 0.08);
             }
 
-            #example::-webkit-scrollbar-thumb:hover {
+            #main-layout::-webkit-scrollbar-thumb:hover {
                 background-color: rgba(118, 160, 255, 0.85);
             }
 
@@ -149,27 +113,90 @@ function StyleSheet() {
                 top: 0;
                 left: 0;
                 right: 0;
-                background: linear-gradient(
-                    180deg,
-                    rgba(11, 16, 17, 0.9) 0%,
-                    rgba(11, 16, 17, 0.65) 35%,
-                    rgba(11, 16, 17, 0.8) 100%
-                ), url(${bannerProfile});
-                background-size: cover;
-                background-position: center;
-                background-repeat: no-repeat;
+                min-height: 350px;
+                overflow: hidden;
                 border-bottom: 1px solid #1d2628;
                 z-index: 100;
                 backdrop-filter: blur(12px);
             }
 
+            .header-background {
+                position: absolute;
+                inset: 0;
+                z-index: 0;
+                height: 100%;
+            }
+
+            .header-background .slick-slider,
+            .header-background .slick-list,
+            .header-background .slick-track,
+            .header-background .slick-slide > div {
+                height: 100%;
+            }
+
+            .header-background .slick-list {
+                cursor: grab;
+            }
+
+            .header-background .slick-list.slick-initialized:hover {
+                cursor: grab;
+            }
+
+            .header-background .slick-list.slick-dragging,
+            .header-background .slick-track.slick-dragging {
+                cursor: grabbing;
+            }
+
+            .header-content * {
+                cursor: auto;
+            }
+
+            .header-slide {
+                height: 100%;
+            }
+
+            .header-slide img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+            .header-background .slick-arrow,
+            .header-background .slick-dots {
+                z-index: 4;
+            }
+
+            .header-overlay {
+                position: absolute;
+                inset: 0;
+                background: linear-gradient(
+                    180deg,
+                    rgba(11, 16, 17, 0.7) 0%,
+                    rgba(11, 16, 17, 0.45) 35%,
+                    rgba(11, 16, 17, 0.6) 100%
+                );
+                z-index: 1;
+                pointer-events: none;
+            }
+
             .header-content {
+                position: relative;
+                z-index: 2;
                 margin: 0 auto;
                 height: 350px;
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
                 padding: 0 24px;
+                pointer-events: none;
+            }
+
+            .header-content > * {
+                pointer-events: auto;
+            }
+
+            .header-content > * {
+                pointer-events: auto;
             }
 
             .logo {

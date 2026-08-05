@@ -1,8 +1,8 @@
-import { Terminal } from "./Terminal";
-import { ThemeSwitch } from "./ThemeSwitch";
-import { LanguageSwitch } from "./LanguageSwitch";
+import { Terminal } from "../Terminal";
+import { ThemeSwitch } from "../ThemeSwitch";
+import { LanguageSwitch } from "../LanguageSwitch";
 
-export function Header() {
+export function Controls() {
   return (
     <div
       style={{
