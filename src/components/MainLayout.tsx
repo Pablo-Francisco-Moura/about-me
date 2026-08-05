@@ -9,7 +9,6 @@ import { Copyright } from "./Copyright";
 import { Description } from "./Description";
 import { useMediaQuery } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
-import banner from "../assets/banner.png";
 
 export default function MainLayout() {
   const mainLayoutRef = useRef<HTMLDivElement | null>(null);
@@ -114,27 +113,90 @@ function StyleSheet() {
                 top: 0;
                 left: 0;
                 right: 0;
-                background: linear-gradient(
-                    180deg,
-                    rgba(11, 16, 17, 0.9) 0%,
-                    rgba(11, 16, 17, 0.65) 35%,
-                    rgba(11, 16, 17, 0.8) 100%
-                ), url(${banner});
-                background-size: cover;
-                background-position: center;
-                background-repeat: no-repeat;
+                min-height: 350px;
+                overflow: hidden;
                 border-bottom: 1px solid #1d2628;
                 z-index: 100;
                 backdrop-filter: blur(12px);
             }
 
+            .header-background {
+                position: absolute;
+                inset: 0;
+                z-index: 0;
+                height: 100%;
+            }
+
+            .header-background .slick-slider,
+            .header-background .slick-list,
+            .header-background .slick-track,
+            .header-background .slick-slide > div {
+                height: 100%;
+            }
+
+            .header-background .slick-list {
+                cursor: grab;
+            }
+
+            .header-background .slick-list.slick-initialized:hover {
+                cursor: grab;
+            }
+
+            .header-background .slick-list.slick-dragging,
+            .header-background .slick-track.slick-dragging {
+                cursor: grabbing;
+            }
+
+            .header-content * {
+                cursor: auto;
+            }
+
+            .header-slide {
+                height: 100%;
+            }
+
+            .header-slide img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+            .header-background .slick-arrow,
+            .header-background .slick-dots {
+                z-index: 4;
+            }
+
+            .header-overlay {
+                position: absolute;
+                inset: 0;
+                background: linear-gradient(
+                    180deg,
+                    rgba(11, 16, 17, 0.7) 0%,
+                    rgba(11, 16, 17, 0.45) 35%,
+                    rgba(11, 16, 17, 0.6) 100%
+                );
+                z-index: 1;
+                pointer-events: none;
+            }
+
             .header-content {
+                position: relative;
+                z-index: 2;
                 margin: 0 auto;
                 height: 350px;
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
                 padding: 0 24px;
+                pointer-events: none;
+            }
+
+            .header-content > * {
+                pointer-events: auto;
+            }
+
+            .header-content > * {
+                pointer-events: auto;
             }
 
             .logo {
