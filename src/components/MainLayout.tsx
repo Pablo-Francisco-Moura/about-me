@@ -110,6 +110,21 @@ function StyleSheet() {
                 height: 8px;
             }
 
+            #example::-webkit-scrollbar-button,
+            #example::-webkit-scrollbar-button:vertical:start,
+            #example::-webkit-scrollbar-button:vertical:end,
+            #example::-webkit-scrollbar-button:horizontal:start,
+            #example::-webkit-scrollbar-button,
+            #example::-webkit-scrollbar-button:horizontal:start,
+            #example::-webkit-scrollbar-button:horizontal:end,
+            #example::-webkit-scrollbar-button:vertical:start,
+            #example::-webkit-scrollbar-button:vertical:end {
+                display: none !important;
+                width: 0 !important;
+                height: 0 !important;
+                background: transparent !important;
+            }
+
             #example::-webkit-scrollbar-track {
                 background: transparent;
             }
