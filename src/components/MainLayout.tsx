@@ -4,33 +4,43 @@ import { Works } from "./works";
 import { Header } from "./Header";
 import { Skills } from "./skills";
 import { Thanks } from "./Thanks";
+import { motion } from "motion/react";
 import { Profile } from "./Profile";
 import { Contacts } from "./Contacts";
-import { useState } from "react";
 import { Copyright } from "./Copyright";
 import { Description } from "./Description";
 import { AlertMessage } from "./Alert";
 import { useMediaQuery } from "@mui/material";
-import { motion, useScroll, useMotionValueEvent } from "motion/react";
+import { useEffect, useRef, useState } from "react";
 
 export default function MainLayout() {
+  const exampleRef = useRef<HTMLDivElement | null>(null);
   const isMobile = useMediaQuery("(max-width: 500px)");
-
-  const { scrollY } = useScroll();
 
   const [hidden, setHidden] = useState(false);
 
-  useMotionValueEvent(scrollY, "change", (current) => {
-    const previous = scrollY.getPrevious() ?? 0;
-    if (current > previous && current > 150) {
-      setHidden(true);
-    } else {
-      setHidden(false);
-    }
-  });
+  useEffect(() => {
+    const element = exampleRef.current;
+    if (!element) return;
+
+    let previous = 0;
+
+    const onScroll = () => {
+      const current = element.scrollTop;
+      if (current > previous && current > 150) {
+        setHidden(true);
+      } else {
+        setHidden(false);
+      }
+      previous = current;
+    };
+
+    element.addEventListener("scroll", onScroll, { passive: true });
+    return () => element.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
-    <div id="example">
+    <div id="example" ref={exampleRef}>
       <motion.header
         className="header"
         animate={{
@@ -38,6 +48,13 @@ export default function MainLayout() {
           opacity: hidden ? 0 : 1,
         }}
         transition={{ duration: 0.3, ease: "easeInOut" }}
+        onWheel={(event) => {
+          event.stopPropagation();
+          event.currentTarget.closest("#example")?.scrollBy({
+            top: event.deltaY,
+            behavior: "auto",
+          });
+        }}
       >
         <div
           className="header-content"
@@ -55,7 +72,7 @@ export default function MainLayout() {
       </motion.header>
 
       <main className="content">
-        <section className="hero"></section>
+        <section className="hero" />
 
         <Description />
         <Skills />
@@ -73,9 +90,38 @@ export default function MainLayout() {
 function StyleSheet() {
   return (
     <style>{`
+            body {
+                overflow: hidden;
+            }
+
             #example {
-                height: auto;
-                overflow: visible;
+                height: 100vh;
+                width: 100vw;
+                min-width: 100vw;
+                max-width: 100vw;
+                overflow-y: auto;
+                overscroll-behavior: contain;
+                scrollbar-width: thin;
+                scrollbar-color: rgba(82, 120, 255, 0.65) transparent;
+            }
+
+            #example::-webkit-scrollbar {
+                width: 8px;
+                height: 8px;
+            }
+
+            #example::-webkit-scrollbar-track {
+                background: transparent;
+            }
+
+            #example::-webkit-scrollbar-thumb {
+                background-color: rgba(82, 120, 255, 0.65);
+                border-radius: 999px;
+                border: 1px solid rgba(255, 255, 255, 0.08);
+            }
+
+            #example::-webkit-scrollbar-thumb:hover {
+                background-color: rgba(118, 160, 255, 0.85);
             }
 
             .header {
@@ -129,6 +175,8 @@ function StyleSheet() {
 
             .content {
                 padding-top: 140px;
+                display: flex;
+                flex-direction: column;
             }
 
             .hero {
