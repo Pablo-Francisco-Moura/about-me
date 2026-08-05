@@ -5,7 +5,7 @@
   "description": {
     "welcome": "Bem-vindo ao meu portfólio!",
     "role": "Desenvolvedor Full Stack",
-    "intro": "Aqui você encontra minhas principais habilidades, trabalhos e formas de contato."
+    "intro": "Aqui você encontra minhas principais habilidades, projetos e formas de contato."
   },
   "skills": {
     "title": "Habilidades",
@@ -15,11 +15,11 @@
     "cannot_displayed": "não pode ser exibido aqui por questões de segurança.",
     "open_in_new_tab": "Abrir em nova aba"
   },
-  "works": {
-    "title": "Trabalhos",
+  "projects": {
+    "title": "Projetos",
     "description": "Descubra meus projetos e experiência profissional."
   },
-  "work": {
+  "project": {
     "share": "Compartilhar",
     "link_copied": "Link copiado!",
     "open": "Abrir",

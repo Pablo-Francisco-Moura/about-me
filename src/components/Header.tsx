@@ -6,10 +6,13 @@ export function Header() {
   return (
     <div
       style={{
-        right: "12px",
+        top: "12px",
+        gap: "8px",
+        right: "24px",
+        display: "flex",
         position: "absolute",
-        maxHeight: "32px",
-        marginLeft: "auto",
+        alignItems: "center",
+        justifyContent: "center",
       }}
     >
       <Terminal />

@@ -1,7 +1,7 @@
 import type {
-  TypeWork,
   TypeSkill,
   TypeContact,
+  TypeProject,
   TypeLanguage,
 } from "../types/app";
 import gmailImage from "../assets/gmail.png";
@@ -151,7 +151,7 @@ export const CONTACTS: TypeContact[] = [
   },
 ] as const;
 
-export const WORKS: TypeWork[] = [
+export const PROJECTS: TypeProject[] = [
   {
     link: "https://finance-manager-eight-beta.vercel.app",
     title: "finance_manager.title",
