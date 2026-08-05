@@ -1,7 +1,7 @@
 import { motion } from "motion/react";
+import { Profile } from "../Profile";
 import { Controls } from "./Controls";
 import { AlertMessage } from "../Alert";
-import { Profile } from "../Profile";
 
 interface HeaderProps {
   hidden: boolean;
@@ -18,7 +18,7 @@ export function Header({ hidden }: HeaderProps) {
       transition={{ duration: 0.3, ease: "easeInOut" }}
       onWheel={(event) => {
         event.stopPropagation();
-        event.currentTarget.closest("#example")?.scrollBy({
+        event.currentTarget.closest("#main-layout")?.scrollBy({
           top: event.deltaY,
           behavior: "auto",
         });
