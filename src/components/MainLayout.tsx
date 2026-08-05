@@ -2,26 +2,23 @@
 
 import { Skills } from "./skills";
 import { Thanks } from "./Thanks";
-import { motion } from "motion/react";
-import { Profile } from "./Profile";
 import { Header } from "./headers";
 import { Projects } from "./projects";
 import { Contacts } from "./Contacts";
 import { Copyright } from "./Copyright";
 import { Description } from "./Description";
-import { AlertMessage } from "./Alert";
 import { useMediaQuery } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import bannerProfile from "../assets/bannerProfile.png";
 
 export default function MainLayout() {
-  const exampleRef = useRef<HTMLDivElement | null>(null);
+  const mainLayoutRef = useRef<HTMLDivElement | null>(null);
   const isMobile = useMediaQuery("(max-width: 500px)");
 
   const [hidden, setHidden] = useState(false);
 
   useEffect(() => {
-    const element = exampleRef.current;
+    const element = mainLayoutRef.current;
     if (!element) return;
 
     let previous = 0;
@@ -41,7 +38,7 @@ export default function MainLayout() {
   }, []);
 
   return (
-    <div id="example" ref={exampleRef}>
+    <div id="main-layout" ref={mainLayoutRef}>
       <Header hidden={hidden} />
 
       <main className="content">
@@ -67,7 +64,7 @@ function StyleSheet() {
                 overflow: hidden;
             }
 
-            #example {
+            #main-layout {
                 height: 100vh;
                 width: 100vw;
                 min-width: 100vw;
@@ -78,37 +75,37 @@ function StyleSheet() {
                 scrollbar-color: rgba(82, 120, 255, 0.65) transparent;
             }
 
-            #example::-webkit-scrollbar {
+            #main-layout::-webkit-scrollbar {
                 width: 8px;
                 height: 8px;
             }
 
-            #example::-webkit-scrollbar-button,
-            #example::-webkit-scrollbar-button:vertical:start,
-            #example::-webkit-scrollbar-button:vertical:end,
-            #example::-webkit-scrollbar-button:horizontal:start,
-            #example::-webkit-scrollbar-button,
-            #example::-webkit-scrollbar-button:horizontal:start,
-            #example::-webkit-scrollbar-button:horizontal:end,
-            #example::-webkit-scrollbar-button:vertical:start,
-            #example::-webkit-scrollbar-button:vertical:end {
+            #main-layout::-webkit-scrollbar-button,
+            #main-layout::-webkit-scrollbar-button:vertical:start,
+            #main-layout::-webkit-scrollbar-button:vertical:end,
+            #main-layout::-webkit-scrollbar-button:horizontal:start,
+            #main-layout::-webkit-scrollbar-button,
+            #main-layout::-webkit-scrollbar-button:horizontal:start,
+            #main-layout::-webkit-scrollbar-button:horizontal:end,
+            #main-layout::-webkit-scrollbar-button:vertical:start,
+            #main-layout::-webkit-scrollbar-button:vertical:end {
                 display: none !important;
                 width: 0 !important;
                 height: 0 !important;
                 background: transparent !important;
             }
 
-            #example::-webkit-scrollbar-track {
+            #main-layout::-webkit-scrollbar-track {
                 background: transparent;
             }
 
-            #example::-webkit-scrollbar-thumb {
+            #main-layout::-webkit-scrollbar-thumb {
                 background-color: rgba(82, 120, 255, 0.65);
                 border-radius: 999px;
                 border: 1px solid rgba(255, 255, 255, 0.08);
             }
 
-            #example::-webkit-scrollbar-thumb:hover {
+            #main-layout::-webkit-scrollbar-thumb:hover {
                 background-color: rgba(118, 160, 255, 0.85);
             }
 
