@@ -1,11 +1,11 @@
 "use client";
 
-import { Works } from "./works";
 import { Header } from "./Header";
 import { Skills } from "./skills";
 import { Thanks } from "./Thanks";
 import { motion } from "motion/react";
 import { Profile } from "./Profile";
+import { Projects } from "./projects";
 import { Contacts } from "./Contacts";
 import { Copyright } from "./Copyright";
 import { Description } from "./Description";
@@ -76,7 +76,7 @@ export default function MainLayout() {
 
         <Description />
         <Skills />
-        <Works />
+        <Projects />
         <Thanks />
         <Contacts isMobile={isMobile} />
         <Copyright isMobile={isMobile} />

@@ -9,8 +9,8 @@ import {
 } from "@mui/material";
 import type { FormEvent, ReactNode } from "react";
 import { CMDS } from "../../constants/terminal";
-import { SKILLS, WORKS } from "../../constants/app";
 import { useTranslation } from "react-i18next";
+import { SKILLS, PROJECTS } from "../../constants/app";
 import { X, Terminal as TerminalIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
@@ -168,9 +168,9 @@ export function TerminalModal({ isOpen, onClose }: Props) {
               <Typography sx={{ color: "#f2cc60" }}>
                 {t("terminal.projects_title")}
               </Typography>
-              {WORKS.map((work, index) => (
+              {PROJECTS.map((project, index) => (
                 <Typography key={index}>
-                  {index + 1}. {t(work.title)} — {t(work.description)}
+                  {index + 1}. {t(project.title)} — {t(project.description)}
                 </Typography>
               ))}
             </Box>
@@ -202,7 +202,9 @@ export function TerminalModal({ isOpen, onClose }: Props) {
         const userCommands = [...newSessionHistory]
           .filter((item) => item.type === "user")
           .map((item, index) => {
-            const executedAt = item.timestamp ? new Date(item.timestamp) : new Date(item.id);
+            const executedAt = item.timestamp
+              ? new Date(item.timestamp)
+              : new Date(item.id);
             return (
               <Typography key={item.id} variant="body2">
                 {index + 1}. [{executedAt.toLocaleString()}] {item.content}

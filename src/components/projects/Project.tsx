@@ -1,7 +1,7 @@
 import { Tooltip } from "@mui/material";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import type { TypeWork } from "../../types/app";
+import type { TypeProject } from "../../types/app";
 import Card from "@mui/material/Card";
 import Button from "@mui/material/Button";
 import CardMedia from "@mui/material/CardMedia";
@@ -11,16 +11,16 @@ import CardActions from "@mui/material/CardActions";
 import CardActionArea from "@mui/material/CardActionArea";
 
 interface Props {
-  work: TypeWork;
+  project: TypeProject;
 }
 
-export function Work({ work }: Props) {
+export function Project({ project }: Props) {
   const { t } = useTranslation();
 
   const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(work.link);
+    navigator.clipboard.writeText(project.link);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -37,26 +37,26 @@ export function Work({ work }: Props) {
           padding: "40px",
           flexDirection: "column",
         }}
-        onClick={() => window.open(work.link, "_blank")}
+        onClick={() => window.open(project.link, "_blank")}
       >
         <CardMedia
-          alt={work.title}
+          alt={project.title}
           width="140"
-          image={work.image}
+          image={project.image}
           height="140"
           component="img"
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
-            {t(work.title)}
+            {t(project.title)}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            {t(work.description)}
+            {t(project.description)}
           </Typography>
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Tooltip title={t("work.share_info")} arrow>
+        <Tooltip title={t("project.share_info")} arrow>
           <div
             style={{
               display: "flex",
@@ -64,7 +64,7 @@ export function Work({ work }: Props) {
             }}
           >
             <Button size="small" color="primary" onClick={handleCopy}>
-              {t("work.share")}
+              {t("project.share")}
             </Button>
             {copied && (
               <Typography
@@ -77,19 +77,19 @@ export function Work({ work }: Props) {
                   position: "absolute",
                 }}
               >
-                {t("work.link_copied")}
+                {t("project.link_copied")}
               </Typography>
             )}
           </div>
         </Tooltip>
 
-        <Tooltip title={t("work.open_info")} arrow>
+        <Tooltip title={t("project.open_info")} arrow>
           <Button
             size="small"
             color="primary"
-            onClick={() => window.open(work.link, "_blank")}
+            onClick={() => window.open(project.link, "_blank")}
           >
-            {t("work.open")}
+            {t("project.open")}
           </Button>
         </Tooltip>
       </CardActions>

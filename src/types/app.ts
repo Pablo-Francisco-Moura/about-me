@@ -5,7 +5,7 @@ export type TypeContact = {
   tooltip: string;
 };
 
-export type TypeWork = {
+export type TypeProject = {
   title: string;
   link: string;
   image?: string;

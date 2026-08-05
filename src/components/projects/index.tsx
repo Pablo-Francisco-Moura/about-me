@@ -1,5 +1,5 @@
-import { Work } from "./Work";
-import { WORKS } from "../../constants/app";
+import { Project } from "./Project";
+import { PROJECTS } from "../../constants/app";
 import { useTheme } from "@mui/material";
 import { Subtitle } from "../Subtitle";
 import { useTranslation } from "react-i18next";
@@ -7,7 +7,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-export function Works() {
+export function Projects() {
   const theme = useTheme();
 
   const { t } = useTranslation();
@@ -73,8 +73,8 @@ export function Works() {
       }}
     >
       <Subtitle
-        subtitle={t("works.title")}
-        description={t("works.description")}
+        subtitle={t("projects.title")}
+        description={t("projects.description")}
       />
       <div
         style={{
@@ -82,9 +82,9 @@ export function Works() {
         }}
       >
         <Slider {...settings}>
-          {WORKS.map((work, idx) => (
-            <div key={work.title + idx}>
-              <Work work={work} />
+          {PROJECTS.map((project, idx) => (
+            <div key={project.title + idx}>
+              <Project project={project} />
             </div>
           ))}
         </Slider>
