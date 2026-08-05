@@ -12,6 +12,7 @@ import { Description } from "./Description";
 import { AlertMessage } from "./Alert";
 import { useMediaQuery } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
+import bannerProfile from "../assets/bannerProfile.png";
 
 export default function MainLayout() {
   const exampleRef = useRef<HTMLDivElement | null>(null);
@@ -60,9 +61,13 @@ export default function MainLayout() {
           className="header-content"
           style={{
             gap: "12px",
+            width: "100%",
             display: "flex",
+            position: "relative",
             marginTop: "12px",
+            alignItems: "center",
             flexDirection: "column",
+            justifyContent: "center",
           }}
         >
           <Header />
@@ -144,11 +149,18 @@ function StyleSheet() {
                 top: 0;
                 left: 0;
                 right: 0;
-                background: rgba(11, 16, 17, 0.9);
+                background: linear-gradient(
+                    180deg,
+                    rgba(11, 16, 17, 0.9) 0%,
+                    rgba(11, 16, 17, 0.65) 35%,
+                    rgba(11, 16, 17, 0.8) 100%
+                ), url(${bannerProfile});
+                background-size: cover;
+                background-position: center;
+                background-repeat: no-repeat;
                 border-bottom: 1px solid #1d2628;
                 z-index: 100;
                 backdrop-filter: blur(12px);
-
             }
 
             .header-content {
