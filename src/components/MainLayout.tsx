@@ -1,10 +1,10 @@
 "use client";
 
-import { Header } from "./Header";
 import { Skills } from "./skills";
 import { Thanks } from "./Thanks";
 import { motion } from "motion/react";
 import { Profile } from "./Profile";
+import { Controls } from "./headers/Controls";
 import { Projects } from "./projects";
 import { Contacts } from "./Contacts";
 import { Copyright } from "./Copyright";
@@ -70,7 +70,7 @@ export default function MainLayout() {
             justifyContent: "center",
           }}
         >
-          <Header />
+          <Controls />
           <AlertMessage />
           <Profile />
         </div>
