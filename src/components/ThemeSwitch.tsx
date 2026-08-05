@@ -9,6 +9,7 @@ export function ThemeSwitch() {
     width: 62,
     height: 34,
     padding: 7,
+    marginRight: -20,
     "& .MuiSwitch-switchBase": {
       margin: 1,
       padding: 0,
@@ -65,9 +66,6 @@ export function ThemeSwitch() {
     <FormControlLabel
       control={
         <StyleThemeSwitch
-          sx={{
-            margin: "-18px 0px 0px 5px",
-          }}
           checked={mode === "dark"}
           onChange={() => setMode(mode === "light" ? "dark" : "light")}
         />
