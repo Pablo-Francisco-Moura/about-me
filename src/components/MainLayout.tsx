@@ -9,7 +9,7 @@ import { Copyright } from "./Copyright";
 import { Description } from "./Description";
 import { useMediaQuery } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
-import bannerProfile from "../assets/bannerProfile.png";
+import banner from "../assets/banner.png";
 
 export default function MainLayout() {
   const mainLayoutRef = useRef<HTMLDivElement | null>(null);
@@ -119,7 +119,7 @@ function StyleSheet() {
                     rgba(11, 16, 17, 0.9) 0%,
                     rgba(11, 16, 17, 0.65) 35%,
                     rgba(11, 16, 17, 0.8) 100%
-                ), url(${bannerProfile});
+                ), url(${banner});
                 background-size: cover;
                 background-position: center;
                 background-repeat: no-repeat;
