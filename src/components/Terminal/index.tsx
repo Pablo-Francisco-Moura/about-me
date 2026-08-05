@@ -6,8 +6,9 @@ import IconButton from "@mui/material/IconButton";
 import TerminalIcon from "@mui/icons-material/Terminal";
 
 export function Terminal() {
-  const [isOpen, setIsOpen] = useState(false);
   const { t } = useTranslation();
+
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <>
@@ -15,7 +16,6 @@ export function Terminal() {
         <IconButton
           aria-label={t("terminal.open")}
           sx={{
-            mt: -2,
             mr: 1,
             width: 33,
             height: 33,
