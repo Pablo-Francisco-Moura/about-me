@@ -1,4 +1,4 @@
-import { Terminal } from "../../Terminal";
+import { Terminal } from "../../terminal";
 import { ThemeSwitch } from "./ThemeSwitch";
 import { LanguageSwitch } from "./LanguageSwitch";
 
