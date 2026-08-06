@@ -1,12 +1,10 @@
 import { motion } from "motion/react";
 import { Profile } from "./Profile";
-import { Controls } from "./Controls";
+import { BANNERS } from "../../constants/app";
+import { Controls } from "./controls";
 import { AlertMessage } from "../Alert";
 import { useRef, useState } from "react";
 import Slider from "react-slick";
-import banner from "../../assets/banner.png";
-import banner2 from "../../assets/banner2.jpeg";
-import banner3 from "../../assets/banner3.png";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
@@ -14,11 +12,9 @@ interface Props {
   hidden: boolean;
 }
 
-const slides = [banner, banner2, banner3];
-
 export function Header({ hidden }: Props) {
-  const [currentSlide, setCurrentSlide] = useState(1);
   const sliderRef = useRef<Slider | null>(null);
+  const [currentSlide, setCurrentSlide] = useState(1);
 
   const resetAutoplay = () => {
     if (sliderRef.current) {
@@ -27,79 +23,88 @@ export function Header({ hidden }: Props) {
     }
   };
 
+  const goToSlide = (index: number) => {
+    sliderRef.current?.slickGoTo(index);
+    setCurrentSlide(index + 1);
+    resetAutoplay();
+  };
+
   const settings = {
     dots: true,
-    infinite: true,
     speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    arrows: true,
-    autoplay: true,
-    autoplaySpeed: 4000,
-    draggable: true,
     swipe: true,
+    arrows: true,
+    infinite: true,
+    autoplay: true,
     touchMove: true,
+    draggable: true,
+    slidesToShow: 1,
     pauseOnHover: false,
-    beforeChange: (_current: number, next: number) => setCurrentSlide(next + 1),
-    afterChange: () => resetAutoplay(),
-    onSwipe: () => resetAutoplay(),
+    autoplaySpeed: 4000,
+    slidesToScroll: 1,
     onEdge: () => resetAutoplay(),
+    onSwipe: () => resetAutoplay(),
     onLazyLoad: () => resetAutoplay(),
+    afterChange: () => resetAutoplay(),
+    beforeChange: (_current: number, next: number) => setCurrentSlide(next + 1),
+
     appendDots: (dots: React.ReactNode) => (
       <div
         style={{
-          position: "absolute",
-          bottom: "16px",
           width: "100%",
-          display: "flex",
-          justifyContent: "center",
           zIndex: 5,
+          bottom: "16px",
+          display: "flex",
+          position: "absolute",
+          justifyContent: "center",
         }}
       >
         <ul style={{ margin: "0px", padding: 0, display: "flex", gap: "10px" }}>
           {dots}
         </ul>
+
         <style>{`
           .slick-dots {
-            display: flex !important;
-            justify-content: center;
             width: 100%;
             margin: 0;
+            display: flex !important;
             padding: 0;
+            justify-content: center;
           }
           .slick-dots li {
-            display: inline-block;
             margin: 0 4px;
+            display: inline-block;
           }
           .slick-dots li button {
             width: 12px !important;
-            height: 12px !important;
-            border-radius: 999px !important;
-            background: #bdbdbd !important;
-            opacity: 1 !important;
             border: none !important;
+            height: 12px !important;
+            opacity: 1 !important;
+            background: #bdbdbd !important;
+            border-radius: 999px !important;
           }
           .slick-dots li.slick-active button {
             background: #646cff !important;
           }
           .slick-prev:before {
-            content: '';
-            margin-left: -10px;
-            display: inline-block;
             width: 34px;
             height: 34px;
+            content: '';
+            display: inline-block;
             background: url('data:image/svg+xml;utf8,<svg fill="%23646cff" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>') center/contain no-repeat;
+            margin-left: -10px;
           }
           .slick-next:before {
-            content: '';
-            display: inline-block;
             width: 34px;
             height: 34px;
+            content: '';
+            display: inline-block;
             background: url('data:image/svg+xml;utf8,<svg fill="%23646cff" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>') center/contain no-repeat;
           }
         `}</style>
       </div>
     ),
+
     customPaging: () => (
       <div style={{ width: "12px", height: "12px", borderRadius: "999px" }} />
     ),
@@ -123,13 +128,44 @@ export function Header({ hidden }: Props) {
     >
       <div className="header-background">
         <Slider ref={sliderRef} {...settings}>
-          {slides.map((src, index) => (
+          {BANNERS.map((src, index) => (
             <div key={index} className="header-slide">
               <img src={src} alt={`Banner ${index + 1}`} />
             </div>
           ))}
         </Slider>
+
         <div className="header-overlay" />
+      </div>
+
+      <div
+        style={{
+          left: "50%",
+          bottom: "16px",
+          zIndex: 5,
+          gap: "8px",
+          display: "flex",
+          position: "absolute",
+          transform: "translateX(-50%)",
+        }}
+      >
+        {BANNERS.map((_, index) => (
+          <button
+            key={index}
+            type="button"
+            aria-label={`Go to banner ${index + 1}`}
+            onClick={() => goToSlide(index)}
+            style={{
+              width: "12px",
+              height: "12px",
+              padding: 0,
+              border: "none",
+              cursor: "pointer",
+              borderRadius: "999px",
+              background: currentSlide === index + 1 ? "#646cff" : "#bdbdbd",
+            }}
+          />
+        ))}
       </div>
 
       <div
@@ -147,22 +183,25 @@ export function Header({ hidden }: Props) {
       >
         <div
           style={{
-            position: "absolute",
-            top: "16px",
-            right: "24px",
-            background: "rgba(0, 0, 0, 0.35)",
+            bottom: "12px",
+            right: "12px",
             color: "#f5f5f5",
-            padding: "6px 10px",
-            borderRadius: "999px",
-            fontSize: "12px",
-            letterSpacing: "0.03em",
             zIndex: 3,
+            padding: "6px 10px",
+            position: "absolute",
+            fontSize: "12px",
+            background: "rgba(0, 0, 0, 0.35)",
+            borderRadius: "999px",
+            letterSpacing: "0.03em",
           }}
         >
-          {currentSlide} / {slides.length}
+          {currentSlide} / {BANNERS.length}
         </div>
+
         <Controls />
+
         <AlertMessage />
+
         <Profile />
       </div>
     </motion.header>

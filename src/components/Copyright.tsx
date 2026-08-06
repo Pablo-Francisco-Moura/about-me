@@ -1,3 +1,4 @@
+import { COPYRIGHT } from "../constants/copyright";
 import { Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
@@ -21,13 +22,18 @@ export function Copyright({ isMobile }: Props) {
       }}
     >
       <Typography noWrap fontSize={10}>
-        {`${t("copyright.developed_by")} Pablo ${
-          isMobile ? "Moura" : "Francisco Moura"
-        } - 2025`}
+        {`${t("copyright.developed_by")} ${COPYRIGHT.firstName} ${
+          isMobile ? COPYRIGHT.lastName : COPYRIGHT.fullLastName
+        } - ${COPYRIGHT.year}`}
       </Typography>
 
-      <Typography noWrap fontSize={10}>{`${t("copyright.version")}: 1.0.6${
-        isMobile ? "" : ` - ${t("copyright.last_updated")}: 03/02/2026`
+      <Typography
+        noWrap
+        fontSize={10}
+      >{`${t("copyright.version")}: ${COPYRIGHT.version}${
+        isMobile
+          ? ""
+          : ` - ${t("copyright.last_updated")}: ${COPYRIGHT.lastUpdated}`
       }`}</Typography>
     </div>
   );

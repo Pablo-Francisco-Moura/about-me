@@ -30,3 +30,5 @@ export type TypeSkill = {
   image: string;
   blocked: boolean;
 };
+
+export type TypeBanner = string;

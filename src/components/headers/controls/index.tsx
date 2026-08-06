@@ -1,6 +1,6 @@
-import { Terminal } from "../Terminal";
-import { ThemeSwitch } from "../ThemeSwitch";
-import { LanguageSwitch } from "../LanguageSwitch";
+import { Terminal } from "../../terminal";
+import { ThemeSwitch } from "./ThemeSwitch";
+import { LanguageSwitch } from "./LanguageSwitch";
 
 export function Controls() {
   return (
@@ -15,8 +15,10 @@ export function Controls() {
         justifyContent: "center",
       }}
     >
-      <Terminal />
+      <Terminal hide={false} />
+
       <ThemeSwitch />
+
       <LanguageSwitch />
     </div>
   );

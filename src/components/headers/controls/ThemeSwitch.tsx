@@ -1,5 +1,5 @@
 import { styled } from "@mui/material/styles";
-import { usePreferencesStore } from "../store/storePreferences.ts";
+import { usePreferencesStore } from "../../../store/storePreferences.ts";
 import { FormControlLabel, Switch } from "@mui/material";
 
 export function ThemeSwitch() {

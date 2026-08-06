@@ -1,8 +1,8 @@
-import { LANGUAGES } from "../constants/app";
+import { LANGUAGES } from "../../../constants/app";
 import { Button, ButtonGroup } from "@mui/material";
-import { usePreferencesStore } from "../store/storePreferences";
-import type { TypeLanguageCode } from "../types/app";
-import i18n from "../settings/i18n";
+import { usePreferencesStore } from "../../../store/storePreferences";
+import type { TypeLanguageCode } from "../../../types/app";
+import i18n from "../../../settings/i18n";
 
 export function LanguageSwitch() {
   const { lang, setLang } = usePreferencesStore();
