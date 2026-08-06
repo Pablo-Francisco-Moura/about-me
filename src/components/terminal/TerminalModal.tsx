@@ -792,7 +792,8 @@ export function TerminalModal({ isOpen, onClose }: Props) {
           sx={{
             position: "fixed",
             left: 24,
-            top: 24,
+            top: "50%",
+            transform: "translateY(-50%)",
             width: 56,
             height: 56,
             zIndex: 1400,
@@ -805,6 +806,20 @@ export function TerminalModal({ isOpen, onClose }: Props) {
             justifyContent: "center",
             cursor: "pointer",
             color: "#7ee787",
+            animation: "terminalPulse 1.4s infinite",
+            transition: "transform 0.2s ease, box-shadow 0.2s ease",
+            "@keyframes terminalPulse": {
+              "0%, 100%": {
+                boxShadow: "0 0 0 2px rgba(137, 246, 146, 0.1)",
+                borderColor: "#6dfa79",
+                transform: "scale(1)",
+              },
+              "50%": {
+                boxShadow: "0 0 0 4px rgba(18, 232, 47, 0.46)",
+                borderColor: "#3afb54",
+                transform: "scale(1.04)",
+              },
+            },
           }}
         >
           <TerminalIcon size={24} />
