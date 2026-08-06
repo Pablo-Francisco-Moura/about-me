@@ -23,6 +23,12 @@ export function Header({ hidden }: Props) {
     }
   };
 
+  const goToSlide = (index: number) => {
+    sliderRef.current?.slickGoTo(index);
+    setCurrentSlide(index + 1);
+    resetAutoplay();
+  };
+
   const settings = {
     dots: true,
     speed: 500,
@@ -130,6 +136,36 @@ export function Header({ hidden }: Props) {
         </Slider>
 
         <div className="header-overlay" />
+      </div>
+
+      <div
+        style={{
+          left: "50%",
+          bottom: "16px",
+          zIndex: 5,
+          gap: "8px",
+          display: "flex",
+          position: "absolute",
+          transform: "translateX(-50%)",
+        }}
+      >
+        {BANNERS.map((_, index) => (
+          <button
+            key={index}
+            type="button"
+            aria-label={`Go to banner ${index + 1}`}
+            onClick={() => goToSlide(index)}
+            style={{
+              width: "12px",
+              height: "12px",
+              padding: 0,
+              border: "none",
+              cursor: "pointer",
+              borderRadius: "999px",
+              background: currentSlide === index + 1 ? "#646cff" : "#bdbdbd",
+            }}
+          />
+        ))}
       </div>
 
       <div

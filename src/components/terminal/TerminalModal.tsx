@@ -13,13 +13,9 @@ import type { FormEvent, MouseEvent as ReactMouseEvent } from "react";
 import { CMDS } from "../../constants/terminal";
 import { useTranslation } from "react-i18next";
 import { SKILLS, PROJECTS } from "../../constants/app";
-import {
-  X,
-  Maximize2,
-  Minimize2,
-  Terminal as TerminalIcon,
-} from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { X, Maximize2, Terminal as TerminalIcon } from "lucide-react";
+import MinimizeIcon from "@mui/icons-material/Minimize";
 
 interface Props {
   isOpen: boolean;
@@ -46,6 +42,9 @@ export function TerminalModal({ isOpen, onClose }: Props) {
 
   const [size, setSize] = useState({ width: 700, height: 350 });
   const [input, setInput] = useState("");
+  const [history, setHistory] = useState<TypeCommandOutput[]>(() =>
+    getInitialHistory(t),
+  );
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isDetached, setIsDetached] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
@@ -53,15 +52,21 @@ export function TerminalModal({ isOpen, onClose }: Props) {
   const [sessionHistory, setSessionHistory] = useState<TypeCommandOutput[]>(
     () => getInitialHistory(t),
   );
-  const [history, setHistory] = useState<TypeCommandOutput[]>(() =>
-    getInitialHistory(t),
-  );
+  const [minimizedPosition, setMinimizedPosition] = useState({
+    x: 24,
+    y: typeof window !== "undefined" ? window.innerHeight / 2 : 24,
+  });
 
   const inputRef = useRef<HTMLInputElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
   const dragStateRef = useRef<{ offsetX: number; offsetY: number } | null>(
     null,
   );
+  const minimizedDragStateRef = useRef<{
+    offsetX: number;
+    offsetY: number;
+  } | null>(null);
+  const minimizedDragMovedRef = useRef(false);
   const resizeStateRef = useRef<{
     direction: "se" | "sw" | "ne" | "nw";
     startX: number;
@@ -134,6 +139,32 @@ export function TerminalModal({ isOpen, onClose }: Props) {
     if (!isOpen) return;
 
     const handleMouseMove = (event: MouseEvent) => {
+      if (minimizedDragStateRef.current) {
+        minimizedDragMovedRef.current = true;
+        const margin = 24;
+        const width = 56;
+        const height = 56;
+        const maxX = Math.max(0, window.innerWidth - width - margin);
+        const maxY = Math.max(0, window.innerHeight - height - margin);
+
+        setMinimizedPosition({
+          x: Math.min(
+            maxX,
+            Math.max(
+              margin,
+              event.clientX - minimizedDragStateRef.current.offsetX,
+            ),
+          ),
+          y: Math.min(
+            maxY,
+            Math.max(
+              margin,
+              event.clientY - minimizedDragStateRef.current.offsetY,
+            ),
+          ),
+        });
+      }
+
       if (dragStateRef.current) {
         const nextPosition = {
           x: event.clientX - dragStateRef.current.offsetX,
@@ -191,6 +222,7 @@ export function TerminalModal({ isOpen, onClose }: Props) {
 
     const handleMouseUp = () => {
       dragStateRef.current = null;
+      minimizedDragStateRef.current = null;
       resizeStateRef.current = null;
     };
 
@@ -439,9 +471,33 @@ export function TerminalModal({ isOpen, onClose }: Props) {
   };
 
   const handleMinimize = () => {
-    setIsMinimized((current) => !current);
+    setIsMinimized(true);
     dragStateRef.current = null;
     resizeStateRef.current = null;
+  };
+
+  const handleRestore = () => {
+    if (minimizedDragMovedRef.current) {
+      minimizedDragMovedRef.current = false;
+      minimizedDragStateRef.current = null;
+      return;
+    }
+
+    setIsMinimized(false);
+    minimizedDragMovedRef.current = false;
+    dragStateRef.current = null;
+    minimizedDragStateRef.current = null;
+    resizeStateRef.current = null;
+  };
+
+  const handleMinimizedDragStart = (event: ReactMouseEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+    minimizedDragMovedRef.current = false;
+    minimizedDragStateRef.current = {
+      offsetX: event.clientX - minimizedPosition.x,
+      offsetY: event.clientY - minimizedPosition.y,
+    };
   };
 
   const terminalContent = () => (
@@ -515,9 +571,14 @@ export function TerminalModal({ isOpen, onClose }: Props) {
             placement="top"
           >
             <IconButton
+              onMouseDown={(event) => event.stopPropagation()}
               onClick={(event) => {
                 event.stopPropagation();
-                handleMinimize();
+                if (isMinimized) {
+                  handleRestore();
+                } else {
+                  handleMinimize();
+                }
               }}
               size="small"
               aria-label={
@@ -531,7 +592,7 @@ export function TerminalModal({ isOpen, onClose }: Props) {
                 },
               }}
             >
-              <Minimize2 size={16} />
+              <MinimizeIcon />
             </IconButton>
           </Tooltip>
 
@@ -540,6 +601,7 @@ export function TerminalModal({ isOpen, onClose }: Props) {
             placement="top"
           >
             <IconButton
+              onMouseDown={(event) => event.stopPropagation()}
               onClick={(event) => {
                 event.stopPropagation();
                 handleToggleDetached();
@@ -560,6 +622,7 @@ export function TerminalModal({ isOpen, onClose }: Props) {
 
           <Tooltip title={t("terminal.close")} placement="top">
             <IconButton
+              onMouseDown={(event) => event.stopPropagation()}
               onClick={(event) => {
                 event.stopPropagation();
                 onClose();
@@ -775,15 +838,17 @@ export function TerminalModal({ isOpen, onClose }: Props) {
     </Box>
   );
 
-  if (isMinimized && isDetached) {
+  if (isMinimized) {
     return (
       <Portal>
         <Box
-          onClick={handleMinimize}
+          onMouseDown={handleMinimizedDragStart}
+          onClick={handleRestore}
           sx={{
             position: "fixed",
-            left: 24,
-            top: 24,
+            left: minimizedPosition.x,
+            top: minimizedPosition.y,
+            transform: "translateY(-50%)",
             width: 56,
             height: 56,
             zIndex: 1400,
@@ -796,6 +861,20 @@ export function TerminalModal({ isOpen, onClose }: Props) {
             justifyContent: "center",
             cursor: "pointer",
             color: "#7ee787",
+            animation: "terminalPulse 1.4s infinite",
+            transition: "transform 0.2s ease, box-shadow 0.2s ease",
+            "@keyframes terminalPulse": {
+              "0%, 100%": {
+                boxShadow: "0 0 0 2px rgba(137, 246, 146, 0.1)",
+                borderColor: "#6dfa79",
+                transform: "scale(1)",
+              },
+              "50%": {
+                boxShadow: "0 0 0 4px rgba(18, 232, 47, 0.46)",
+                borderColor: "#3afb54",
+                transform: "scale(1.04)",
+              },
+            },
           }}
         >
           <TerminalIcon size={24} />
