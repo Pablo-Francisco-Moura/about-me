@@ -7,8 +7,8 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
-import type { FormEvent } from "react";
 import type { TypeCommandOutput } from "../../types/terminal";
+import type { FormEvent, MouseEvent as ReactMouseEvent } from "react";
 import { CMDS } from "../../constants/terminal";
 import { useTranslation } from "react-i18next";
 import { SKILLS, PROJECTS } from "../../constants/app";
@@ -39,6 +39,7 @@ export function TerminalModal({ isOpen, onClose }: Props) {
   const { t } = useTranslation();
 
   const [input, setInput] = useState("");
+  const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isCursorActive, setIsCursorActive] = useState(false);
   const [sessionHistory, setSessionHistory] = useState<TypeCommandOutput[]>(
     () => getInitialHistory(t),
@@ -49,6 +50,9 @@ export function TerminalModal({ isOpen, onClose }: Props) {
 
   const inputRef = useRef<HTMLInputElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const dragStateRef = useRef<{ offsetX: number; offsetY: number } | null>(
+    null,
+  );
   const promptLabel = t("terminal.prompt");
   const cursorSymbol = t("terminal.cursor");
 
@@ -79,6 +83,68 @@ export function TerminalModal({ isOpen, onClose }: Props) {
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [history]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const clampPosition = (x: number, y: number) => {
+      const margin = 24;
+      const width = 700;
+      const height = 350;
+      const maxX = Math.max(0, window.innerWidth - width - margin);
+      const maxY = Math.max(0, window.innerHeight - height - margin);
+
+      return {
+        x: Math.min(maxX, Math.max(margin, x)),
+        y: Math.min(maxY, Math.max(margin, y)),
+      };
+    };
+
+    setPosition(
+      clampPosition(
+        (window.innerWidth - 700) / 2,
+        (window.innerHeight - 350) / 2,
+      ),
+    );
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleMouseMove = (event: MouseEvent) => {
+      if (!dragStateRef.current) return;
+
+      const nextPosition = {
+        x: event.clientX - dragStateRef.current.offsetX,
+        y: event.clientY - dragStateRef.current.offsetY,
+      };
+
+      setPosition(() => {
+        const margin = 24;
+        const width = 700;
+        const height = 350;
+        const maxX = Math.max(0, window.innerWidth - width - margin);
+        const maxY = Math.max(0, window.innerHeight - height - margin);
+
+        return {
+          x: Math.min(maxX, Math.max(margin, nextPosition.x)),
+          y: Math.min(maxY, Math.max(margin, nextPosition.y)),
+        };
+      });
+    };
+
+    const handleMouseUp = () => {
+      dragStateRef.current = null;
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseup", handleMouseUp);
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, [isOpen]);
 
   const resetVisibleHistory = () => {
     setHistory([
@@ -271,6 +337,14 @@ export function TerminalModal({ isOpen, onClose }: Props) {
     executeCommand(cmd);
   };
 
+  const handleDragStart = (event: ReactMouseEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    dragStateRef.current = {
+      offsetX: event.clientX - position.x,
+      offsetY: event.clientY - position.y,
+    };
+  };
+
   return (
     <Dialog
       open={isOpen}
@@ -288,41 +362,49 @@ export function TerminalModal({ isOpen, onClose }: Props) {
       }}
       PaperProps={{
         sx: {
-          borderRadius: 3,
-          overflow: "hidden",
+          m: 0,
+          top: position.y,
+          left: position.x,
+          width: "700px",
+          height: "350px",
           bgcolor: "transparent",
+          maxWidth: "calc(100vw - 32px)",
+          overflow: "hidden",
+          position: "fixed",
           boxShadow: "0 24px 80px rgba(0, 0, 0, 0.45)",
-          width: { xs: "100%", sm: "min(92vw, 860px)" },
-          maxHeight: "85vh",
-          minHeight: "50vh",
-          m: { xs: 1, sm: 3 },
+          maxHeight: "calc(100vh - 32px)",
+          transform: "none",
+          borderRadius: 3,
         },
       }}
     >
       <Box
         sx={{
-          display: "flex",
-          flexDirection: "column",
-          height: "100%",
-          minHeight: "50vh",
-          maxHeight: "85vh",
-          bgcolor: "#0d1117",
           color: "#f0f6fc",
+          width: "100%",
           border: "1px solid #30363d",
-          borderRadius: 3,
+          height: "100%",
+          display: "flex",
+          bgcolor: "#0d1117",
           overflow: "hidden",
+          minHeight: 0,
           fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
+          borderRadius: 3,
+          flexDirection: "column",
         }}
       >
         <Box
+          onMouseDown={handleDragStart}
           sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
             px: 2,
             py: 1.1,
+            cursor: "grab",
+            display: "flex",
             bgcolor: "#161b22",
+            alignItems: "center",
+            userSelect: "none",
             borderBottom: "1px solid #30363d",
+            justifyContent: "space-between",
           }}
         >
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
@@ -330,24 +412,24 @@ export function TerminalModal({ isOpen, onClose }: Props) {
               sx={{
                 width: 12,
                 height: 12,
-                borderRadius: "50%",
                 bgcolor: "#f85149",
+                borderRadius: "50%",
               }}
             />
             <Box
               sx={{
                 width: 12,
                 height: 12,
-                borderRadius: "50%",
                 bgcolor: "#d29922",
+                borderRadius: "50%",
               }}
             />
             <Box
               sx={{
                 width: 12,
                 height: 12,
-                borderRadius: "50%",
                 bgcolor: "#3fb950",
+                borderRadius: "50%",
               }}
             />
             <TerminalIcon
@@ -355,8 +437,8 @@ export function TerminalModal({ isOpen, onClose }: Props) {
               style={{ color: "#7ee787", marginLeft: 4 }}
             />
             <Typography
-              variant="caption"
               sx={{ color: "#8b949e", letterSpacing: 1.2, fontWeight: 700 }}
+              variant="caption"
             >
               {t("terminal.window_title")}
             </Typography>
@@ -383,17 +465,17 @@ export function TerminalModal({ isOpen, onClose }: Props) {
         <Box
           onClick={focusInput}
           sx={{
-            flex: 1,
-            minHeight: 0,
             px: 2.2,
             py: 2,
             pr: 1.2,
-            overflowY: "auto",
-            bgcolor: "#090c10",
-            overscrollBehavior: "contain",
+            flex: 1,
             cursor: "text",
-            scrollbarWidth: "thin",
+            bgcolor: "#090c10",
+            minHeight: 0,
+            overflowY: "auto",
             scrollbarColor: "#3fb950 transparent",
+            scrollbarWidth: "thin",
+            overscrollBehavior: "contain",
             "&::-webkit-scrollbar": {
               width: 8,
             },
@@ -401,9 +483,9 @@ export function TerminalModal({ isOpen, onClose }: Props) {
               background: "transparent",
             },
             "&::-webkit-scrollbar-thumb": {
-              backgroundColor: "rgba(63, 185, 80, 0.55)",
-              borderRadius: 999,
               border: "1px solid rgba(255,255,255,0.08)",
+              borderRadius: 999,
+              backgroundColor: "rgba(63, 185, 80, 0.55)",
             },
             "&::-webkit-scrollbar-thumb:hover": {
               backgroundColor: "rgba(126, 231, 135, 0.8)",
@@ -416,15 +498,15 @@ export function TerminalModal({ isOpen, onClose }: Props) {
                 {item.type === "user" ? (
                   <Box
                     sx={{
-                      display: "flex",
-                      alignItems: "center",
                       gap: 1,
+                      display: "flex",
                       flexWrap: "wrap",
+                      alignItems: "center",
                     }}
                   >
                     <Typography
-                      component="span"
                       sx={{ color: "#7ee787", fontWeight: 700 }}
+                      component="span"
                     >
                       {promptLabel}
                     </Typography>
@@ -446,37 +528,37 @@ export function TerminalModal({ isOpen, onClose }: Props) {
               component="form"
               onSubmit={handleSubmit}
               sx={{
+                pt: 0.5,
+                gap: 0.5,
                 display: "flex",
                 alignItems: "center",
-                gap: 0.5,
-                pt: 0.5,
               }}
             >
               <Typography
-                component="span"
                 sx={{ color: "#7ee787", fontWeight: 700, whiteSpace: "nowrap" }}
+                component="span"
               >
                 {promptLabel}
               </Typography>
 
               <Box
                 sx={{
-                  position: "relative",
                   flex: 1,
-                  minWidth: 0,
                   display: "flex",
-                  alignItems: "center",
+                  minWidth: 0,
+                  position: "relative",
                   minHeight: "1.2em",
+                  alignItems: "center",
                 }}
               >
                 <Box
                   component="span"
                   sx={{
                     color: "#f0f6fc",
-                    fontFamily: "inherit",
                     fontSize: "0.95rem",
-                    whiteSpace: "pre-wrap",
                     wordBreak: "break-word",
+                    fontFamily: "inherit",
+                    whiteSpace: "pre-wrap",
                   }}
                 >
                   {input}
@@ -484,18 +566,18 @@ export function TerminalModal({ isOpen, onClose }: Props) {
                 <Box
                   component="span"
                   sx={{
-                    color: isCursorActive ? "#f0f6fc" : "transparent",
-                    fontFamily: "inherit",
-                    fontSize: "0.95rem",
-                    lineHeight: 1,
                     ml: 0.2,
+                    color: isCursorActive ? "#f0f6fc" : "transparent",
+                    fontSize: "0.95rem",
+                    fontFamily: "inherit",
+                    lineHeight: 1,
                   }}
                 >
                   {cursorSymbol}
                 </Box>
                 <InputBase
-                  inputRef={inputRef}
                   value={input}
+                  inputRef={inputRef}
                   onChange={(e) => setInput(e.target.value)}
                   onFocus={() => setIsCursorActive(true)}
                   onBlur={() => setIsCursorActive(false)}
@@ -503,17 +585,17 @@ export function TerminalModal({ isOpen, onClose }: Props) {
                   fullWidth
                   onClick={() => inputRef.current?.focus()}
                   sx={{
-                    position: "absolute",
                     inset: 0,
-                    opacity: 0,
                     width: "100%",
                     color: "transparent",
+                    opacity: 0,
+                    position: "absolute",
                     caretColor: "#7ee787",
                     "& input": {
-                      padding: 0,
-                      outline: "none",
                       width: "100%",
                       color: "transparent",
+                      padding: 0,
+                      outline: "none",
                       caretColor: "#7ee787",
                     },
                   }}
@@ -526,16 +608,16 @@ export function TerminalModal({ isOpen, onClose }: Props) {
 
         <Box
           sx={{
-            display: "flex",
-            flexWrap: "wrap",
-            alignItems: "center",
-            justifyContent: "flex-start",
-            gap: 1,
             px: 2,
             py: 1.2,
-            bgcolor: "#1f2937",
-            borderTop: "1px solid #30363d",
             mt: "auto",
+            gap: 1,
+            bgcolor: "#1f2937",
+            display: "flex",
+            flexWrap: "wrap",
+            borderTop: "1px solid #30363d",
+            alignItems: "center",
+            justifyContent: "flex-start",
           }}
         >
           {CMDS.map((cmd) => (
@@ -544,15 +626,15 @@ export function TerminalModal({ isOpen, onClose }: Props) {
               component="button"
               onClick={() => handleQuickCommand(cmd.name)}
               sx={{
-                border: 0,
-                bgcolor: "transparent",
                 color: "#f9fafb",
+                border: 0,
                 cursor: "pointer",
+                bgcolor: "transparent",
+                padding: 0,
                 fontFamily: "inherit",
                 fontWeight: 700,
                 letterSpacing: 0.8,
                 textTransform: "uppercase",
-                padding: 0,
                 "&:hover": { color: "#7ee787" },
               }}
             >
