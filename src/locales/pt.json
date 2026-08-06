@@ -10,14 +10,14 @@
   "skills": {
     "title": "Habilidades",
     "close": "Fechar",
-    "description": "Explore minhas habilidades técnicas e experiência.",
+    "description": "Minhas habilidades técnicas e experiência.",
     "the_website_of": "O site do",
     "cannot_displayed": "não pode ser exibido aqui por questões de segurança.",
     "open_in_new_tab": "Abrir em nova aba"
   },
   "projects": {
     "title": "Projetos",
-    "description": "Descubra meus projetos e experiência profissional."
+    "description": "Conheça meus projetos pessoais."
   },
   "project": {
     "share": "Compartilhar",
