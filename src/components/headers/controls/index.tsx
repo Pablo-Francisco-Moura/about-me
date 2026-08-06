@@ -15,7 +15,7 @@ export function Controls() {
         justifyContent: "center",
       }}
     >
-      <Terminal />
+      <Terminal hide={false} />
 
       <ThemeSwitch />
 
