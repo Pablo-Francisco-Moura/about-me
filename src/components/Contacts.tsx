@@ -16,7 +16,7 @@ export function Contacts({ isMobile }: Props) {
         display: "flex",
         flexWrap: "wrap",
         textAlign: "center",
-        marginBottom: "12px",
+        marginBottom: "25px",
         justifyContent: "center",
       }}
     >

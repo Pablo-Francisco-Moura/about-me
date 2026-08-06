@@ -40,14 +40,27 @@ export default function MainLayout() {
     <div id="main-layout" ref={mainLayoutRef}>
       <Header hidden={hidden} />
 
-      <main className="content">
+      <main
+        className="content"
+        style={{
+          gap: "20px",
+          display: "flex",
+          alignItems: "center",
+          flexDirection: "column",
+        }}
+      >
         <section className="hero" />
 
         <Description />
+
         <Skills />
+
         <Projects />
+
         <Thanks />
+
         <Contacts isMobile={isMobile} />
+
         <Copyright isMobile={isMobile} />
       </main>
 
