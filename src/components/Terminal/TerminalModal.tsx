@@ -13,7 +13,12 @@ import type { FormEvent, MouseEvent as ReactMouseEvent } from "react";
 import { CMDS } from "../../constants/terminal";
 import { useTranslation } from "react-i18next";
 import { SKILLS, PROJECTS } from "../../constants/app";
-import { X, Terminal as TerminalIcon } from "lucide-react";
+import {
+  X,
+  Maximize2,
+  Minimize2,
+  Terminal as TerminalIcon,
+} from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 interface Props {
@@ -43,6 +48,7 @@ export function TerminalModal({ isOpen, onClose }: Props) {
   const [input, setInput] = useState("");
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isDetached, setIsDetached] = useState(false);
+  const [isMinimized, setIsMinimized] = useState(false);
   const [isCursorActive, setIsCursorActive] = useState(false);
   const [sessionHistory, setSessionHistory] = useState<TypeCommandOutput[]>(
     () => getInitialHistory(t),
@@ -99,6 +105,7 @@ export function TerminalModal({ isOpen, onClose }: Props) {
   useEffect(() => {
     if (!isOpen) {
       setIsDetached(false);
+      setIsMinimized(false);
       return;
     }
 
@@ -415,6 +422,28 @@ export function TerminalModal({ isOpen, onClose }: Props) {
     };
   };
 
+  const handleToggleDetached = () => {
+    if (isDetached) {
+      setIsDetached(false);
+      setIsMinimized(false);
+      setSize({ width: 700, height: 350 });
+      dragStateRef.current = null;
+      resizeStateRef.current = null;
+      return;
+    }
+
+    setIsDetached(true);
+    setIsMinimized(false);
+    dragStateRef.current = null;
+    resizeStateRef.current = null;
+  };
+
+  const handleMinimize = () => {
+    setIsMinimized((current) => !current);
+    dragStateRef.current = null;
+    resizeStateRef.current = null;
+  };
+
   const terminalContent = () => (
     <Box
       sx={{
@@ -480,22 +509,75 @@ export function TerminalModal({ isOpen, onClose }: Props) {
           </Typography>
         </Box>
 
-        <Tooltip title={t("terminal.close")} placement="top">
-          <IconButton
-            onClick={onClose}
-            size="small"
-            aria-label={t("terminal.close")}
-            sx={{
-              color: "#8b949e",
-              "&:hover": {
-                color: "#ffffff",
-                bgcolor: "rgba(255,255,255,0.08)",
-              },
-            }}
+        <Box sx={{ display: "flex", alignItems: "center", gap: 0.6 }}>
+          <Tooltip
+            title={isMinimized ? "Restore terminal" : "Minimize terminal"}
+            placement="top"
           >
-            <X size={16} />
-          </IconButton>
-        </Tooltip>
+            <IconButton
+              onClick={(event) => {
+                event.stopPropagation();
+                handleMinimize();
+              }}
+              size="small"
+              aria-label={
+                isMinimized ? "Restore terminal" : "Minimize terminal"
+              }
+              sx={{
+                color: "#8b949e",
+                "&:hover": {
+                  color: "#ffffff",
+                  bgcolor: "rgba(255,255,255,0.08)",
+                },
+              }}
+            >
+              <Minimize2 size={16} />
+            </IconButton>
+          </Tooltip>
+
+          <Tooltip
+            title={isDetached ? "Restore terminal" : "Detach terminal"}
+            placement="top"
+          >
+            <IconButton
+              onClick={(event) => {
+                event.stopPropagation();
+                handleToggleDetached();
+              }}
+              size="small"
+              aria-label={isDetached ? "Restore terminal" : "Detach terminal"}
+              sx={{
+                color: "#8b949e",
+                "&:hover": {
+                  color: "#ffffff",
+                  bgcolor: "rgba(255,255,255,0.08)",
+                },
+              }}
+            >
+              {isDetached ? <Maximize2 size={16} /> : <Maximize2 size={16} />}
+            </IconButton>
+          </Tooltip>
+
+          <Tooltip title={t("terminal.close")} placement="top">
+            <IconButton
+              onClick={(event) => {
+                event.stopPropagation();
+                onClose();
+              }}
+              size="small"
+              aria-label={t("terminal.close")}
+              sx={{
+                color: "#8b949e",
+                "&:hover": {
+                  color: "#ffffff",
+                  bgcolor: "rgba(255,255,255,0.08)",
+                },
+              }}
+            >
+              <X size={16} />
+            </IconButton>
+          </Tooltip>
+        </Box>
       </Box>
 
       <Box
@@ -692,6 +774,35 @@ export function TerminalModal({ isOpen, onClose }: Props) {
       />
     </Box>
   );
+
+  if (isMinimized && isDetached) {
+    return (
+      <Portal>
+        <Box
+          onClick={handleMinimize}
+          sx={{
+            position: "fixed",
+            left: 24,
+            top: 24,
+            width: 56,
+            height: 56,
+            zIndex: 1400,
+            borderRadius: "50%",
+            bgcolor: "#161b22",
+            border: "1px solid #30363d",
+            boxShadow: "0 12px 40px rgba(0, 0, 0, 0.35)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            cursor: "pointer",
+            color: "#7ee787",
+          }}
+        >
+          <TerminalIcon size={24} />
+        </Box>
+      </Portal>
+    );
+  }
 
   return isDetached ? (
     <Portal>
