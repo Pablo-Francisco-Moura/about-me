@@ -147,8 +147,15 @@ function StyleSheet() {
                 cursor: grabbing;
             }
 
-            .header-content * {
-                cursor: auto;
+            .header-content button,
+            .header-content a,
+            .header-content input,
+            .header-content [role="button"],
+            .header-content .MuiButton-root,
+            .header-content .MuiIconButton-root,
+            .header-content .MuiFormControlLabel-root,
+            .header-content .MuiSwitch-root {
+                cursor: pointer;
             }
 
             .header-slide {
