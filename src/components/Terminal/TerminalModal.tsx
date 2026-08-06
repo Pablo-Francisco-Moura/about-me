@@ -439,7 +439,13 @@ export function TerminalModal({ isOpen, onClose }: Props) {
   };
 
   const handleMinimize = () => {
-    setIsMinimized((current) => !current);
+    setIsMinimized(true);
+    dragStateRef.current = null;
+    resizeStateRef.current = null;
+  };
+
+  const handleRestore = () => {
+    setIsMinimized(false);
     dragStateRef.current = null;
     resizeStateRef.current = null;
   };
@@ -515,9 +521,14 @@ export function TerminalModal({ isOpen, onClose }: Props) {
             placement="top"
           >
             <IconButton
+              onMouseDown={(event) => event.stopPropagation()}
               onClick={(event) => {
                 event.stopPropagation();
-                handleMinimize();
+                if (isMinimized) {
+                  handleRestore();
+                } else {
+                  handleMinimize();
+                }
               }}
               size="small"
               aria-label={
@@ -531,7 +542,7 @@ export function TerminalModal({ isOpen, onClose }: Props) {
                 },
               }}
             >
-              <Minimize2 size={16} />
+              <MinimizeIcon />
             </IconButton>
           </Tooltip>
 
@@ -775,11 +786,11 @@ export function TerminalModal({ isOpen, onClose }: Props) {
     </Box>
   );
 
-  if (isMinimized && isDetached) {
+  if (isMinimized) {
     return (
       <Portal>
         <Box
-          onClick={handleMinimize}
+          onClick={handleRestore}
           sx={{
             position: "fixed",
             left: 24,
