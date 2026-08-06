@@ -42,6 +42,9 @@ export function TerminalModal({ isOpen, onClose }: Props) {
 
   const [size, setSize] = useState({ width: 700, height: 350 });
   const [input, setInput] = useState("");
+  const [history, setHistory] = useState<TypeCommandOutput[]>(() =>
+    getInitialHistory(t),
+  );
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isDetached, setIsDetached] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
@@ -49,15 +52,21 @@ export function TerminalModal({ isOpen, onClose }: Props) {
   const [sessionHistory, setSessionHistory] = useState<TypeCommandOutput[]>(
     () => getInitialHistory(t),
   );
-  const [history, setHistory] = useState<TypeCommandOutput[]>(() =>
-    getInitialHistory(t),
-  );
+  const [minimizedPosition, setMinimizedPosition] = useState({
+    x: 24,
+    y: typeof window !== "undefined" ? window.innerHeight / 2 : 24,
+  });
 
   const inputRef = useRef<HTMLInputElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
   const dragStateRef = useRef<{ offsetX: number; offsetY: number } | null>(
     null,
   );
+  const minimizedDragStateRef = useRef<{
+    offsetX: number;
+    offsetY: number;
+  } | null>(null);
+  const minimizedDragMovedRef = useRef(false);
   const resizeStateRef = useRef<{
     direction: "se" | "sw" | "ne" | "nw";
     startX: number;
@@ -130,6 +139,32 @@ export function TerminalModal({ isOpen, onClose }: Props) {
     if (!isOpen) return;
 
     const handleMouseMove = (event: MouseEvent) => {
+      if (minimizedDragStateRef.current) {
+        minimizedDragMovedRef.current = true;
+        const margin = 24;
+        const width = 56;
+        const height = 56;
+        const maxX = Math.max(0, window.innerWidth - width - margin);
+        const maxY = Math.max(0, window.innerHeight - height - margin);
+
+        setMinimizedPosition({
+          x: Math.min(
+            maxX,
+            Math.max(
+              margin,
+              event.clientX - minimizedDragStateRef.current.offsetX,
+            ),
+          ),
+          y: Math.min(
+            maxY,
+            Math.max(
+              margin,
+              event.clientY - minimizedDragStateRef.current.offsetY,
+            ),
+          ),
+        });
+      }
+
       if (dragStateRef.current) {
         const nextPosition = {
           x: event.clientX - dragStateRef.current.offsetX,
@@ -187,6 +222,7 @@ export function TerminalModal({ isOpen, onClose }: Props) {
 
     const handleMouseUp = () => {
       dragStateRef.current = null;
+      minimizedDragStateRef.current = null;
       resizeStateRef.current = null;
     };
 
@@ -441,9 +477,27 @@ export function TerminalModal({ isOpen, onClose }: Props) {
   };
 
   const handleRestore = () => {
+    if (minimizedDragMovedRef.current) {
+      minimizedDragMovedRef.current = false;
+      minimizedDragStateRef.current = null;
+      return;
+    }
+
     setIsMinimized(false);
+    minimizedDragMovedRef.current = false;
     dragStateRef.current = null;
+    minimizedDragStateRef.current = null;
     resizeStateRef.current = null;
+  };
+
+  const handleMinimizedDragStart = (event: ReactMouseEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+    minimizedDragMovedRef.current = false;
+    minimizedDragStateRef.current = {
+      offsetX: event.clientX - minimizedPosition.x,
+      offsetY: event.clientY - minimizedPosition.y,
+    };
   };
 
   const terminalContent = () => (
@@ -788,11 +842,12 @@ export function TerminalModal({ isOpen, onClose }: Props) {
     return (
       <Portal>
         <Box
+          onMouseDown={handleMinimizedDragStart}
           onClick={handleRestore}
           sx={{
             position: "fixed",
-            left: 24,
-            top: "50%",
+            left: minimizedPosition.x,
+            top: minimizedPosition.y,
             transform: "translateY(-50%)",
             width: 56,
             height: 56,
