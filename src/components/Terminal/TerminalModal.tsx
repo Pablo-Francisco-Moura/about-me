@@ -2,6 +2,7 @@ import {
   Box,
   Stack,
   Dialog,
+  Portal,
   Tooltip,
   InputBase,
   IconButton,
@@ -38,9 +39,10 @@ const getInitialHistory = (
 export function TerminalModal({ isOpen, onClose }: Props) {
   const { t } = useTranslation();
 
+  const [size, setSize] = useState({ width: 700, height: 350 });
   const [input, setInput] = useState("");
   const [position, setPosition] = useState({ x: 0, y: 0 });
-  const [size, setSize] = useState({ width: 700, height: 350 });
+  const [isDetached, setIsDetached] = useState(false);
   const [isCursorActive, setIsCursorActive] = useState(false);
   const [sessionHistory, setSessionHistory] = useState<TypeCommandOutput[]>(
     () => getInitialHistory(t),
@@ -95,7 +97,10 @@ export function TerminalModal({ isOpen, onClose }: Props) {
   }, [history]);
 
   useEffect(() => {
-    if (!isOpen) return;
+    if (!isOpen) {
+      setIsDetached(false);
+      return;
+    }
 
     const clampPosition = (x: number, y: number) => {
       const margin = 24;
@@ -388,6 +393,7 @@ export function TerminalModal({ isOpen, onClose }: Props) {
   ) => {
     event.preventDefault();
     event.stopPropagation();
+    setIsDetached(true);
 
     resizeStateRef.current = {
       direction,
@@ -402,13 +408,310 @@ export function TerminalModal({ isOpen, onClose }: Props) {
 
   const handleDragStart = (event: ReactMouseEvent<HTMLDivElement>) => {
     event.preventDefault();
+    setIsDetached(true);
     dragStateRef.current = {
       offsetX: event.clientX - position.x,
       offsetY: event.clientY - position.y,
     };
   };
 
-  return (
+  const terminalContent = () => (
+    <Box
+      sx={{
+        color: "#f0f6fc",
+        width: "100%",
+        border: "1px solid #30363d",
+        height: "100%",
+        display: "flex",
+        bgcolor: "#0d1117",
+        position: "relative",
+        overflow: "hidden",
+        minHeight: 0,
+        fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
+        borderRadius: 3,
+        flexDirection: "column",
+      }}
+    >
+      <Box
+        onMouseDown={handleDragStart}
+        sx={{
+          px: 2,
+          py: 1.1,
+          cursor: "grab",
+          display: "flex",
+          bgcolor: "#161b22",
+          alignItems: "center",
+          userSelect: "none",
+          borderBottom: "1px solid #30363d",
+          justifyContent: "space-between",
+        }}
+      >
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+          <Box
+            sx={{
+              width: 12,
+              height: 12,
+              bgcolor: "#f85149",
+              borderRadius: "50%",
+            }}
+          />
+          <Box
+            sx={{
+              width: 12,
+              height: 12,
+              bgcolor: "#d29922",
+              borderRadius: "50%",
+            }}
+          />
+          <Box
+            sx={{
+              width: 12,
+              height: 12,
+              bgcolor: "#3fb950",
+              borderRadius: "50%",
+            }}
+          />
+          <TerminalIcon size={15} style={{ color: "#7ee787", marginLeft: 4 }} />
+          <Typography
+            sx={{ color: "#8b949e", letterSpacing: 1.2, fontWeight: 700 }}
+            variant="caption"
+          >
+            {t("terminal.window_title")}
+          </Typography>
+        </Box>
+
+        <Tooltip title={t("terminal.close")} placement="top">
+          <IconButton
+            onClick={onClose}
+            size="small"
+            aria-label={t("terminal.close")}
+            sx={{
+              color: "#8b949e",
+              "&:hover": {
+                color: "#ffffff",
+                bgcolor: "rgba(255,255,255,0.08)",
+              },
+            }}
+          >
+            <X size={16} />
+          </IconButton>
+        </Tooltip>
+      </Box>
+
+      <Box
+        onClick={focusInput}
+        sx={{
+          px: 2.2,
+          py: 2,
+          pr: 1.2,
+          flex: 1,
+          cursor: "text",
+          bgcolor: "#090c10",
+          minHeight: 0,
+          overflowY: "auto",
+          scrollbarColor: "#3fb950 transparent",
+          scrollbarWidth: "thin",
+          overscrollBehavior: "contain",
+          "&::-webkit-scrollbar": {
+            width: 8,
+          },
+          "&::-webkit-scrollbar-track": {
+            background: "transparent",
+          },
+          "&::-webkit-scrollbar-thumb": {
+            border: "1px solid rgba(255,255,255,0.08)",
+            borderRadius: 999,
+            backgroundColor: "rgba(63, 185, 80, 0.55)",
+          },
+          "&::-webkit-scrollbar-thumb:hover": {
+            backgroundColor: "rgba(126, 231, 135, 0.8)",
+          },
+        }}
+      >
+        <Stack spacing={1}>
+          {history.map((item) => (
+            <Box key={item.id}>
+              {item.type === "user" ? (
+                <Box
+                  sx={{
+                    gap: 1,
+                    display: "flex",
+                    flexWrap: "wrap",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography
+                    sx={{ color: "#7ee787", fontWeight: 700 }}
+                    component="span"
+                  >
+                    {promptLabel}
+                  </Typography>
+                  <Typography component="span" sx={{ color: "#f0f6fc" }}>
+                    {item.content}
+                  </Typography>
+                </Box>
+              ) : item.type === "error" ? (
+                <Typography sx={{ color: "#ff7b72" }}>
+                  {item.content}
+                </Typography>
+              ) : (
+                <Box sx={{ color: "#d0d7de" }}>{item.content}</Box>
+              )}
+            </Box>
+          ))}
+
+          <Box
+            component="form"
+            onSubmit={handleSubmit}
+            sx={{
+              pt: 0.5,
+              gap: 0.5,
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <Typography
+              sx={{ color: "#7ee787", fontWeight: 700, whiteSpace: "nowrap" }}
+              component="span"
+            >
+              {promptLabel}
+            </Typography>
+
+            <Box
+              sx={{
+                flex: 1,
+                display: "flex",
+                minWidth: 0,
+                position: "relative",
+                minHeight: "1.2em",
+                alignItems: "center",
+              }}
+            >
+              <Box
+                component="span"
+                sx={{
+                  color: "#f0f6fc",
+                  fontSize: "0.95rem",
+                  wordBreak: "break-word",
+                  fontFamily: "inherit",
+                  whiteSpace: "pre-wrap",
+                }}
+              >
+                {input}
+              </Box>
+              <Box
+                component="span"
+                sx={{
+                  ml: 0.2,
+                  color: isCursorActive ? "#f0f6fc" : "transparent",
+                  fontSize: "0.95rem",
+                  fontFamily: "inherit",
+                  lineHeight: 1,
+                }}
+              >
+                {cursorSymbol}
+              </Box>
+              <InputBase
+                value={input}
+                inputRef={inputRef}
+                onChange={(e) => setInput(e.target.value)}
+                onFocus={() => setIsCursorActive(true)}
+                onBlur={() => setIsCursorActive(false)}
+                autoFocus
+                fullWidth
+                onClick={() => inputRef.current?.focus()}
+                sx={{
+                  inset: 0,
+                  width: "100%",
+                  color: "transparent",
+                  opacity: 0,
+                  position: "absolute",
+                  caretColor: "#7ee787",
+                  "& input": {
+                    width: "100%",
+                    color: "transparent",
+                    padding: 0,
+                    outline: "none",
+                    caretColor: "#7ee787",
+                  },
+                }}
+              />
+            </Box>
+          </Box>
+          <div ref={bottomRef} />
+        </Stack>
+      </Box>
+
+      <Box
+        sx={{
+          px: 2,
+          py: 1.2,
+          mt: "auto",
+          gap: 1,
+          bgcolor: "#1f2937",
+          display: "flex",
+          flexWrap: "wrap",
+          borderTop: "1px solid #30363d",
+          alignItems: "center",
+          justifyContent: "flex-start",
+        }}
+      >
+        {CMDS.map((cmd) => (
+          <Box
+            key={cmd.name}
+            component="button"
+            onClick={() => handleQuickCommand(cmd.name)}
+            sx={{
+              color: "#f9fafb",
+              border: 0,
+              cursor: "pointer",
+              bgcolor: "transparent",
+              padding: 0,
+              fontFamily: "inherit",
+              fontWeight: 700,
+              letterSpacing: 0.8,
+              textTransform: "uppercase",
+              "&:hover": { color: "#7ee787" },
+            }}
+          >
+            {t(cmd.tooltip)}
+          </Box>
+        ))}
+      </Box>
+      <Box
+        onMouseDown={(event) => handleResizeStart(event, "se")}
+        sx={{
+          width: 16,
+          right: 0,
+          height: 16,
+          bottom: 0,
+          cursor: "nwse-resize",
+          bgcolor: "transparent",
+          position: "absolute",
+        }}
+      />
+    </Box>
+  );
+
+  return isDetached ? (
+    <Portal>
+      <Box
+        sx={{
+          position: "fixed",
+          top: position.y,
+          left: position.x,
+          width: `${size.width}px`,
+          height: `${size.height}px`,
+          zIndex: 1400,
+          boxShadow: "0 24px 80px rgba(0, 0, 0, 0.45)",
+          borderRadius: 3,
+          overflow: "hidden",
+        }}
+      >
+        {terminalContent()}
+      </Box>
+    </Portal>
+  ) : (
     <Dialog
       open={isOpen}
       onClose={onClose}
@@ -418,8 +721,8 @@ export function TerminalModal({ isOpen, onClose }: Props) {
       slotProps={{
         backdrop: {
           sx: {
-            backgroundColor: "rgba(2, 6, 23, 0.78)",
             backdropFilter: "blur(6px)",
+            backgroundColor: "rgba(2, 6, 23, 0.78)",
           },
         },
       }}
@@ -441,284 +744,7 @@ export function TerminalModal({ isOpen, onClose }: Props) {
         },
       }}
     >
-      <Box
-        sx={{
-          color: "#f0f6fc",
-          width: "100%",
-          border: "1px solid #30363d",
-          position: "relative",
-          height: "100%",
-          display: "flex",
-          bgcolor: "#0d1117",
-          overflow: "hidden",
-          minHeight: 0,
-          fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
-          borderRadius: 3,
-          flexDirection: "column",
-        }}
-      >
-        <Box
-          onMouseDown={handleDragStart}
-          sx={{
-            px: 2,
-            py: 1.1,
-            cursor: "grab",
-            display: "flex",
-            bgcolor: "#161b22",
-            alignItems: "center",
-            userSelect: "none",
-            borderBottom: "1px solid #30363d",
-            justifyContent: "space-between",
-          }}
-        >
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            <Box
-              sx={{
-                width: 12,
-                height: 12,
-                bgcolor: "#f85149",
-                borderRadius: "50%",
-              }}
-            />
-            <Box
-              sx={{
-                width: 12,
-                height: 12,
-                bgcolor: "#d29922",
-                borderRadius: "50%",
-              }}
-            />
-            <Box
-              sx={{
-                width: 12,
-                height: 12,
-                bgcolor: "#3fb950",
-                borderRadius: "50%",
-              }}
-            />
-            <TerminalIcon
-              size={15}
-              style={{ color: "#7ee787", marginLeft: 4 }}
-            />
-            <Typography
-              sx={{ color: "#8b949e", letterSpacing: 1.2, fontWeight: 700 }}
-              variant="caption"
-            >
-              {t("terminal.window_title")}
-            </Typography>
-          </Box>
-
-          <Tooltip title={t("terminal.close")} placement="top">
-            <IconButton
-              onClick={onClose}
-              size="small"
-              aria-label={t("terminal.close")}
-              sx={{
-                color: "#8b949e",
-                "&:hover": {
-                  color: "#ffffff",
-                  bgcolor: "rgba(255,255,255,0.08)",
-                },
-              }}
-            >
-              <X size={16} />
-            </IconButton>
-          </Tooltip>
-        </Box>
-
-        <Box
-          onClick={focusInput}
-          sx={{
-            px: 2.2,
-            py: 2,
-            pr: 1.2,
-            flex: 1,
-            cursor: "text",
-            bgcolor: "#090c10",
-            minHeight: 0,
-            overflowY: "auto",
-            scrollbarColor: "#3fb950 transparent",
-            scrollbarWidth: "thin",
-            overscrollBehavior: "contain",
-            "&::-webkit-scrollbar": {
-              width: 8,
-            },
-            "&::-webkit-scrollbar-track": {
-              background: "transparent",
-            },
-            "&::-webkit-scrollbar-thumb": {
-              border: "1px solid rgba(255,255,255,0.08)",
-              borderRadius: 999,
-              backgroundColor: "rgba(63, 185, 80, 0.55)",
-            },
-            "&::-webkit-scrollbar-thumb:hover": {
-              backgroundColor: "rgba(126, 231, 135, 0.8)",
-            },
-          }}
-        >
-          <Stack spacing={1}>
-            {history.map((item) => (
-              <Box key={item.id}>
-                {item.type === "user" ? (
-                  <Box
-                    sx={{
-                      gap: 1,
-                      display: "flex",
-                      flexWrap: "wrap",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Typography
-                      sx={{ color: "#7ee787", fontWeight: 700 }}
-                      component="span"
-                    >
-                      {promptLabel}
-                    </Typography>
-                    <Typography component="span" sx={{ color: "#f0f6fc" }}>
-                      {item.content}
-                    </Typography>
-                  </Box>
-                ) : item.type === "error" ? (
-                  <Typography sx={{ color: "#ff7b72" }}>
-                    {item.content}
-                  </Typography>
-                ) : (
-                  <Box sx={{ color: "#d0d7de" }}>{item.content}</Box>
-                )}
-              </Box>
-            ))}
-
-            <Box
-              component="form"
-              onSubmit={handleSubmit}
-              sx={{
-                pt: 0.5,
-                gap: 0.5,
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              <Typography
-                sx={{ color: "#7ee787", fontWeight: 700, whiteSpace: "nowrap" }}
-                component="span"
-              >
-                {promptLabel}
-              </Typography>
-
-              <Box
-                sx={{
-                  flex: 1,
-                  display: "flex",
-                  minWidth: 0,
-                  position: "relative",
-                  minHeight: "1.2em",
-                  alignItems: "center",
-                }}
-              >
-                <Box
-                  component="span"
-                  sx={{
-                    color: "#f0f6fc",
-                    fontSize: "0.95rem",
-                    wordBreak: "break-word",
-                    fontFamily: "inherit",
-                    whiteSpace: "pre-wrap",
-                  }}
-                >
-                  {input}
-                </Box>
-                <Box
-                  component="span"
-                  sx={{
-                    ml: 0.2,
-                    color: isCursorActive ? "#f0f6fc" : "transparent",
-                    fontSize: "0.95rem",
-                    fontFamily: "inherit",
-                    lineHeight: 1,
-                  }}
-                >
-                  {cursorSymbol}
-                </Box>
-                <InputBase
-                  value={input}
-                  inputRef={inputRef}
-                  onChange={(e) => setInput(e.target.value)}
-                  onFocus={() => setIsCursorActive(true)}
-                  onBlur={() => setIsCursorActive(false)}
-                  autoFocus
-                  fullWidth
-                  onClick={() => inputRef.current?.focus()}
-                  sx={{
-                    inset: 0,
-                    width: "100%",
-                    color: "transparent",
-                    opacity: 0,
-                    position: "absolute",
-                    caretColor: "#7ee787",
-                    "& input": {
-                      width: "100%",
-                      color: "transparent",
-                      padding: 0,
-                      outline: "none",
-                      caretColor: "#7ee787",
-                    },
-                  }}
-                />
-              </Box>
-            </Box>
-            <div ref={bottomRef} />
-          </Stack>
-        </Box>
-
-        <Box
-          sx={{
-            px: 2,
-            py: 1.2,
-            mt: "auto",
-            gap: 1,
-            bgcolor: "#1f2937",
-            display: "flex",
-            flexWrap: "wrap",
-            borderTop: "1px solid #30363d",
-            alignItems: "center",
-            justifyContent: "flex-start",
-          }}
-        >
-          {CMDS.map((cmd) => (
-            <Box
-              key={cmd.name}
-              component="button"
-              onClick={() => handleQuickCommand(cmd.name)}
-              sx={{
-                color: "#f9fafb",
-                border: 0,
-                cursor: "pointer",
-                bgcolor: "transparent",
-                padding: 0,
-                fontFamily: "inherit",
-                fontWeight: 700,
-                letterSpacing: 0.8,
-                textTransform: "uppercase",
-                "&:hover": { color: "#7ee787" },
-              }}
-            >
-              {t(cmd.tooltip)}
-            </Box>
-          ))}
-        </Box>
-        <Box
-          onMouseDown={(event) => handleResizeStart(event, "se")}
-          sx={{
-            width: 16,
-            height: 16,
-            position: "absolute",
-            right: 0,
-            bottom: 0,
-            cursor: "nwse-resize",
-            bgcolor: "transparent",
-          }}
-        />
-      </Box>
+      {terminalContent()}
     </Dialog>
   );
 }
