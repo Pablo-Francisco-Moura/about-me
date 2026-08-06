@@ -17,9 +17,9 @@ export function Terminal() {
           aria-label={t("terminal.open")}
           sx={{
             mr: 1,
-            width: 33,
+            width: 45,
             color: "inherit",
-            height: 33,
+            height: 45,
             bgcolor: "transparent",
             position: "relative",
             overflow: "hidden",
@@ -39,17 +39,17 @@ export function Terminal() {
                 borderColor: "#6dfa79",
               },
               "50%": {
-                boxShadow: "0 0 0 6px rgba(18, 232, 47, 0.3)",
-                borderColor: "#3fb950",
+                boxShadow: "0 0 0 4px rgba(18, 232, 47, 0.46)",
+                borderColor: "#3afb54",
               },
             },
           }}
           onClick={() => setIsOpen(true)}
         >
           <TerminalIcon
-            fontSize="small"
+            fontSize="large"
             sx={{
-              color: "white",
+              color: "#6dfa79",
             }}
           />
         </IconButton>
