@@ -13,13 +13,9 @@ import type { FormEvent, MouseEvent as ReactMouseEvent } from "react";
 import { CMDS } from "../../constants/terminal";
 import { useTranslation } from "react-i18next";
 import { SKILLS, PROJECTS } from "../../constants/app";
-import {
-  X,
-  Maximize2,
-  Minimize2,
-  Terminal as TerminalIcon,
-} from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { X, Maximize2, Terminal as TerminalIcon } from "lucide-react";
+import MinimizeIcon from "@mui/icons-material/Minimize";
 
 interface Props {
   isOpen: boolean;
@@ -551,6 +547,7 @@ export function TerminalModal({ isOpen, onClose }: Props) {
             placement="top"
           >
             <IconButton
+              onMouseDown={(event) => event.stopPropagation()}
               onClick={(event) => {
                 event.stopPropagation();
                 handleToggleDetached();
@@ -571,6 +568,7 @@ export function TerminalModal({ isOpen, onClose }: Props) {
 
           <Tooltip title={t("terminal.close")} placement="top">
             <IconButton
+              onMouseDown={(event) => event.stopPropagation()}
               onClick={(event) => {
                 event.stopPropagation();
                 onClose();
