@@ -6,6 +6,7 @@ export function Description() {
   return (
     <section
       style={{
+        margin: "auto 20px auto 25px",
         position: "relative",
         textAlign: "center",
       }}

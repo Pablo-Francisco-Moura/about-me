@@ -31,7 +31,7 @@ export function Skills() {
       )}
       <section
         style={{
-          margin: "auto",
+          margin: "auto 20px auto 25px",
           border: `1px solid ${theme.palette.divider}`,
           padding: "12px",
           maxWidth: "1000px",

@@ -10,14 +10,14 @@
   "skills": {
     "title": "Skills",
     "close": "Close",
-    "description": "Explore my technical skills and expertise.",
+    "description": "My technical skills and expertise.",
     "the_website_of": "The website of",
     "cannot_displayed": "it cannot be displayed here for security reasons.",
     "open_in_new_tab": "Open in new tab"
   },
   "projects": {
     "title": "Projects",
-    "description": "Discover my projects and professional experience."
+    "description": "Check out my personal projects."
   },
   "project": {
     "share": "Share",

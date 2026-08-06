@@ -1,6 +1,6 @@
-import { Terminal } from "../Terminal";
-import { ThemeSwitch } from "../ThemeSwitch";
-import { LanguageSwitch } from "../LanguageSwitch";
+import { Terminal } from "../../Terminal";
+import { ThemeSwitch } from "./ThemeSwitch";
+import { LanguageSwitch } from "./LanguageSwitch";
 
 export function Controls() {
   return (
@@ -16,7 +16,9 @@ export function Controls() {
       }}
     >
       <Terminal />
+
       <ThemeSwitch />
+
       <LanguageSwitch />
     </div>
   );

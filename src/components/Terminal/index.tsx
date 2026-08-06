@@ -17,39 +17,39 @@ export function Terminal() {
           aria-label={t("terminal.open")}
           sx={{
             mr: 1,
-            width: 33,
-            height: 33,
-            borderRadius: "50%",
-            bgcolor: "transparent",
+            width: 45,
             color: "inherit",
-            boxShadow: "0 0 0 2px rgba(126, 231, 135, 0.16)",
+            height: 45,
+            bgcolor: "transparent",
             position: "relative",
             overflow: "hidden",
+            boxShadow: "0 0 0 2px rgba(126, 231, 135, 0.16)",
             animation: "terminalPulse 1.4s infinite",
             transition: "transform 0.2s ease, box-shadow 0.2s ease",
+            borderRadius: "50%",
             "&:hover": {
-              bgcolor: "transparent",
               color: "inherit",
+              bgcolor: "transparent",
               transform: "scale(1.04)",
               boxShadow: "0 0 0 3px rgba(126, 231, 135, 0.24)",
             },
             "@keyframes terminalPulse": {
               "0%, 100%": {
-                borderColor: "#7ee787",
                 boxShadow: "0 0 0 2px rgba(137, 246, 146, 0.1)",
+                borderColor: "#6dfa79",
               },
               "50%": {
-                borderColor: "#3fb950",
-                boxShadow: "0 0 0 6px rgba(18, 232, 47, 0.3)",
+                boxShadow: "0 0 0 4px rgba(18, 232, 47, 0.46)",
+                borderColor: "#3afb54",
               },
             },
           }}
           onClick={() => setIsOpen(true)}
         >
           <TerminalIcon
-            fontSize="small"
+            fontSize="large"
             sx={{
-              color: "white",
+              color: "#6dfa79",
             }}
           />
         </IconButton>
