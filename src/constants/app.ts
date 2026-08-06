@@ -1,18 +1,24 @@
 import type {
   TypeSkill,
+  TypeBanner,
   TypeContact,
   TypeProject,
   TypeLanguage,
 } from "../types/app";
-import gmailImage from "../assets/gmail.png";
-import gitHubImage from "../assets/gitHub.png";
-import whatsappImage from "../assets/whatsapp.png";
-import linkedInImage from "../assets/linkedin.png";
-import miniKanbanImage from "../assets/miniKanban.png";
-import myGuidelinesImage from "../assets/myGuidelines.png";
-import financeManagerImage from "../assets/financeManager.png";
-import brImage from "../assets/flag-br.svg";
-import usImage from "../assets/flag-us.svg";
+import banner from "../assets/banner/banner.png";
+import banner2 from "../assets/banner/banner2.jpeg";
+import banner3 from "../assets/banner/banner3.png";
+import brImage from "../assets/language/flag-br.svg";
+import usImage from "../assets/language/flag-us.svg";
+import gmailImage from "../assets/contacts/gmail.png";
+import gitHubImage from "../assets/contacts/gitHub.png";
+import whatsappImage from "../assets/contacts/whatsapp.png";
+import linkedInImage from "../assets/contacts/linkedin.png";
+import miniKanbanImage from "../assets/projects/financeManager.png";
+import myGuidelinesImage from "../assets/projects/financeManager.png";
+import financeManagerImage from "../assets/projects/financeManager.png";
+
+export const BANNERS: TypeBanner[] = [banner, banner2, banner3] as const;
 
 export const SKILLS: TypeSkill[] = [
   {
