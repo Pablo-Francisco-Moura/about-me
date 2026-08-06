@@ -16,7 +16,9 @@ export function Controls() {
       }}
     >
       <Terminal />
+
       <ThemeSwitch />
+
       <LanguageSwitch />
     </div>
   );
