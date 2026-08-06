@@ -1,20 +1,16 @@
 import { motion } from "motion/react";
 import { Profile } from "./Profile";
+import { BANNERS } from "../../constants/app";
 import { Controls } from "./Controls";
 import { AlertMessage } from "../Alert";
 import { useRef, useState } from "react";
 import Slider from "react-slick";
-import banner from "../../assets/banner.png";
-import banner2 from "../../assets/banner2.jpeg";
-import banner3 from "../../assets/banner3.png";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 interface Props {
   hidden: boolean;
 }
-
-const slides = [banner, banner2, banner3];
 
 export function Header({ hidden }: Props) {
   const [currentSlide, setCurrentSlide] = useState(1);
@@ -123,7 +119,7 @@ export function Header({ hidden }: Props) {
     >
       <div className="header-background">
         <Slider ref={sliderRef} {...settings}>
-          {slides.map((src, index) => (
+          {BANNERS.map((src, index) => (
             <div key={index} className="header-slide">
               <img src={src} alt={`Banner ${index + 1}`} />
             </div>
@@ -159,7 +155,7 @@ export function Header({ hidden }: Props) {
             zIndex: 3,
           }}
         >
-          {currentSlide} / {slides.length}
+          {currentSlide} / {BANNERS.length}
         </div>
         <Controls />
         <AlertMessage />
