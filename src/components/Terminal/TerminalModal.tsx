@@ -40,6 +40,7 @@ export function TerminalModal({ isOpen, onClose }: Props) {
 
   const [input, setInput] = useState("");
   const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [size, setSize] = useState({ width: 700, height: 350 });
   const [isCursorActive, setIsCursorActive] = useState(false);
   const [sessionHistory, setSessionHistory] = useState<TypeCommandOutput[]>(
     () => getInitialHistory(t),
@@ -53,6 +54,15 @@ export function TerminalModal({ isOpen, onClose }: Props) {
   const dragStateRef = useRef<{ offsetX: number; offsetY: number } | null>(
     null,
   );
+  const resizeStateRef = useRef<{
+    direction: "se" | "sw" | "ne" | "nw";
+    startX: number;
+    startY: number;
+    startWidth: number;
+    startHeight: number;
+    startLeft: number;
+    startTop: number;
+  } | null>(null);
   const promptLabel = t("terminal.prompt");
   const cursorSymbol = t("terminal.cursor");
 
@@ -89,8 +99,8 @@ export function TerminalModal({ isOpen, onClose }: Props) {
 
     const clampPosition = (x: number, y: number) => {
       const margin = 24;
-      const width = 700;
-      const height = 350;
+      const width = size.width;
+      const height = size.height;
       const maxX = Math.max(0, window.innerWidth - width - margin);
       const maxY = Math.max(0, window.innerHeight - height - margin);
 
@@ -102,39 +112,74 @@ export function TerminalModal({ isOpen, onClose }: Props) {
 
     setPosition(
       clampPosition(
-        (window.innerWidth - 700) / 2,
-        (window.innerHeight - 350) / 2,
+        (window.innerWidth - size.width) / 2,
+        (window.innerHeight - size.height) / 2,
       ),
     );
-  }, [isOpen]);
+  }, [isOpen, size.width, size.height]);
 
   useEffect(() => {
     if (!isOpen) return;
 
     const handleMouseMove = (event: MouseEvent) => {
-      if (!dragStateRef.current) return;
-
-      const nextPosition = {
-        x: event.clientX - dragStateRef.current.offsetX,
-        y: event.clientY - dragStateRef.current.offsetY,
-      };
-
-      setPosition(() => {
-        const margin = 24;
-        const width = 700;
-        const height = 350;
-        const maxX = Math.max(0, window.innerWidth - width - margin);
-        const maxY = Math.max(0, window.innerHeight - height - margin);
-
-        return {
-          x: Math.min(maxX, Math.max(margin, nextPosition.x)),
-          y: Math.min(maxY, Math.max(margin, nextPosition.y)),
+      if (dragStateRef.current) {
+        const nextPosition = {
+          x: event.clientX - dragStateRef.current.offsetX,
+          y: event.clientY - dragStateRef.current.offsetY,
         };
-      });
+
+        setPosition(() => {
+          const margin = 24;
+          const width = size.width;
+          const height = size.height;
+          const maxX = Math.max(0, window.innerWidth - width - margin);
+          const maxY = Math.max(0, window.innerHeight - height - margin);
+
+          return {
+            x: Math.min(maxX, Math.max(margin, nextPosition.x)),
+            y: Math.min(maxY, Math.max(margin, nextPosition.y)),
+          };
+        });
+      }
+
+      if (resizeStateRef.current) {
+        const resize = resizeStateRef.current;
+        const deltaX = event.clientX - resize.startX;
+        const deltaY = event.clientY - resize.startY;
+        const nextWidth = Math.min(
+          900,
+          Math.max(320, resize.startWidth + deltaX),
+        );
+        const nextHeight = Math.min(
+          700,
+          Math.max(220, resize.startHeight + deltaY),
+        );
+
+        if (resize.direction.includes("e")) {
+          setSize((current) => ({ ...current, width: nextWidth }));
+        }
+
+        if (resize.direction.includes("s")) {
+          setSize((current) => ({ ...current, height: nextHeight }));
+        }
+
+        if (resize.direction.includes("w")) {
+          const nextLeft = resize.startLeft + (resize.startWidth - nextWidth);
+          setPosition((current) => ({ ...current, x: nextLeft }));
+          setSize((current) => ({ ...current, width: nextWidth }));
+        }
+
+        if (resize.direction.includes("n")) {
+          const nextTop = resize.startTop + (resize.startHeight - nextHeight);
+          setPosition((current) => ({ ...current, y: nextTop }));
+          setSize((current) => ({ ...current, height: nextHeight }));
+        }
+      }
     };
 
     const handleMouseUp = () => {
       dragStateRef.current = null;
+      resizeStateRef.current = null;
     };
 
     window.addEventListener("mousemove", handleMouseMove);
@@ -144,7 +189,7 @@ export function TerminalModal({ isOpen, onClose }: Props) {
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseup", handleMouseUp);
     };
-  }, [isOpen]);
+  }, [isOpen, size.width, size.height]);
 
   const resetVisibleHistory = () => {
     setHistory([
@@ -337,6 +382,24 @@ export function TerminalModal({ isOpen, onClose }: Props) {
     executeCommand(cmd);
   };
 
+  const handleResizeStart = (
+    event: ReactMouseEvent<HTMLDivElement>,
+    direction: "se" | "sw" | "ne" | "nw",
+  ) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    resizeStateRef.current = {
+      direction,
+      startX: event.clientX,
+      startY: event.clientY,
+      startWidth: size.width,
+      startHeight: size.height,
+      startLeft: position.x,
+      startTop: position.y,
+    };
+  };
+
   const handleDragStart = (event: ReactMouseEvent<HTMLDivElement>) => {
     event.preventDefault();
     dragStateRef.current = {
@@ -365,8 +428,8 @@ export function TerminalModal({ isOpen, onClose }: Props) {
           m: 0,
           top: position.y,
           left: position.x,
-          width: "700px",
-          height: "350px",
+          width: `${size.width}px`,
+          height: `${size.height}px`,
           bgcolor: "transparent",
           maxWidth: "calc(100vw - 32px)",
           overflow: "hidden",
@@ -383,6 +446,7 @@ export function TerminalModal({ isOpen, onClose }: Props) {
           color: "#f0f6fc",
           width: "100%",
           border: "1px solid #30363d",
+          position: "relative",
           height: "100%",
           display: "flex",
           bgcolor: "#0d1117",
@@ -642,6 +706,18 @@ export function TerminalModal({ isOpen, onClose }: Props) {
             </Box>
           ))}
         </Box>
+        <Box
+          onMouseDown={(event) => handleResizeStart(event, "se")}
+          sx={{
+            width: 16,
+            height: 16,
+            position: "absolute",
+            right: 0,
+            bottom: 0,
+            cursor: "nwse-resize",
+            bgcolor: "transparent",
+          }}
+        />
       </Box>
     </Dialog>
   );
