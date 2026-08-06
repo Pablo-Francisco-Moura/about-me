@@ -1,7 +1,7 @@
 import { motion } from "motion/react";
 import { Profile } from "./Profile";
 import { BANNERS } from "../../constants/app";
-import { Controls } from "./Controls";
+import { Controls } from "./controls";
 import { AlertMessage } from "../Alert";
 import { useRef, useState } from "react";
 import Slider from "react-slick";
