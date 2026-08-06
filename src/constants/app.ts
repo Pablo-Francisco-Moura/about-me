@@ -14,8 +14,8 @@ import gmailImage from "../assets/contacts/gmail.png";
 import gitHubImage from "../assets/contacts/gitHub.png";
 import whatsappImage from "../assets/contacts/whatsapp.png";
 import linkedInImage from "../assets/contacts/linkedin.png";
-import miniKanbanImage from "../assets/projects/financeManager.png";
-import myGuidelinesImage from "../assets/projects/financeManager.png";
+import miniKanbanImage from "../assets/projects/miniKanban.png";
+import myGuidelinesImage from "../assets/projects/myGuidelines.png";
 import financeManagerImage from "../assets/projects/financeManager.png";
 
 export const BANNERS: TypeBanner[] = [banner, banner2, banner3] as const;
