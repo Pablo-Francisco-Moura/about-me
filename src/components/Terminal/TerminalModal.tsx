@@ -7,19 +7,13 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
-import type { FormEvent, ReactNode } from "react";
+import type { FormEvent } from "react";
+import type { TypeCommandOutput } from "../../types/terminal";
 import { CMDS } from "../../constants/terminal";
 import { useTranslation } from "react-i18next";
 import { SKILLS, PROJECTS } from "../../constants/app";
 import { X, Terminal as TerminalIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-
-interface ICommandOutput {
-  id: number;
-  type: "user" | "system" | "error";
-  content: string | string[] | ReactNode;
-  timestamp?: number;
-}
 
 interface Props {
   isOpen: boolean;
@@ -28,7 +22,7 @@ interface Props {
 
 const getInitialHistory = (
   translate: (key: string) => string,
-): ICommandOutput[] => [
+): TypeCommandOutput[] => [
   {
     id: 1,
     type: "system",
@@ -46,10 +40,10 @@ export function TerminalModal({ isOpen, onClose }: Props) {
 
   const [input, setInput] = useState("");
   const [isCursorActive, setIsCursorActive] = useState(false);
-  const [sessionHistory, setSessionHistory] = useState<ICommandOutput[]>(() =>
-    getInitialHistory(t),
+  const [sessionHistory, setSessionHistory] = useState<TypeCommandOutput[]>(
+    () => getInitialHistory(t),
   );
-  const [history, setHistory] = useState<ICommandOutput[]>(() =>
+  const [history, setHistory] = useState<TypeCommandOutput[]>(() =>
     getInitialHistory(t),
   );
 
@@ -120,8 +114,11 @@ export function TerminalModal({ isOpen, onClose }: Props) {
       content: cmd,
       timestamp,
     };
-    const newSessionHistory: ICommandOutput[] = [...sessionHistory, userEntry];
-    const newHistory: ICommandOutput[] = [...history, userEntry];
+    const newSessionHistory: TypeCommandOutput[] = [
+      ...sessionHistory,
+      userEntry,
+    ];
+    const newHistory: TypeCommandOutput[] = [...history, userEntry];
 
     setSessionHistory(newSessionHistory);
 
