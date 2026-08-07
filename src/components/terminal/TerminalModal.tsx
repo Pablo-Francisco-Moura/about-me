@@ -9,10 +9,11 @@ import {
   Typography,
 } from "@mui/material";
 import type { TypeCommandOutput } from "../../types/terminal";
-import type { FormEvent, MouseEvent as ReactMouseEvent } from "react";
+import type { FormEvent, PointerEvent as ReactPointerEvent } from "react";
 import { CMDS } from "../../constants/terminal";
 import { useTranslation } from "react-i18next";
 import { SKILLS, PROJECTS } from "../../constants/app";
+import { usePreferencesStore } from "../../store/storePreferences";
 import { useEffect, useRef, useState } from "react";
 import { X, Maximize2, Terminal as TerminalIcon } from "lucide-react";
 import MinimizeIcon from "@mui/icons-material/Minimize";
@@ -37,10 +38,29 @@ const getInitialHistory = (
   },
 ];
 
+const getResponsiveTerminalSize = (isMobileView: boolean) => {
+  if (typeof window === "undefined") {
+    return { width: 700, height: 350 };
+  }
+
+  if (isMobileView) {
+    const width = Math.round(window.innerWidth * 0.7);
+    const height = Math.round(window.innerHeight * 0.4);
+
+    return {
+      width: Math.min(width, window.innerWidth - 48),
+      height: Math.min(height, window.innerHeight - 48),
+    };
+  }
+
+  return { width: 700, height: 350 };
+};
+
 export function TerminalModal({ isOpen, onClose }: Props) {
   const { t } = useTranslation();
+  const { isMobile } = usePreferencesStore();
 
-  const [size, setSize] = useState({ width: 700, height: 350 });
+  const [size, setSize] = useState(() => getResponsiveTerminalSize(isMobile));
   const [input, setInput] = useState("");
   const [history, setHistory] = useState<TypeCommandOutput[]>(() =>
     getInitialHistory(t),
@@ -48,7 +68,16 @@ export function TerminalModal({ isOpen, onClose }: Props) {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isDetached, setIsDetached] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
+  const [isMinimizing, setIsMinimizing] = useState(false);
   const [isCursorActive, setIsCursorActive] = useState(false);
+  const [minimizeAnimation, setMinimizeAnimation] = useState({
+    x: 0,
+    y: 0,
+    width: 0,
+    height: 0,
+    borderRadius: 12,
+    opacity: 1,
+  });
   const [sessionHistory, setSessionHistory] = useState<TypeCommandOutput[]>(
     () => getInitialHistory(t),
   );
@@ -56,6 +85,10 @@ export function TerminalModal({ isOpen, onClose }: Props) {
     x: 24,
     y: typeof window !== "undefined" ? window.innerHeight / 2 : 24,
   });
+  const [minimizedTransitionOrigin, setMinimizedTransitionOrigin] = useState<{
+    x: number;
+    y: number;
+  } | null>(null);
 
   const inputRef = useRef<HTMLInputElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
@@ -114,10 +147,29 @@ export function TerminalModal({ isOpen, onClose }: Props) {
       return;
     }
 
+    const nextSize = getResponsiveTerminalSize(isMobile);
+    setSize((currentSize) => {
+      if (
+        currentSize.width === nextSize.width &&
+        currentSize.height === nextSize.height
+      ) {
+        return currentSize;
+      }
+      return nextSize;
+    });
+
+    if (isMobile) {
+      setPosition({
+        x: Math.max(24, Math.round((window.innerWidth - nextSize.width) / 2)),
+        y: Math.max(24, Math.round((window.innerHeight - nextSize.height) / 2)),
+      });
+      return;
+    }
+
     const clampPosition = (x: number, y: number) => {
       const margin = 24;
-      const width = size.width;
-      const height = size.height;
+      const width = nextSize.width;
+      const height = nextSize.height;
       const maxX = Math.max(0, window.innerWidth - width - margin);
       const maxY = Math.max(0, window.innerHeight - height - margin);
 
@@ -129,16 +181,16 @@ export function TerminalModal({ isOpen, onClose }: Props) {
 
     setPosition(
       clampPosition(
-        (window.innerWidth - size.width) / 2,
-        (window.innerHeight - size.height) / 2,
+        (window.innerWidth - nextSize.width) / 2,
+        (window.innerHeight - nextSize.height) / 2,
       ),
     );
-  }, [isOpen, size.width, size.height]);
+  }, [isOpen, isMobile]);
 
   useEffect(() => {
     if (!isOpen) return;
 
-    const handleMouseMove = (event: MouseEvent) => {
+    const handlePointerMove = (event: PointerEvent) => {
       if (minimizedDragStateRef.current) {
         minimizedDragMovedRef.current = true;
         const margin = 24;
@@ -187,15 +239,30 @@ export function TerminalModal({ isOpen, onClose }: Props) {
 
       if (resizeStateRef.current) {
         const resize = resizeStateRef.current;
+        const margin = 24;
+        const viewportWidth = window.innerWidth;
+        const viewportHeight = window.innerHeight;
+        const initialWidth = Math.min(
+          Math.max(220, Math.round(viewportWidth * 0.7)),
+          viewportWidth - margin * 2,
+        );
+        const initialHeight = Math.min(
+          Math.max(180, Math.round(viewportHeight * 0.3)),
+          viewportHeight - margin * 2,
+        );
+        const maxWidth = isMobile ? initialWidth : 900;
+        const maxHeight = isMobile ? initialHeight : 700;
+        const minWidth = isMobile ? 220 : 320;
+        const minHeight = isMobile ? 180 : 220;
         const deltaX = event.clientX - resize.startX;
         const deltaY = event.clientY - resize.startY;
         const nextWidth = Math.min(
-          900,
-          Math.max(320, resize.startWidth + deltaX),
+          maxWidth,
+          Math.max(minWidth, resize.startWidth + deltaX),
         );
         const nextHeight = Math.min(
-          700,
-          Math.max(220, resize.startHeight + deltaY),
+          maxHeight,
+          Math.max(minHeight, resize.startHeight + deltaY),
         );
 
         if (resize.direction.includes("e")) {
@@ -207,31 +274,45 @@ export function TerminalModal({ isOpen, onClose }: Props) {
         }
 
         if (resize.direction.includes("w")) {
-          const nextLeft = resize.startLeft + (resize.startWidth - nextWidth);
+          const nextLeft = Math.min(
+            Math.max(
+              margin,
+              resize.startLeft + (resize.startWidth - nextWidth),
+            ),
+            viewportWidth - nextWidth - margin,
+          );
           setPosition((current) => ({ ...current, x: nextLeft }));
           setSize((current) => ({ ...current, width: nextWidth }));
         }
 
         if (resize.direction.includes("n")) {
-          const nextTop = resize.startTop + (resize.startHeight - nextHeight);
+          const nextTop = Math.min(
+            Math.max(
+              margin,
+              resize.startTop + (resize.startHeight - nextHeight),
+            ),
+            viewportHeight - nextHeight - margin,
+          );
           setPosition((current) => ({ ...current, y: nextTop }));
           setSize((current) => ({ ...current, height: nextHeight }));
         }
       }
     };
 
-    const handleMouseUp = () => {
+    const handlePointerUp = () => {
       dragStateRef.current = null;
       minimizedDragStateRef.current = null;
       resizeStateRef.current = null;
     };
 
-    window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("mouseup", handleMouseUp);
+    window.addEventListener("pointermove", handlePointerMove);
+    window.addEventListener("pointerup", handlePointerUp);
+    window.addEventListener("pointercancel", handlePointerUp);
 
     return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("mouseup", handleMouseUp);
+      window.removeEventListener("pointermove", handlePointerMove);
+      window.removeEventListener("pointerup", handlePointerUp);
+      window.removeEventListener("pointercancel", handlePointerUp);
     };
   }, [isOpen, size.width, size.height]);
 
@@ -427,9 +508,15 @@ export function TerminalModal({ isOpen, onClose }: Props) {
   };
 
   const handleResizeStart = (
-    event: ReactMouseEvent<HTMLDivElement>,
+    event: ReactPointerEvent<HTMLDivElement>,
     direction: "se" | "sw" | "ne" | "nw",
   ) => {
+    if (isMobile) {
+      event.preventDefault();
+      event.stopPropagation();
+      return;
+    }
+
     event.preventDefault();
     event.stopPropagation();
     setIsDetached(true);
@@ -445,7 +532,7 @@ export function TerminalModal({ isOpen, onClose }: Props) {
     };
   };
 
-  const handleDragStart = (event: ReactMouseEvent<HTMLDivElement>) => {
+  const handleDragStart = (event: ReactPointerEvent<HTMLDivElement>) => {
     event.preventDefault();
     setIsDetached(true);
     dragStateRef.current = {
@@ -458,7 +545,7 @@ export function TerminalModal({ isOpen, onClose }: Props) {
     if (isDetached) {
       setIsDetached(false);
       setIsMinimized(false);
-      setSize({ width: 700, height: 350 });
+      setIsMinimizing(false);
       dragStateRef.current = null;
       resizeStateRef.current = null;
       return;
@@ -466,14 +553,48 @@ export function TerminalModal({ isOpen, onClose }: Props) {
 
     setIsDetached(true);
     setIsMinimized(false);
+    setIsMinimizing(false);
     dragStateRef.current = null;
     resizeStateRef.current = null;
   };
 
   const handleMinimize = () => {
+    const startX = position.x + size.width / 2;
+    const startY = position.y + size.height / 2;
+    const finalX = 24;
+    const finalY = typeof window !== "undefined" ? window.innerHeight / 2 : 24;
+
+    setMinimizedTransitionOrigin({ x: startX, y: startY });
+    setMinimizedPosition({ x: startX, y: startY });
+    setMinimizeAnimation({
+      x: startX,
+      y: startY,
+      width: size.width,
+      height: size.height,
+      borderRadius: 24,
+      opacity: 1,
+    });
     setIsMinimized(true);
+    setIsMinimizing(true);
     dragStateRef.current = null;
     resizeStateRef.current = null;
+
+    window.setTimeout(() => {
+      setMinimizeAnimation({
+        x: finalX,
+        y: finalY,
+        width: 56,
+        height: 56,
+        borderRadius: 999,
+        opacity: 1,
+      });
+      setMinimizedPosition({ x: finalX, y: finalY });
+      setMinimizedTransitionOrigin(null);
+    }, 16);
+
+    window.setTimeout(() => {
+      setIsMinimizing(false);
+    }, 600);
   };
 
   const handleRestore = () => {
@@ -484,13 +605,24 @@ export function TerminalModal({ isOpen, onClose }: Props) {
     }
 
     setIsMinimized(false);
+    setIsMinimizing(false);
+    setMinimizeAnimation({
+      x: 0,
+      y: 0,
+      width: 0,
+      height: 0,
+      borderRadius: 12,
+      opacity: 1,
+    });
     minimizedDragMovedRef.current = false;
     dragStateRef.current = null;
     minimizedDragStateRef.current = null;
     resizeStateRef.current = null;
   };
 
-  const handleMinimizedDragStart = (event: ReactMouseEvent<HTMLDivElement>) => {
+  const handleMinimizedDragStart = (
+    event: ReactPointerEvent<HTMLDivElement>,
+  ) => {
     event.preventDefault();
     event.stopPropagation();
     minimizedDragMovedRef.current = false;
@@ -498,6 +630,40 @@ export function TerminalModal({ isOpen, onClose }: Props) {
       offsetX: event.clientX - minimizedPosition.x,
       offsetY: event.clientY - minimizedPosition.y,
     };
+    event.currentTarget.setPointerCapture(event.pointerId);
+  };
+
+  const handleMinimizedDragMove = (
+    event: ReactPointerEvent<HTMLDivElement>,
+  ) => {
+    if (!minimizedDragStateRef.current) return;
+
+    minimizedDragMovedRef.current = true;
+    const margin = 24;
+    const width = 56;
+    const height = 56;
+    const maxX = Math.max(0, window.innerWidth - width - margin);
+    const maxY = Math.max(0, window.innerHeight - height - margin);
+
+    setMinimizedPosition({
+      x: Math.min(
+        maxX,
+        Math.max(margin, event.clientX - minimizedDragStateRef.current.offsetX),
+      ),
+      y: Math.min(
+        maxY,
+        Math.max(margin, event.clientY - minimizedDragStateRef.current.offsetY),
+      ),
+    });
+  };
+
+  const handleMinimizedDragEnd = (event: ReactPointerEvent<HTMLDivElement>) => {
+    if (!minimizedDragMovedRef.current) {
+      handleRestore();
+    }
+    minimizedDragMovedRef.current = false;
+    minimizedDragStateRef.current = null;
+    event.currentTarget.releasePointerCapture(event.pointerId);
   };
 
   const terminalContent = () => (
@@ -518,7 +684,7 @@ export function TerminalModal({ isOpen, onClose }: Props) {
       }}
     >
       <Box
-        onMouseDown={handleDragStart}
+        onPointerDown={handleDragStart}
         sx={{
           px: 2,
           py: 1.1,
@@ -527,6 +693,7 @@ export function TerminalModal({ isOpen, onClose }: Props) {
           bgcolor: "#161b22",
           alignItems: "center",
           userSelect: "none",
+          touchAction: "none",
           borderBottom: "1px solid #30363d",
           justifyContent: "space-between",
         }}
@@ -571,7 +738,7 @@ export function TerminalModal({ isOpen, onClose }: Props) {
             placement="top"
           >
             <IconButton
-              onMouseDown={(event) => event.stopPropagation()}
+              onPointerDown={(event) => event.stopPropagation()}
               onClick={(event) => {
                 event.stopPropagation();
                 if (isMinimized) {
@@ -601,7 +768,7 @@ export function TerminalModal({ isOpen, onClose }: Props) {
             placement="top"
           >
             <IconButton
-              onMouseDown={(event) => event.stopPropagation()}
+              onPointerDown={(event) => event.stopPropagation()}
               onClick={(event) => {
                 event.stopPropagation();
                 handleToggleDetached();
@@ -622,7 +789,7 @@ export function TerminalModal({ isOpen, onClose }: Props) {
 
           <Tooltip title={t("terminal.close")} placement="top">
             <IconButton
-              onMouseDown={(event) => event.stopPropagation()}
+              onPointerDown={(event) => event.stopPropagation()}
               onClick={(event) => {
                 event.stopPropagation();
                 onClose();
@@ -823,46 +990,86 @@ export function TerminalModal({ isOpen, onClose }: Props) {
           </Box>
         ))}
       </Box>
-      <Box
-        onMouseDown={(event) => handleResizeStart(event, "se")}
-        sx={{
-          width: 16,
-          right: 0,
-          height: 16,
-          bottom: 0,
-          cursor: "nwse-resize",
-          bgcolor: "transparent",
-          position: "absolute",
-        }}
-      />
+      {!isMobile ? (
+        <Box
+          onPointerDown={(event) => handleResizeStart(event, "se")}
+          sx={{
+            width: 16,
+            right: 0,
+            height: 16,
+            bottom: 0,
+            cursor: "nwse-resize",
+            bgcolor: "transparent",
+            position: "absolute",
+            touchAction: "none",
+          }}
+        />
+      ) : null}
     </Box>
   );
+
+  if (isMinimizing) {
+    return (
+      <Portal>
+        <Box
+          sx={{
+            left: minimizeAnimation.x,
+            top: minimizeAnimation.y,
+            width: `${minimizeAnimation.width}px`,
+            height: `${minimizeAnimation.height}px`,
+            zIndex: 1400,
+            opacity: minimizeAnimation.opacity,
+            position: "fixed",
+            overflow: "hidden",
+            boxShadow: "0 24px 80px rgba(0, 0, 0, 0.45)",
+            transform: "translate(-50%, -50%)",
+            transition:
+              "left 0.6s cubic-bezier(0.2, 0.8, 0.2, 1.1), top 0.6s cubic-bezier(0.2, 0.8, 0.2, 1.1), width 0.6s cubic-bezier(0.2, 0.8, 0.2, 1.1), height 0.6s cubic-bezier(0.2, 0.8, 0.2, 1.1), border-radius 0.6s cubic-bezier(0.2, 0.8, 0.2, 1.1), opacity 0.25s ease",
+            borderRadius: `${minimizeAnimation.borderRadius}px`,
+            pointerEvents: "none",
+          }}
+        >
+          {terminalContent()}
+        </Box>
+      </Portal>
+    );
+  }
 
   if (isMinimized) {
     return (
       <Portal>
         <Box
-          onMouseDown={handleMinimizedDragStart}
-          onClick={handleRestore}
+          onPointerDown={handleMinimizedDragStart}
+          onPointerMove={handleMinimizedDragMove}
+          onPointerUp={handleMinimizedDragEnd}
+          onPointerCancel={handleMinimizedDragEnd}
+          onClick={(event) => {
+            event.stopPropagation();
+          }}
           sx={{
-            position: "fixed",
-            left: minimizedPosition.x,
             top: minimizedPosition.y,
-            transform: "translateY(-50%)",
+            left: minimizedPosition.x,
             width: 56,
-            height: 56,
-            zIndex: 1400,
-            borderRadius: "50%",
-            bgcolor: "#161b22",
-            border: "1px solid #30363d",
-            boxShadow: "0 12px 40px rgba(0, 0, 0, 0.35)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            cursor: "pointer",
             color: "#7ee787",
-            animation: "terminalPulse 1.4s infinite",
-            transition: "transform 0.2s ease, box-shadow 0.2s ease",
+            height: 56,
+            border: "1px solid #30363d",
+            zIndex: 1400,
+            cursor: "pointer",
+            bgcolor: "#161b22",
+            display: "flex",
+            position: "fixed",
+            transform: "translate(-50%, -50%)",
+            boxShadow: "0 12px 40px rgba(0, 0, 0, 0.35)",
+            alignItems: "center",
+            touchAction: "none",
+            borderRadius: "50%",
+            justifyContent: "center",
+            animation: minimizedTransitionOrigin
+              ? "terminalPulse 1.4s infinite, terminalFloat 0.9s cubic-bezier(0.2, 0.8, 0.2, 1.1)"
+              : "terminalPulse 1.4s infinite",
+            transition: minimizedTransitionOrigin
+              ? "left 0.9s cubic-bezier(0.2, 0.8, 0.2, 1.1), top 0.9s cubic-bezier(0.2, 0.8, 0.2, 1.1), transform 0.9s cubic-bezier(0.2, 0.8, 0.2, 1.1)"
+              : "transform 0.2s ease, box-shadow 0.2s ease",
             "@keyframes terminalPulse": {
               "0%, 100%": {
                 boxShadow: "0 0 0 2px rgba(137, 246, 146, 0.1)",
@@ -873,6 +1080,20 @@ export function TerminalModal({ isOpen, onClose }: Props) {
                 boxShadow: "0 0 0 4px rgba(18, 232, 47, 0.46)",
                 borderColor: "#3afb54",
                 transform: "scale(1.04)",
+              },
+            },
+            "@keyframes terminalFloat": {
+              "0%": {
+                opacity: 0.1,
+                transform: "scale(0.45)",
+              },
+              "55%": {
+                opacity: 0.9,
+                transform: "scale(1.08)",
+              },
+              "100%": {
+                opacity: 1,
+                transform: "scale(1)",
               },
             },
           }}
