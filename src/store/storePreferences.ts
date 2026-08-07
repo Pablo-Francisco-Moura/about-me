@@ -7,17 +7,33 @@ interface PreferencesState {
   setMode: (mode: TypeMode) => void;
   lang: TypeLanguageCode;
   setLang: (lang: TypeLanguageCode) => void;
+  isMobile: boolean;
+  setIsMobile: (isMobile: boolean) => void;
 }
 
-export const usePreferencesStore = create<PreferencesState>((set) => ({
-  mode: (localStorage.getItem("themeMode") as TypeMode) || "light",
-  setMode: (mode) => {
-    localStorage.setItem("themeMode", mode);
-    set({ mode });
-  },
-  lang: (i18n.language as TypeLanguageCode) || "en",
-  setLang: (lang) => {
-    i18n.changeLanguage(lang);
-    set({ lang });
-  },
-}));
+const getIsMobile = () =>
+  typeof window !== "undefined" ? window.innerWidth <= 650 : false;
+
+export const usePreferencesStore = create<PreferencesState>((set) => {
+  const updateIsMobile = () => set({ isMobile: getIsMobile() });
+
+  if (typeof window !== "undefined") {
+    window.addEventListener("resize", updateIsMobile);
+    updateIsMobile();
+  }
+
+  return {
+    mode: (localStorage.getItem("themeMode") as TypeMode) || "light",
+    setMode: (mode) => {
+      localStorage.setItem("themeMode", mode);
+      set({ mode });
+    },
+    lang: (i18n.language as TypeLanguageCode) || "en",
+    setLang: (lang) => {
+      i18n.changeLanguage(lang);
+      set({ lang });
+    },
+    isMobile: getIsMobile(),
+    setIsMobile: (isMobile) => set({ isMobile }),
+  };
+});
