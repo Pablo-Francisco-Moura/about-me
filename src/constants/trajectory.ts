@@ -7,3 +7,5 @@ export const EXPERIENCE_KEYS = [
   "infrastructure",
   "administrative",
 ] as const;
+
+export const EDUCATION_KEYS = ["technical", "degree"] as const;
