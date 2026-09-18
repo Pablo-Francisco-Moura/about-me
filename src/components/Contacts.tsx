@@ -1,13 +1,24 @@
 import { CONTACTS } from "../constants/app";
 import { useTranslation } from "react-i18next";
+import { usePreferencesStore } from "../store/storePreferences";
 import { Box, Tooltip, Typography } from "@mui/material";
+import type { TypeContact } from "../types/app";
 
 interface Props {
   isMobile: boolean;
 }
 
+const getContactImage = (contact: TypeContact, mode: "light" | "dark") => {
+  if (typeof contact.image === "string") {
+    return contact.image;
+  }
+
+  return mode === "dark" ? contact.image.dark : contact.image.light;
+};
+
 export function Contacts({ isMobile }: Props) {
   const { t } = useTranslation();
+  const { mode } = usePreferencesStore();
 
   return (
     <section
@@ -48,7 +59,7 @@ export function Contacts({ isMobile }: Props) {
             }}
           >
             <img
-              src={contact.image}
+              src={getContactImage(contact, mode)}
               alt={contact.name}
               style={{
                 width: "40px",
