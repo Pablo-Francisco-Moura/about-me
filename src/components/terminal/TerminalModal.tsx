@@ -9,10 +9,15 @@ import {
   Typography,
 } from "@mui/material";
 import type { TypeCommandOutput } from "../../types/terminal";
-import type { FormEvent, PointerEvent as ReactPointerEvent } from "react";
-import { CMDS } from "../../constants/terminal";
+import type {
+  FormEvent,
+  KeyboardEvent as ReactKeyboardEvent,
+  PointerEvent as ReactPointerEvent,
+} from "react";
+import { CMDS, COMMAND_PRIORITY, HELP_COMMAND } from "../../constants/terminal";
+import { Trans } from "react-i18next";
 import { useTranslation } from "react-i18next";
-import { SKILLS, PROJECTS } from "../../constants/app";
+import { CONTACTS, SKILLS, PROJECTS } from "../../constants/app";
 import { usePreferencesStore } from "../../store/storePreferences";
 import { useEffect, useRef, useState } from "react";
 import { X, Maximize2, Terminal as TerminalIcon } from "lucide-react";
@@ -62,6 +67,8 @@ export function TerminalModal({ isOpen, onClose }: Props) {
 
   const [size, setSize] = useState(() => getResponsiveTerminalSize(isMobile));
   const [input, setInput] = useState("");
+  const [cursorPosition, setCursorPosition] = useState(0);
+  const [historyIndex, setHistoryIndex] = useState(-1);
   const [history, setHistory] = useState<TypeCommandOutput[]>(() =>
     getInitialHistory(t),
   );
@@ -92,6 +99,7 @@ export function TerminalModal({ isOpen, onClose }: Props) {
 
   const inputRef = useRef<HTMLInputElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const draftInputRef = useRef("");
   const dragStateRef = useRef<{ offsetX: number; offsetY: number } | null>(
     null,
   );
@@ -125,6 +133,17 @@ export function TerminalModal({ isOpen, onClose }: Props) {
 
     return () => window.clearTimeout(timeout);
   }, [isOpen]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const timeout = window.setTimeout(() => {
+      inputRef.current?.focus();
+      setIsCursorActive(true);
+    }, 0);
+
+    return () => window.clearTimeout(timeout);
+  }, [isDetached, isOpen]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -341,27 +360,119 @@ export function TerminalModal({ isOpen, onClose }: Props) {
     setIsCursorActive(true);
   };
 
+  const setInputFromHistory = (value: string) => {
+    setInput(value);
+    setCursorPosition(value.length);
+    window.requestAnimationFrame(() => {
+      const inputElement = inputRef.current;
+      if (!inputElement) return;
+
+      inputElement.focus();
+      inputElement.setSelectionRange(value.length, value.length);
+    });
+  };
+
+  const syncCursorPosition = () => {
+    setCursorPosition(inputRef.current?.selectionStart ?? input.length);
+  };
+
+  const handleInputKeyDown = (event: ReactKeyboardEvent<HTMLInputElement>) => {
+    if (event.key !== "ArrowUp" && event.key !== "ArrowDown") return;
+
+    const commandHistory = sessionHistory
+      .filter((item) => item.type === "user")
+      .map((item) => String(item.content));
+
+    if (commandHistory.length === 0) return;
+
+    event.preventDefault();
+
+    if (event.key === "ArrowUp") {
+      const nextIndex =
+        historyIndex === -1
+          ? commandHistory.length - 1
+          : Math.max(0, historyIndex - 1);
+
+      if (historyIndex === -1) draftInputRef.current = input;
+      setHistoryIndex(nextIndex);
+      setInputFromHistory(commandHistory[nextIndex]);
+      return;
+    }
+
+    if (historyIndex === -1) return;
+
+    const nextIndex = historyIndex + 1;
+    if (nextIndex >= commandHistory.length) {
+      setHistoryIndex(-1);
+      setInputFromHistory(draftInputRef.current);
+      return;
+    }
+
+    setHistoryIndex(nextIndex);
+    setInputFromHistory(commandHistory[nextIndex]);
+  };
+
   const executeCommand = (cmd: string) => {
     const cleanCmd = cmd.trim().toLowerCase();
+    const [baseCommand, helpTopic] = cleanCmd.split(/\s+/);
+    const matchedCommand = CMDS.find((command) =>
+      command.name.includes(cleanCmd),
+    );
+    const commandName = matchedCommand?.name[0] ?? baseCommand;
+
+    setHistoryIndex(-1);
+    draftInputRef.current = "";
+
     const timestamp = Date.now();
+
     const userEntry = {
       id: timestamp,
       type: "user" as const,
       content: cmd,
       timestamp,
     };
+
     const newSessionHistory: TypeCommandOutput[] = [
       ...sessionHistory,
       userEntry,
     ];
+
     const newHistory: TypeCommandOutput[] = [...history, userEntry];
 
     setSessionHistory(newSessionHistory);
 
     setIsCursorActive(false);
 
-    switch (cleanCmd) {
-      case "help":
+    const contactCommand = matchedCommand?.link ? matchedCommand : null;
+
+    if (contactCommand?.link) {
+      newHistory.push({
+        id: Date.now() + 1,
+        type: "system",
+        content: t(contactCommand.description),
+      });
+      setHistory(newHistory);
+      setInput("");
+      window.open(contactCommand.link, "_blank", "noopener,noreferrer");
+      return;
+    }
+
+    switch (commandName) {
+      case "help": {
+        const helpCommands = !helpTopic
+          ? COMMAND_PRIORITY
+          : helpTopic === "contacts"
+            ? COMMAND_PRIORITY.filter((name) =>
+                ["whatsapp", "linkedin", "github", "email"].includes(name),
+              )
+            : helpTopic === "send"
+              ? COMMAND_PRIORITY.filter((name) => name.startsWith("send "))
+              : helpTopic === "viewer"
+                ? COMMAND_PRIORITY.filter((name) => name.startsWith("viewer "))
+                : helpTopic === "terminal"
+                  ? ["help", "clear", "quit", "restore", "detach"]
+                  : [];
+
         newHistory.push({
           id: Date.now() + 1,
           type: "system",
@@ -373,16 +484,25 @@ export function TerminalModal({ isOpen, onClose }: Props) {
               >
                 {t("terminal.available_commands")}
               </Typography>
-              {CMDS.map((cmd) => (
-                <Typography key={cmd.name} variant="body2">
-                  <span style={{ color: "#6076f2" }}>{cmd.name}</span> —{" "}
-                  {t(cmd.description)}
-                </Typography>
-              ))}
+              {helpCommands.map((commandName) => {
+                const command = CMDS.find((item) =>
+                  item.name.includes(commandName),
+                );
+                const description =
+                  command?.description ?? HELP_COMMAND.description;
+
+                return (
+                  <Typography key={commandName} variant="body2">
+                    <span style={{ color: "#6076f2" }}>{commandName}</span> —{" "}
+                    {t(description)}
+                  </Typography>
+                );
+              })}
             </Box>
           ),
         });
         break;
+      }
 
       case "about":
         newHistory.push({
@@ -422,6 +542,26 @@ export function TerminalModal({ isOpen, onClose }: Props) {
 
             return `${skillNames.slice(0, -1).join(", ")} e ${skillNames.at(-1)}`;
           })(),
+        });
+        break;
+
+      case "contacts":
+      case "contatos":
+        newHistory.push({
+          id: Date.now() + 1,
+          type: "system",
+          content: (
+            <Box sx={{ color: "#d0d7de" }}>
+              <Typography sx={{ color: "#f2cc60" }}>
+                {t("terminal.command.contacts.translation")}
+              </Typography>
+              {CONTACTS.map((contact) => (
+                <Typography key={contact.name}>
+                  {contact.name} — {contact.link}
+                </Typography>
+              ))}
+            </Box>
+          ),
         });
         break;
 
@@ -481,14 +621,37 @@ export function TerminalModal({ isOpen, onClose }: Props) {
         onClose();
         return;
 
+      case "minimize":
+        setHistory(newHistory);
+        setInput("");
+        handleMinimize();
+        return;
+
+      case "detach":
+        setHistory(newHistory);
+        setInput("");
+        if (!isDetached) handleToggleDetached();
+        return;
+
+      case "restore":
+        setHistory(newHistory);
+        setInput("");
+        if (isDetached) handleToggleDetached();
+        return;
+
       default:
         newHistory.push({
           id: Date.now() + 1,
           type: "error",
-          content: t("terminal.errors.command_not_found", {
-            cmd,
-            help: t("terminal.command.help.translation"),
-          }),
+          content: (
+            <Typography sx={{ color: "#ff7b72" }}>
+              <Trans
+                i18nKey="terminal.errors.command_not_found"
+                values={{ cmd }}
+                components={[<span style={{ color: "#ffffff" }} />]}
+              />
+            </Typography>
+          ),
         });
         break;
     }
@@ -764,7 +927,11 @@ export function TerminalModal({ isOpen, onClose }: Props) {
           </Tooltip>
 
           <Tooltip
-            title={isDetached ? "Restore terminal" : "Detach terminal"}
+            title={
+              isDetached
+                ? t("terminal.command.restore.translation")
+                : t("terminal.command.detach.translation")
+            }
             placement="top"
           >
             <IconButton
@@ -774,7 +941,11 @@ export function TerminalModal({ isOpen, onClose }: Props) {
                 handleToggleDetached();
               }}
               size="small"
-              aria-label={isDetached ? "Restore terminal" : "Detach terminal"}
+              aria-label={
+                isDetached
+                  ? t("terminal.command.restore.translation")
+                  : t("terminal.command.detach.translation")
+              }
               sx={{
                 color: "#8b949e",
                 "&:hover": {
@@ -909,7 +1080,7 @@ export function TerminalModal({ isOpen, onClose }: Props) {
                   whiteSpace: "pre-wrap",
                 }}
               >
-                {input}
+                {input.slice(0, cursorPosition)}
               </Box>
               <Box
                 component="span"
@@ -923,11 +1094,36 @@ export function TerminalModal({ isOpen, onClose }: Props) {
               >
                 {cursorSymbol}
               </Box>
+              <Box
+                component="span"
+                sx={{
+                  color: "#f0f6fc",
+                  fontSize: "0.95rem",
+                  wordBreak: "break-word",
+                  fontFamily: "inherit",
+                  whiteSpace: "pre-wrap",
+                }}
+              >
+                {input.slice(cursorPosition)}
+              </Box>
               <InputBase
                 value={input}
                 inputRef={inputRef}
-                onChange={(e) => setInput(e.target.value)}
-                onFocus={() => setIsCursorActive(true)}
+                onChange={(e) => {
+                  setHistoryIndex(-1);
+                  draftInputRef.current = e.target.value;
+                  setCursorPosition(
+                    e.target.selectionStart ?? e.target.value.length,
+                  );
+                  setInput(e.target.value);
+                }}
+                onKeyDown={handleInputKeyDown}
+                onKeyUp={syncCursorPosition}
+                onSelect={syncCursorPosition}
+                onFocus={() => {
+                  setIsCursorActive(true);
+                  syncCursorPosition();
+                }}
                 onBlur={() => setIsCursorActive(false)}
                 autoFocus
                 fullWidth
@@ -968,11 +1164,29 @@ export function TerminalModal({ isOpen, onClose }: Props) {
           justifyContent: "flex-start",
         }}
       >
-        {CMDS.map((cmd) => (
+        <Box
+          component="button"
+          onClick={() => handleQuickCommand(HELP_COMMAND.name)}
+          sx={{
+            color: "#f9fafb",
+            border: 0,
+            cursor: "pointer",
+            bgcolor: "transparent",
+            padding: 0,
+            fontFamily: "inherit",
+            fontWeight: 700,
+            letterSpacing: 0.8,
+            textTransform: "uppercase",
+            "&:hover": { color: "#7ee787" },
+          }}
+        >
+          {t(HELP_COMMAND.tooltip)}
+        </Box>
+        {CMDS.filter((cmd) => !cmd.notShowBottom).map((cmd) => (
           <Box
-            key={cmd.name}
+            key={cmd.name[0]}
             component="button"
-            onClick={() => handleQuickCommand(cmd.name)}
+            onClick={() => handleQuickCommand(cmd.name[0])}
             sx={{
               color: "#f9fafb",
               border: 0,

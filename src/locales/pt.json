@@ -53,7 +53,7 @@
       },
       "about": {
         "translation": "Sobre",
-        "description": "Exibe informações sobre o desenvolvedor",
+        "description": "Minha trajetória como profissional",
         "content": "Desenvolvedor Full Stack focado em ecossistemas modernos."
       },
       "projects": {
@@ -64,6 +64,10 @@
         "translation": "Habilidades",
         "description": "Mostra as habilidades técnicas"
       },
+      "contacts": {
+        "translation": "Contatos",
+        "description": "Lista os canais de contato disponíveis"
+      },
       "clear": {
         "translation": "Limpar",
         "description": "Limpa o histórico do terminal"
@@ -72,6 +76,18 @@
         "translation": "Histórico",
         "description": "Mostra todos os comandos digitados nesta sessão",
         "empty": "Nenhum histórico disponível."
+      },
+      "minimize": {
+        "translation": "Minimizar",
+        "description": "Minimiza o terminal"
+      },
+      "detach": {
+        "translation": "Separar",
+        "description": "Separa o foco do terminal da página"
+      },
+      "restore": {
+        "translation": "Restaurar",
+        "description": "Restaura o foco para o terminal"
       },
       "quit": {
         "translation": "Sair",
@@ -82,7 +98,7 @@
     "projects_title": "Projetos em Destaque:",
     "window_title": "PABLO_OS / TERMINAL",
     "errors": {
-      "command_not_found": "comando não encontrado: {{cmd}}. Digite '{{help}}' para ver os comandos."
+      "command_not_found": "comando não encontrado: {{cmd}}. Digite '<0>help</0>' para ver os comandos."
     }
   },
   "contacts": {

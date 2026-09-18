@@ -64,6 +64,10 @@
         "translation": "Skills",
         "description": "Shows technical skills"
       },
+      "contacts": {
+        "translation": "Contacts",
+        "description": "Lists the available contact channels"
+      },
       "clear": {
         "translation": "Clear",
         "description": "Clears the terminal history"
@@ -72,6 +76,18 @@
         "translation": "History",
         "description": "Shows all typed commands during this session",
         "empty": "No history available."
+      },
+      "minimize": {
+        "translation": "Minimize",
+        "description": "Minimizes the terminal"
+      },
+      "detach": {
+        "translation": "Detach",
+        "description": "Separates the terminal focus from the page"
+      },
+      "restore": {
+        "translation": "Restore",
+        "description": "Restores focus to the terminal"
       },
       "quit": {
         "translation": "Quit",
@@ -82,7 +98,7 @@
     "projects_title": "Featured projects:",
     "window_title": "PABLO_OS / TERMINAL",
     "errors": {
-      "command_not_found": "command not found: {{cmd}}. Type '{{help}}' to see the commands."
+      "command_not_found": "command not found: {{cmd}}. Type '<0>help</0>' to see the commands."
     }
   },
   "contacts": {
