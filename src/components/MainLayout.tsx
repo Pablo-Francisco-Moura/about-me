@@ -218,6 +218,38 @@ function StyleSheet() {
                 z-index: 4;
             }
 
+            .header-background .slick-arrow {
+                opacity: 0;
+                visibility: hidden;
+                left: 16px !important;
+                right: auto !important;
+                transform: none !important;
+                transition: opacity 180ms ease, background-color 180ms ease;
+            }
+
+            .header-background .slick-next {
+                right: 16px !important;
+                left: auto !important;
+            }
+
+            .header-background .slick-prev::before,
+            .header-background .slick-next::before {
+                content: none;
+            }
+
+            .header-background .slick-arrow:hover {
+                opacity: 1;
+            }
+
+            .header-background:hover .slick-arrow {
+                opacity: 1;
+                visibility: visible;
+            }
+
+            .header-background .slick-arrow:hover {
+                background-color: rgba(0, 0, 0, 0.58) !important;
+            }
+
             .header-overlay {
                 position: absolute;
                 inset: 0;
