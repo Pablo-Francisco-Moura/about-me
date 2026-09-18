@@ -6,6 +6,6 @@ export const COPYRIGHT: TypeCopyright = {
   lastName: "Moura",
   firstName: "Pablo",
   developedBy: "Pablo Francisco Moura",
-  lastUpdated: "06/08/2026",
+  lastUpdated: "18/09/2026",
   fullLastName: "Francisco Moura",
 };
