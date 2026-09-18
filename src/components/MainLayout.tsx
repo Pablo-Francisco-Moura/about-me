@@ -6,6 +6,7 @@ import { Header } from "./headers";
 import { Projects } from "./projects";
 import { Contacts } from "./Contacts";
 import { Copyright } from "./Copyright";
+import { Trajectory } from "./Trajectory";
 import { Description } from "./Description";
 import { useMediaQuery } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
@@ -36,6 +37,35 @@ export default function MainLayout() {
     return () => element.removeEventListener("scroll", onScroll);
   }, []);
 
+  useEffect(() => {
+    const handleTerminalNavigation = (event: Event) => {
+      const target = (event as CustomEvent<string>).detail;
+      if (target !== "trajectory" && target !== "projects") return;
+
+      const container = mainLayoutRef.current;
+      const targetElement = document.getElementById(target);
+      if (!container || !targetElement) return;
+
+      const scrollToTarget = () => {
+        const containerRect = container.getBoundingClientRect();
+        const targetRect = targetElement.getBoundingClientRect();
+        const top = Math.max(
+          0,
+          container.scrollTop + targetRect.top - containerRect.top - 24,
+        );
+
+        container.scrollTo({ top, behavior: "smooth" });
+      };
+
+      requestAnimationFrame(scrollToTarget);
+      window.setTimeout(scrollToTarget, 400);
+    };
+
+    window.addEventListener("terminal:navigate", handleTerminalNavigation);
+    return () =>
+      window.removeEventListener("terminal:navigate", handleTerminalNavigation);
+  }, []);
+
   return (
     <div id="main-layout" ref={mainLayoutRef}>
       <Header hidden={hidden} />
@@ -56,6 +86,8 @@ export default function MainLayout() {
         <Skills />
 
         <Projects />
+
+        <Trajectory />
 
         <Thanks />
 
