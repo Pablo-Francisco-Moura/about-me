@@ -1,6 +1,6 @@
 import { Subtitle } from "./Subtitle";
 import { useTranslation } from "react-i18next";
-import { EXPERIENCE_KEYS } from "../constants/trajectory";
+import { EDUCATION_KEYS, EXPERIENCE_KEYS } from "../constants/trajectory";
 import { Box, Typography, useTheme } from "@mui/material";
 
 export function Trajectory() {
@@ -60,29 +60,28 @@ export function Trajectory() {
           <Typography variant="h5" gutterBottom>
             {t("trajectory.courses.title")}
           </Typography>
-          <Box sx={{ display: "grid", gap: 2 }}>
-            <Box>
-              <Typography sx={{ fontWeight: 700 }}>
-                {t("trajectory.courses.technical.title")}
-              </Typography>
-              <Typography color="text.secondary">
-                {t("trajectory.courses.technical.period")}
-              </Typography>
-              <Typography sx={{ mt: 1, lineHeight: 1.7 }}>
-                {t("trajectory.courses.technical.content")}
-              </Typography>
-            </Box>
-            <Box>
-              <Typography sx={{ fontWeight: 700 }}>
-                {t("trajectory.courses.degree.title")}
-              </Typography>
-              <Typography color="text.secondary">
-                {t("trajectory.courses.degree.period")}
-              </Typography>
-              <Typography sx={{ mt: 1, lineHeight: 1.7 }}>
-                {t("trajectory.courses.degree.content")}
-              </Typography>
-            </Box>
+          <Box sx={{ display: "grid", gap: 2, p: 1 }}>
+            {EDUCATION_KEYS.map((key) => (
+              <Box
+                key={key}
+                sx={{
+                  p: 1,
+                  border: `1px solid ${theme.palette.divider}`,
+                  borderRadius: "10px",
+                  backgroundColor: theme.palette.background.b3,
+                }}
+              >
+                <Typography sx={{ fontWeight: 700 }}>
+                  {t(`trajectory.courses.${key}.title`)}
+                </Typography>
+                <Typography color="text.secondary">
+                  {t(`trajectory.courses.${key}.period`)}
+                </Typography>
+                <Typography sx={{ mt: 1, lineHeight: 1.7 }}>
+                  {t(`trajectory.courses.${key}.content`)}
+                </Typography>
+              </Box>
+            ))}
           </Box>
         </Box>
 
