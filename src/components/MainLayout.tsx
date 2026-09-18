@@ -6,6 +6,7 @@ import { Header } from "./headers";
 import { Projects } from "./projects";
 import { Contacts } from "./Contacts";
 import { Copyright } from "./Copyright";
+import { Trajectory } from "./Trajectory";
 import { Description } from "./Description";
 import { useMediaQuery } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
@@ -36,6 +37,35 @@ export default function MainLayout() {
     return () => element.removeEventListener("scroll", onScroll);
   }, []);
 
+  useEffect(() => {
+    const handleTerminalNavigation = (event: Event) => {
+      const target = (event as CustomEvent<string>).detail;
+      if (target !== "trajectory" && target !== "projects") return;
+
+      const container = mainLayoutRef.current;
+      const targetElement = document.getElementById(target);
+      if (!container || !targetElement) return;
+
+      const scrollToTarget = () => {
+        const containerRect = container.getBoundingClientRect();
+        const targetRect = targetElement.getBoundingClientRect();
+        const top = Math.max(
+          0,
+          container.scrollTop + targetRect.top - containerRect.top - 24,
+        );
+
+        container.scrollTo({ top, behavior: "smooth" });
+      };
+
+      requestAnimationFrame(scrollToTarget);
+      window.setTimeout(scrollToTarget, 400);
+    };
+
+    window.addEventListener("terminal:navigate", handleTerminalNavigation);
+    return () =>
+      window.removeEventListener("terminal:navigate", handleTerminalNavigation);
+  }, []);
+
   return (
     <div id="main-layout" ref={mainLayoutRef}>
       <Header hidden={hidden} />
@@ -56,6 +86,8 @@ export default function MainLayout() {
         <Skills />
 
         <Projects />
+
+        <Trajectory />
 
         <Thanks />
 
@@ -184,6 +216,38 @@ function StyleSheet() {
             .header-background .slick-arrow,
             .header-background .slick-dots {
                 z-index: 4;
+            }
+
+            .header-background .slick-arrow {
+                opacity: 0;
+                visibility: hidden;
+                left: 16px !important;
+                right: auto !important;
+                transform: none !important;
+                transition: opacity 180ms ease, background-color 180ms ease;
+            }
+
+            .header-background .slick-next {
+                right: 16px !important;
+                left: auto !important;
+            }
+
+            .header-background .slick-prev::before,
+            .header-background .slick-next::before {
+                content: none;
+            }
+
+            .header-background .slick-arrow:hover {
+                opacity: 1;
+            }
+
+            .header-background:hover .slick-arrow {
+                opacity: 1;
+                visibility: visible;
+            }
+
+            .header-background .slick-arrow:hover {
+                background-color: rgba(0, 0, 0, 0.58) !important;
             }
 
             .header-overlay {

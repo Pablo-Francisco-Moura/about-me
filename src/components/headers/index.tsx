@@ -4,12 +4,50 @@ import { BANNERS } from "../../constants/app";
 import { Controls } from "./controls";
 import { AlertMessage } from "../Alert";
 import { useRef, useState } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 interface Props {
   hidden: boolean;
+}
+
+interface ArrowProps {
+  direction: "left" | "right";
+  style?: React.CSSProperties;
+  className?: string;
+  onClick?: () => void;
+}
+
+function BannerArrow({ style, className, direction, onClick }: ArrowProps) {
+  const Icon = direction === "left" ? ChevronLeft : ChevronRight;
+
+  return (
+    <button
+      type="button"
+      className={className}
+      aria-label={direction === "left" ? "Previous banner" : "Next banner"}
+      style={{
+        ...style,
+        width: "42px",
+        color: "#fff",
+        height: "42px",
+        margin: 0,
+        border: "1px solid rgba(255, 255, 255, 0.45)",
+        padding: 0,
+        display: "flex",
+        alignItems: "center",
+        background: "rgba(0, 0, 0, 0.35)",
+        borderRadius: "50%",
+        justifyContent: "center",
+        backdropFilter: "blur(4px)",
+      }}
+      onClick={onClick}
+    >
+      <Icon size={26} strokeWidth={2} />
+    </button>
+  );
 }
 
 export function Header({ hidden }: Props) {
@@ -38,6 +76,8 @@ export function Header({ hidden }: Props) {
     autoplay: true,
     touchMove: true,
     draggable: true,
+    prevArrow: <BannerArrow direction="left" />,
+    nextArrow: <BannerArrow direction="right" />,
     slidesToShow: 1,
     pauseOnHover: false,
     autoplaySpeed: 4000,
@@ -85,21 +125,6 @@ export function Header({ hidden }: Props) {
           }
           .slick-dots li.slick-active button {
             background: #646cff !important;
-          }
-          .slick-prev:before {
-            width: 34px;
-            height: 34px;
-            content: '';
-            display: inline-block;
-            background: url('data:image/svg+xml;utf8,<svg fill="%23646cff" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>') center/contain no-repeat;
-            margin-left: -10px;
-          }
-          .slick-next:before {
-            width: 34px;
-            height: 34px;
-            content: '';
-            display: inline-block;
-            background: url('data:image/svg+xml;utf8,<svg fill="%23646cff" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>') center/contain no-repeat;
           }
         `}</style>
       </div>

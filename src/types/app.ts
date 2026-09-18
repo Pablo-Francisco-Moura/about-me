@@ -1,7 +1,9 @@
+export type TypeContactImage = string | { light: string; dark: string };
+
 export type TypeContact = {
   name: string;
   link: string;
-  image: string;
+  image: TypeContactImage;
   tooltip: string;
 };
 

@@ -11,6 +11,7 @@ export function Projects() {
 
   return (
     <section
+      id="projects"
       style={{
         border: `1px solid ${theme.palette.divider}`,
         margin: "auto 20px auto 25px",

@@ -1,10 +1,19 @@
 import type { ReactNode } from "react";
 
 export type TypeCMD = {
-  name: string;
+  name: string[];
   tooltip: string;
   description: string;
   content?: string;
+  link?: string;
+  notShowBottom?: boolean;
+};
+
+export type TypeHelpCommand = {
+  name: string;
+  tooltip: string;
+  description: string;
+  commands: string[];
 };
 
 export type TypeCommandOutput = {

@@ -39,6 +39,100 @@
     "description": "Um quadro Kanban simples e intuitivo para gerenciamento de tarefas."
   },
   "thanks": "Obrigado por visitar meu portfólio!",
+  "trajectory": {
+    "title": "Trajetória",
+    "description": "Minha trajetória profissional, formação e principais competências.",
+    "summary": {
+      "title": "Resumo Profissional",
+      "content": "Desenvolvedor Full Stack com experiência desde 2021 na criação de aplicações web modernas, escaláveis e baseadas em arquiteturas de microsserviços. Construo portais e interfaces de alta performance e responsivas com React.js, Vite, Next.js, TypeScript, JavaScript, HTML5 e CSS3, além de soluções backend com Node.js, Python, .NET e bancos MySQL e PostgreSQL. Tenho experiência com APIs RESTful, WebSockets, testes automatizados, documentação técnica, Design Systems, crawlers e scrapers com Puppeteer, pipelines de dados com IA e LLMs, ambientes AWS e Azure, RabbitMQ, Kafka, CI/CD, Docker, Git e code reviews."
+    },
+    "courses": {
+      "title": "Formação",
+      "technical": {
+        "title": "Técnico em Informática",
+        "period": "2016 – 2017",
+        "content": "Formação com ênfase em manutenção de computadores, orientação a objetos com Java, JavaScript, PHP, HTML, bancos de dados MySQL e análise de sistemas."
+      },
+      "degree": {
+        "title": "Bacharelado em Sistemas de Informação",
+        "period": "2018 – 2022",
+        "content": "Ênfase em Engenharia de Software, modelagem e administração de bancos de dados e desenvolvimento web e mobile."
+      }
+    },
+    "experience": {
+      "title": "Experiência Profissional",
+      "current": {
+        "role": "Desenvolvedor Full Stack",
+        "period": "05/2026 – Atual",
+        "items": {
+          "0": "Desenvolvimento e manutenção de portais com React.js e TypeScript, integrados a microsserviços e APIs estáveis.",
+          "1": "Criação de crawlers e scrapers com Puppeteer e Python, usando IA e LLMs para processamento e análise textual.",
+          "2": "Desenvolvimento e consumo de APIs RESTful com NestJS e Prisma ORM, além de mensageria assíncrona com RabbitMQ.",
+          "3": "Modelagem e otimização de bancos MySQL e PostgreSQL, com deploy e sustentação em infraestrutura AWS.",
+          "4": "Implementação de funcionalidades em tempo real com WebSockets, priorizando resiliência e alta disponibilidade."
+        }
+      },
+      "full_stack": {
+        "role": "Desenvolvedor Full Stack",
+        "period": "06/2022 – 05/2026",
+        "items": {
+          "0": "Desenvolvimento de interfaces web modernas com React.js e TypeScript.",
+          "1": "Desenvolvimento e manutenção de APIs RESTful com NestJS, Prisma ORM e PostgreSQL.",
+          "2": "Atuação em nuvens Azure e Google Cloud, incluindo CDN e soluções de distribuição de conteúdo.",
+          "3": "Criação de documentação técnica com Swagger e VitePress, além de testes com Jest, Vitest e Testing Library.",
+          "4": "Construção de Design Systems, otimização de performance, responsividade, code reviews, Docker e CI/CD."
+        }
+      },
+      "internship": {
+        "role": "Estágio em TI",
+        "period": "01/2022 – 06/2022",
+        "items": {
+          "0": "Manutenção e evolução de sistema desenvolvido em PHP.",
+          "1": "Atualização de versão do PHP e integração com aplicações externas.",
+          "2": "Desenvolvimento de melhorias conforme as necessidades das áreas usuárias.",
+          "3": "Atuação em ambientes de QA e homologação."
+        }
+      },
+      "support_testing": {
+        "role": "Suporte e Testes",
+        "period": "10/2021 – 12/2021",
+        "items": {
+          "0": "Atuação em Service Desk integrado ao time de desenvolvimento.",
+          "1": "Execução de testes seguindo a metodologia Kanban.",
+          "2": "Verificação e reporte de falhas, sugerindo e aplicando correções simples.",
+          "3": "Participação em apresentações e validações de software com clientes."
+        }
+      },
+      "technical_support": {
+        "role": "Suporte Técnico",
+        "period": "04/2021 – 09/2021",
+        "items": {
+          "0": "Atendimento local e remoto em ambiente hospitalar.",
+          "1": "Suporte a sistemas corporativos, Active Directory, certificados digitais, redes, telefonia e impressoras.",
+          "2": "Resolução e acompanhamento de chamados com foco no cumprimento de SLA."
+        }
+      },
+      "infrastructure": {
+        "role": "Estágio em Infraestrutura de TI",
+        "period": "09/2019 – 09/2020",
+        "items": {
+          "0": "Suporte a redes e microinformática, incluindo formatação e configuração de máquinas.",
+          "1": "Criação de rede com servidor PFSense e administração de Windows Server.",
+          "2": "Configuração de ambientes Windows e Linux, backups, licenças, câmeras e controle de acesso.",
+          "3": "Conhecimentos básicos de infraestrutura em nuvem."
+        }
+      },
+      "administrative": {
+        "role": "Assistente Administrativo",
+        "period": "07/2018 – 09/2019",
+        "items": {
+          "0": "Gestão e acompanhamento de projetos em sistema interno.",
+          "1": "Controle de apontamentos e verificação de horas dos colaboradores.",
+          "2": "Emissão de relatórios mensais de produtividade."
+        }
+      }
+    }
+  },
   "terminal": {
     "open": "Abrir terminal",
     "welcome_title": "PABLO_OS [v1.0] — Terminal de bordo",
@@ -53,8 +147,8 @@
       },
       "about": {
         "translation": "Sobre",
-        "description": "Exibe informações sobre o desenvolvedor",
-        "content": "Desenvolvedor Full Stack focado em ecossistemas modernos."
+        "description": "Minha trajetória como profissional",
+        "content": "Abrindo minha trajetória profissional..."
       },
       "projects": {
         "translation": "Projetos",
@@ -63,6 +157,10 @@
       "skills": {
         "translation": "Habilidades",
         "description": "Mostra as habilidades técnicas"
+      },
+      "contacts": {
+        "translation": "Contatos",
+        "description": "Lista os canais de contato disponíveis"
       },
       "clear": {
         "translation": "Limpar",
@@ -73,6 +171,18 @@
         "description": "Mostra todos os comandos digitados nesta sessão",
         "empty": "Nenhum histórico disponível."
       },
+      "minimize": {
+        "translation": "Minimizar",
+        "description": "Minimiza o terminal"
+      },
+      "detach": {
+        "translation": "Separar",
+        "description": "Separa o foco do terminal da página"
+      },
+      "restore": {
+        "translation": "Restaurar",
+        "description": "Restaura o foco para o terminal"
+      },
       "quit": {
         "translation": "Sair",
         "description": "Fecha o terminal"
@@ -82,7 +192,7 @@
     "projects_title": "Projetos em Destaque:",
     "window_title": "PABLO_OS / TERMINAL",
     "errors": {
-      "command_not_found": "comando não encontrado: {{cmd}}. Digite '{{help}}' para ver os comandos."
+      "command_not_found": "comando não encontrado: {{cmd}}. Digite '<0>help</0>' para ver os comandos."
     }
   },
   "contacts": {

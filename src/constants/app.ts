@@ -15,6 +15,7 @@ import gitHubImage from "../assets/contacts/gitHub.png";
 import whatsappImage from "../assets/contacts/whatsapp.png";
 import linkedInImage from "../assets/contacts/linkedin.png";
 import miniKanbanImage from "../assets/projects/miniKanban.png";
+import gitHubWhiteImage from "../assets/contacts/gitHubWhite.png";
 import myGuidelinesImage from "../assets/projects/myGuidelines.png";
 import financeManagerImage from "../assets/projects/financeManager.png";
 
@@ -146,7 +147,10 @@ export const CONTACTS: TypeContact[] = [
   {
     name: "GitHub",
     link: "https://github.com/Pablo-Francisco-Moura",
-    image: gitHubImage,
+    image: {
+      light: gitHubImage,
+      dark: gitHubWhiteImage,
+    },
     tooltip: "contacts.gitHub",
   },
   {
