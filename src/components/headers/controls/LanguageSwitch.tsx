@@ -23,6 +23,13 @@ export function LanguageSwitch() {
           key={language.code}
           sx={{
             px: "5px",
+            transform: lang === language.code ? "scale(1.1)" : "scale(1)",
+            transition:
+              "background-color 600ms ease, border-color 600ms ease, transform 600ms cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 600ms ease",
+            boxShadow:
+              lang === language.code
+                ? "0 4px 14px rgba(100, 108, 255, 0.28)"
+                : "none",
           }}
           onClick={() => handleChangeLanguage(language.code)}
           variant={lang === language.code ? "contained" : "outlined"}
@@ -33,14 +40,21 @@ export function LanguageSwitch() {
             style={{
               width: 24,
               height: 24,
+              transform:
+                lang === language.code
+                  ? "scale(1.18) rotate(360deg)"
+                  : "scale(1)",
+              transition:
+                "transform 1s cubic-bezier(0.34, 1.56, 0.64, 1), filter 600ms ease",
               marginRight: 6,
               borderRadius: "4px",
             }}
           />
           <span
             style={{
-              fontWeight: 600,
               color: lang === language.code ? "white" : language.color,
+              fontWeight: 600,
+              transition: "color 220ms ease",
             }}
           >
             {language.code}
