@@ -8,18 +8,18 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
-import type { TypeCommandOutput } from "../../types/terminal";
 import type {
   FormEvent,
-  KeyboardEvent as ReactKeyboardEvent,
   PointerEvent as ReactPointerEvent,
+  KeyboardEvent as ReactKeyboardEvent,
 } from "react";
-import { CMDS, COMMAND_PRIORITY, HELP_COMMAND } from "../../constants/terminal";
+import type { TypeCommandOutput } from "../../types/terminal";
 import { Trans } from "react-i18next";
 import { useTranslation } from "react-i18next";
-import { CONTACTS, SKILLS, PROJECTS } from "../../constants/app";
 import { usePreferencesStore } from "../../store/storePreferences";
+import { CONTACTS, SKILLS, PROJECTS } from "../../constants/app";
 import { useEffect, useRef, useState } from "react";
+import { CMDS, COMMAND_PRIORITY, HELP_COMMAND } from "../../constants/terminal";
 import { X, Maximize2, Terminal as TerminalIcon } from "lucide-react";
 import MinimizeIcon from "@mui/icons-material/Minimize";
 
@@ -61,22 +61,31 @@ const getResponsiveTerminalSize = (isMobileView: boolean) => {
   return { width: 700, height: 350 };
 };
 
+// Wait 2s before closing the terminal.
+const waitClosingTerminal = 2000;
+
+// Performs the navigation 350 ms after closing the terminal.
+const waitNavigationAfterClosingTerminal = 500;
+
 export function TerminalModal({ isOpen, onClose }: Props) {
   const { t } = useTranslation();
   const { isMobile } = usePreferencesStore();
 
   const [size, setSize] = useState(() => getResponsiveTerminalSize(isMobile));
   const [input, setInput] = useState("");
-  const [cursorPosition, setCursorPosition] = useState(0);
-  const [historyIndex, setHistoryIndex] = useState(-1);
   const [history, setHistory] = useState<TypeCommandOutput[]>(() =>
     getInitialHistory(t),
   );
+  const [historyIndex, setHistoryIndex] = useState(-1);
+  const [cursorPosition, setCursorPosition] = useState(0);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isDetached, setIsDetached] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
   const [isMinimizing, setIsMinimizing] = useState(false);
   const [isCursorActive, setIsCursorActive] = useState(false);
+  const [sessionHistory, setSessionHistory] = useState<TypeCommandOutput[]>(
+    () => getInitialHistory(t),
+  );
   const [minimizeAnimation, setMinimizeAnimation] = useState({
     x: 0,
     y: 0,
@@ -85,9 +94,6 @@ export function TerminalModal({ isOpen, onClose }: Props) {
     borderRadius: 12,
     opacity: 1,
   });
-  const [sessionHistory, setSessionHistory] = useState<TypeCommandOutput[]>(
-    () => getInitialHistory(t),
-  );
   const [minimizedPosition, setMinimizedPosition] = useState({
     x: 24,
     y: typeof window !== "undefined" ? window.innerHeight / 2 : 24,
@@ -99,10 +105,10 @@ export function TerminalModal({ isOpen, onClose }: Props) {
 
   const inputRef = useRef<HTMLInputElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
-  const draftInputRef = useRef("");
   const dragStateRef = useRef<{ offsetX: number; offsetY: number } | null>(
     null,
   );
+  const draftInputRef = useRef("");
   const minimizedDragStateRef = useRef<{
     offsetX: number;
     offsetY: number;
@@ -129,6 +135,7 @@ export function TerminalModal({ isOpen, onClose }: Props) {
     };
 
     focusInput();
+
     const timeout = window.setTimeout(focusInput, 50);
 
     return () => window.clearTimeout(timeout);
@@ -510,6 +517,14 @@ export function TerminalModal({ isOpen, onClose }: Props) {
           type: "system",
           content: t("terminal.command.about.content"),
         });
+        window.setTimeout(() => {
+          onClose();
+          window.setTimeout(() => {
+            window.dispatchEvent(
+              new CustomEvent("terminal:navigate", { detail: "trajectory" }),
+            );
+          }, waitNavigationAfterClosingTerminal);
+        }, waitClosingTerminal);
         break;
 
       case "projects":
@@ -529,6 +544,14 @@ export function TerminalModal({ isOpen, onClose }: Props) {
             </Box>
           ),
         });
+        window.setTimeout(() => {
+          onClose();
+          window.setTimeout(() => {
+            window.dispatchEvent(
+              new CustomEvent("terminal:navigate", { detail: "projects" }),
+            );
+          }, waitNavigationAfterClosingTerminal);
+        }, waitClosingTerminal);
         break;
 
       case "skills":
