@@ -39,6 +39,100 @@
     "description": "A simple and intuitive Kanban board for task management."
   },
   "thanks": "Thank you for visiting my portfolio!",
+  "trajectory": {
+    "title": "Trajectory",
+    "description": "My professional journey, education, and core competencies.",
+    "summary": {
+      "title": "Professional Summary",
+      "content": "Full Stack Developer with experience since 2021 building modern, scalable web applications and microservice architectures. I build high-performance responsive portals and interfaces with React.js, Vite, Next.js, TypeScript, JavaScript, HTML5, and CSS3, as well as backend solutions with Node.js, Python, .NET, MySQL, and PostgreSQL. My experience includes RESTful APIs, WebSockets, automated testing, technical documentation, Design Systems, Puppeteer crawlers and scrapers, AI and LLM data pipelines, AWS and Azure, RabbitMQ, Kafka, CI/CD, Docker, Git, and code reviews."
+    },
+    "courses": {
+      "title": "Education",
+      "technical": {
+        "title": "Technical Computing Course",
+        "period": "2016 – 2017",
+        "content": "Training focused on computer maintenance, object-oriented programming with Java, JavaScript, PHP, HTML, MySQL databases, and systems analysis."
+      },
+      "degree": {
+        "title": "Bachelor's Degree in Information Systems | Faculdade Pitágoras",
+        "period": "2018 – 2022",
+        "content": "Focus on software engineering, database modeling and administration, and web and mobile development."
+      }
+    },
+    "experience": {
+      "title": "Professional Experience",
+      "current": {
+        "role": "Full Stack Developer",
+        "period": "05/2026 – Present",
+        "items": {
+          "0": "Developing and maintaining portals with React.js and TypeScript integrated with microservices and stable APIs.",
+          "1": "Building crawlers and scrapers with Puppeteer and Python, using AI and LLMs for text processing and analysis.",
+          "2": "Developing and consuming RESTful APIs with NestJS and Prisma ORM, plus asynchronous messaging with RabbitMQ.",
+          "3": "Modeling and optimizing MySQL and PostgreSQL databases, with deployment and support on AWS infrastructure.",
+          "4": "Implementing real-time features with WebSockets, prioritizing resilience and high availability."
+        }
+      },
+      "full_stack": {
+        "role": "Full Stack Developer",
+        "period": "06/2022 – 05/2026",
+        "items": {
+          "0": "Developing modern web interfaces with React.js and TypeScript.",
+          "1": "Developing and maintaining RESTful APIs with NestJS, Prisma ORM, and PostgreSQL.",
+          "2": "Working with Azure and Google Cloud environments, including CDN and content distribution solutions.",
+          "3": "Creating technical documentation with Swagger and VitePress, plus tests with Jest, Vitest, and Testing Library.",
+          "4": "Building Design Systems, optimizing performance and responsiveness, and contributing to code reviews, Docker, and CI/CD."
+        }
+      },
+      "internship": {
+        "role": "IT Intern",
+        "period": "01/2022 – 06/2022",
+        "items": {
+          "0": "Maintaining and evolving a PHP system.",
+          "1": "Upgrading PHP versions and integrating external applications.",
+          "2": "Developing improvements based on user-area needs.",
+          "3": "Working in QA and staging environments."
+        }
+      },
+      "support_testing": {
+        "role": "Support and Testing",
+        "period": "10/2021 – 12/2021",
+        "items": {
+          "0": "Working in a Service Desk integrated with the development team.",
+          "1": "Executing tests following the Kanban methodology.",
+          "2": "Investigating and reporting failures while applying simple fixes.",
+          "3": "Participating in software presentations and client validations."
+        }
+      },
+      "technical_support": {
+        "role": "Technical Support",
+        "period": "04/2021 – 09/2021",
+        "items": {
+          "0": "Providing local and remote support in a hospital environment.",
+          "1": "Supporting corporate systems, Active Directory, digital certificates, networks, telephony, and printers.",
+          "2": "Resolving and tracking tickets with a focus on SLA compliance."
+        }
+      },
+      "infrastructure": {
+        "role": "IT Infrastructure Intern",
+        "period": "09/2019 – 09/2020",
+        "items": {
+          "0": "Supporting networks and computer operations, including machine setup and configuration.",
+          "1": "Creating networks with PFSense and administering Windows Server.",
+          "2": "Configuring Windows and Linux environments, backups, licenses, cameras, and access control.",
+          "3": "Building foundational knowledge of cloud infrastructure."
+        }
+      },
+      "administrative": {
+        "role": "Administrative Assistant",
+        "period": "07/2018 – 09/2019",
+        "items": {
+          "0": "Managing and tracking projects in an internal system.",
+          "1": "Controlling timesheets and checking employee hours.",
+          "2": "Preparing monthly productivity reports."
+        }
+      }
+    }
+  },
   "terminal": {
     "open": "Open terminal",
     "welcome_title": "PABLO_OS [v1.0] — Dashboard terminal",
@@ -54,7 +148,7 @@
       "about": {
         "translation": "About",
         "description": "Displays information about the developer",
-        "content": "Full Stack Developer focused on modern ecosystems."
+        "content": "Opening my professional trajectory..."
       },
       "projects": {
         "translation": "Projects",
