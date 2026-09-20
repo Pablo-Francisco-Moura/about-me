@@ -75,12 +75,12 @@ export function TerminalModal({ isOpen, onClose }: Props) {
   const [history, setHistory] = useState<TypeCommandOutput[]>(() =>
     getInitialHistory(t),
   );
-  const [historyIndex, setHistoryIndex] = useState(-1);
-  const [cursorPosition, setCursorPosition] = useState(0);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isDetached, setIsDetached] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
+  const [historyIndex, setHistoryIndex] = useState(-1);
   const [isMinimizing, setIsMinimizing] = useState(false);
+  const [cursorPosition, setCursorPosition] = useState(0);
   const [isCursorActive, setIsCursorActive] = useState(false);
   const [sessionHistory, setSessionHistory] = useState<TypeCommandOutput[]>(
     () => getInitialHistory(t),
