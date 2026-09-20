@@ -1,7 +1,7 @@
 import { Subtitle } from "./Subtitle";
 import { useTranslation } from "react-i18next";
-import { EDUCATION_KEYS, EXPERIENCE_KEYS } from "../constants/trajectory";
 import { Box, Typography, useTheme } from "@mui/material";
+import { EDUCATION_KEYS, EXPERIENCE_KEYS } from "../constants/trajectory";
 
 export function Trajectory() {
   const theme = useTheme();

@@ -1,9 +1,9 @@
 import { createRoot } from "react-dom/client";
 import { I18nextProvider } from "react-i18next";
 import { usePreferencesStore } from "./store/storePreferences";
+import { StrictMode, useMemo } from "react";
 import { lightTheme, darkTheme } from "./theme";
 import { CssBaseline, ThemeProvider } from "@mui/material";
-import { StrictMode, useMemo } from "react";
 import App from "./App.tsx";
 import i18n from "./settings/i18n.ts";
 import "./settings/i18n.ts";

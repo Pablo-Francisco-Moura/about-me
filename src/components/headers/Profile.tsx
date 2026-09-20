@@ -4,6 +4,7 @@ import profileImage from "../../assets/profile.jpg";
 
 export function Profile() {
   const imageRef = useRef<HTMLImageElement | null>(null);
+
   const [isHovered, setIsHovered] = useState(false);
   const [imagePosition, setImagePosition] = useState({
     top: 0,
