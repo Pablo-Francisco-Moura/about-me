@@ -1,10 +1,10 @@
 import { motion } from "motion/react";
+import { Banner } from "./Banner";
 import { Profile } from "./Profile";
 import { BANNERS } from "../../constants/app";
 import { Controls } from "./controls";
 import { AlertMessage } from "../Alert";
 import { useRef, useState } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -13,45 +13,9 @@ interface Props {
   hidden: boolean;
 }
 
-interface ArrowProps {
-  direction: "left" | "right";
-  style?: React.CSSProperties;
-  className?: string;
-  onClick?: () => void;
-}
-
-function BannerArrow({ style, className, direction, onClick }: ArrowProps) {
-  const Icon = direction === "left" ? ChevronLeft : ChevronRight;
-
-  return (
-    <button
-      type="button"
-      className={className}
-      aria-label={direction === "left" ? "Previous banner" : "Next banner"}
-      style={{
-        ...style,
-        width: "42px",
-        color: "#fff",
-        height: "42px",
-        margin: 0,
-        border: "1px solid rgba(255, 255, 255, 0.45)",
-        padding: 0,
-        display: "flex",
-        alignItems: "center",
-        background: "rgba(0, 0, 0, 0.35)",
-        borderRadius: "50%",
-        justifyContent: "center",
-        backdropFilter: "blur(4px)",
-      }}
-      onClick={onClick}
-    >
-      <Icon size={26} strokeWidth={2} />
-    </button>
-  );
-}
-
 export function Header({ hidden }: Props) {
   const sliderRef = useRef<Slider | null>(null);
+
   const [currentSlide, setCurrentSlide] = useState(1);
 
   const resetAutoplay = () => {
@@ -76,8 +40,8 @@ export function Header({ hidden }: Props) {
     autoplay: true,
     touchMove: true,
     draggable: true,
-    prevArrow: <BannerArrow direction="left" />,
-    nextArrow: <BannerArrow direction="right" />,
+    prevArrow: <Banner side="left" />,
+    nextArrow: <Banner side="right" />,
     slidesToShow: 1,
     pauseOnHover: false,
     autoplaySpeed: 4000,
