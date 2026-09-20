@@ -14,6 +14,11 @@ interface PreferencesState {
 const getIsMobile = () =>
   typeof window !== "undefined" ? window.innerWidth <= 650 : false;
 
+const getLanguage = (): TypeLanguageCode => {
+  const language = i18n.resolvedLanguage?.split("-")[0];
+  return language === "en" ? "en" : "pt";
+};
+
 export const usePreferencesStore = create<PreferencesState>((set) => {
   const updateIsMobile = () => set({ isMobile: getIsMobile() });
 
@@ -28,7 +33,7 @@ export const usePreferencesStore = create<PreferencesState>((set) => {
       localStorage.setItem("themeMode", mode);
       set({ mode });
     },
-    lang: (i18n.language as TypeLanguageCode) || "en",
+    lang: getLanguage(),
     setLang: (lang) => {
       i18n.changeLanguage(lang);
       set({ lang });
