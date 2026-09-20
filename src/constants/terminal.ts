@@ -137,3 +137,16 @@ export const MINIMIZED_POSITION: TypeMinimizedPosition = {
   x: 24,
   y: typeof window !== "undefined" ? window.innerHeight / 2 : 24,
 } as const;
+
+export const TITLE_BAR_SX = {
+  px: 2,
+  py: 1.1,
+  cursor: "grab",
+  display: "flex",
+  bgcolor: "#161b22",
+  alignItems: "center",
+  userSelect: "none",
+  touchAction: "none",
+  borderBottom: "1px solid #30363d",
+  justifyContent: "space-between",
+};

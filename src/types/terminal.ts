@@ -41,3 +41,5 @@ export type TypeMinimizedTransitionOrigin = {
   x: number;
   y: number;
 } | null;
+
+export type TypeTranslate = (key: string) => string;
