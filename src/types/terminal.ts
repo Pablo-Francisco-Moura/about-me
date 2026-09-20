@@ -22,3 +22,22 @@ export type TypeCommandOutput = {
   content: string | string[] | ReactNode;
   timestamp?: number;
 };
+
+export type TypeMinimizeAnimation = {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  opacity: number;
+  borderRadius: number;
+};
+
+export type TypeMinimizedPosition = {
+  x: number;
+  y: number;
+};
+
+export type TypeMinimizedTransitionOrigin = {
+  x: number;
+  y: number;
+} | null;
