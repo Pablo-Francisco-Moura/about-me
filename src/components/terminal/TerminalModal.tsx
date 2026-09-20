@@ -14,12 +14,17 @@ import type {
   KeyboardEvent as ReactKeyboardEvent,
 } from "react";
 import type { TypeCommandOutput } from "../../types/terminal";
+import {
+  CMDS,
+  HELP_COMMAND,
+  COMMAND_PRIORITY,
+  TERMINAL_TIMINGS,
+} from "../../constants/terminal";
 import { Trans } from "react-i18next";
 import { useTranslation } from "react-i18next";
 import { usePreferencesStore } from "../../store/storePreferences";
 import { CONTACTS, SKILLS, PROJECTS } from "../../constants/app";
 import { useEffect, useRef, useState } from "react";
-import { CMDS, COMMAND_PRIORITY, HELP_COMMAND } from "../../constants/terminal";
 import { X, Maximize2, Terminal as TerminalIcon } from "lucide-react";
 import MinimizeIcon from "@mui/icons-material/Minimize";
 
@@ -60,12 +65,6 @@ const getResponsiveTerminalSize = (isMobileView: boolean) => {
 
   return { width: 700, height: 350 };
 };
-
-// Wait 2s before closing the terminal.
-const waitClosingTerminal = 2000;
-
-// Performs the navigation 350 ms after closing the terminal.
-const waitNavigationAfterClosingTerminal = 500;
 
 export function TerminalModal({ isOpen, onClose }: Props) {
   const { t } = useTranslation();
@@ -523,8 +522,8 @@ export function TerminalModal({ isOpen, onClose }: Props) {
             window.dispatchEvent(
               new CustomEvent("terminal:navigate", { detail: "trajectory" }),
             );
-          }, waitNavigationAfterClosingTerminal);
-        }, waitClosingTerminal);
+          }, TERMINAL_TIMINGS.waitNavigationAfterClosingTerminal);
+        }, TERMINAL_TIMINGS.waitClosingTerminal);
         break;
 
       case "projects":
@@ -550,8 +549,8 @@ export function TerminalModal({ isOpen, onClose }: Props) {
             window.dispatchEvent(
               new CustomEvent("terminal:navigate", { detail: "projects" }),
             );
-          }, waitNavigationAfterClosingTerminal);
-        }, waitClosingTerminal);
+          }, TERMINAL_TIMINGS.waitNavigationAfterClosingTerminal);
+        }, TERMINAL_TIMINGS.waitClosingTerminal);
         break;
 
       case "skills":
@@ -780,7 +779,7 @@ export function TerminalModal({ isOpen, onClose }: Props) {
 
     window.setTimeout(() => {
       setIsMinimizing(false);
-    }, 600);
+    }, TERMINAL_TIMINGS.minimizeAnimationDuration);
   };
 
   const handleRestore = () => {
@@ -1260,8 +1259,7 @@ export function TerminalModal({ isOpen, onClose }: Props) {
             overflow: "hidden",
             boxShadow: "0 24px 80px rgba(0, 0, 0, 0.45)",
             transform: "translate(-50%, -50%)",
-            transition:
-              "left 0.6s cubic-bezier(0.2, 0.8, 0.2, 1.1), top 0.6s cubic-bezier(0.2, 0.8, 0.2, 1.1), width 0.6s cubic-bezier(0.2, 0.8, 0.2, 1.1), height 0.6s cubic-bezier(0.2, 0.8, 0.2, 1.1), border-radius 0.6s cubic-bezier(0.2, 0.8, 0.2, 1.1), opacity 0.25s ease",
+            transition: `left ${TERMINAL_TIMINGS.minimizeAnimationDuration}ms cubic-bezier(0.2, 0.8, 0.2, 1.1), top ${TERMINAL_TIMINGS.minimizeAnimationDuration}ms cubic-bezier(0.2, 0.8, 0.2, 1.1), width ${TERMINAL_TIMINGS.minimizeAnimationDuration}ms cubic-bezier(0.2, 0.8, 0.2, 1.1), height ${TERMINAL_TIMINGS.minimizeAnimationDuration}ms cubic-bezier(0.2, 0.8, 0.2, 1.1), border-radius ${TERMINAL_TIMINGS.minimizeAnimationDuration}ms cubic-bezier(0.2, 0.8, 0.2, 1.1), opacity 0.25s ease`,
             borderRadius: `${minimizeAnimation.borderRadius}px`,
             pointerEvents: "none",
           }}
@@ -1302,10 +1300,10 @@ export function TerminalModal({ isOpen, onClose }: Props) {
             borderRadius: "50%",
             justifyContent: "center",
             animation: minimizedTransitionOrigin
-              ? "terminalPulse 1.4s infinite, terminalFloat 0.9s cubic-bezier(0.2, 0.8, 0.2, 1.1)"
+              ? `terminalPulse 1.4s infinite, terminalFloat ${TERMINAL_TIMINGS.minimizeAnimationDuration}ms cubic-bezier(0.2, 0.8, 0.2, 1.1)`
               : "terminalPulse 1.4s infinite",
             transition: minimizedTransitionOrigin
-              ? "left 0.9s cubic-bezier(0.2, 0.8, 0.2, 1.1), top 0.9s cubic-bezier(0.2, 0.8, 0.2, 1.1), transform 0.9s cubic-bezier(0.2, 0.8, 0.2, 1.1)"
+              ? `left ${TERMINAL_TIMINGS.minimizeAnimationDuration}ms cubic-bezier(0.2, 0.8, 0.2, 1.1), top ${TERMINAL_TIMINGS.minimizeAnimationDuration}ms cubic-bezier(0.2, 0.8, 0.2, 1.1), transform ${TERMINAL_TIMINGS.minimizeAnimationDuration}ms cubic-bezier(0.2, 0.8, 0.2, 1.1)`
               : "transform 0.2s ease, box-shadow 0.2s ease",
             "@keyframes terminalPulse": {
               "0%, 100%": {

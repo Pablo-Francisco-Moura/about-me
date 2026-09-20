@@ -110,3 +110,11 @@ export const CMDS: TypeCMD[] = [
     description: "terminal.command.quit.description",
   },
 ] as const;
+
+export const TERMINAL_TIMINGS = {
+  waitClosingTerminal: 2000, // Wait 2s before closing the terminal.
+
+  waitNavigationAfterClosingTerminal: 500, // Performs the navigation 350 ms after closing the terminal.
+
+  minimizeAnimationDuration: 1000, // Duration of the minimize animation in 1s.
+} as const;
