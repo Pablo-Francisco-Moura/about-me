@@ -8,63 +8,39 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
-import type {
-  FormEvent,
-  PointerEvent as ReactPointerEvent,
-  KeyboardEvent as ReactKeyboardEvent,
-} from "react";
-import type { TypeCommandOutput } from "../../types/terminal";
 import {
   CMDS,
   HELP_COMMAND,
   COMMAND_PRIORITY,
   TERMINAL_TIMINGS,
+  MINIMIZE_ANIMATION,
+  MINIMIZED_POSITION,
 } from "../../constants/terminal";
+import {
+  getInitialHistory,
+  getResponsiveTerminalSize,
+} from "../../utils/terminal";
 import { Trans } from "react-i18next";
 import { useTranslation } from "react-i18next";
 import { usePreferencesStore } from "../../store/storePreferences";
 import { CONTACTS, SKILLS, PROJECTS } from "../../constants/app";
 import { useEffect, useRef, useState } from "react";
 import { X, Maximize2, Terminal as TerminalIcon } from "lucide-react";
+import type {
+  FormEvent,
+  PointerEvent as ReactPointerEvent,
+  KeyboardEvent as ReactKeyboardEvent,
+} from "react";
+import type {
+  TypeCommandOutput,
+  TypeMinimizedTransitionOrigin,
+} from "../../types/terminal";
 import MinimizeIcon from "@mui/icons-material/Minimize";
 
 interface Props {
   isOpen: boolean;
   onClose: () => void;
 }
-
-const getInitialHistory = (
-  translate: (key: string) => string,
-): TypeCommandOutput[] => [
-  {
-    id: 1,
-    type: "system",
-    content: translate("terminal.welcome_title"),
-  },
-  {
-    id: 2,
-    type: "system",
-    content: translate("terminal.welcome_help"),
-  },
-];
-
-const getResponsiveTerminalSize = (isMobileView: boolean) => {
-  if (typeof window === "undefined") {
-    return { width: 700, height: 350 };
-  }
-
-  if (isMobileView) {
-    const width = Math.round(window.innerWidth * 0.7);
-    const height = Math.round(window.innerHeight * 0.4);
-
-    return {
-      width: Math.min(width, window.innerWidth - 48),
-      height: Math.min(height, window.innerHeight - 48),
-    };
-  }
-
-  return { width: 700, height: 350 };
-};
 
 export function TerminalModal({ isOpen, onClose }: Props) {
   const { t } = useTranslation();
@@ -85,22 +61,12 @@ export function TerminalModal({ isOpen, onClose }: Props) {
   const [sessionHistory, setSessionHistory] = useState<TypeCommandOutput[]>(
     () => getInitialHistory(t),
   );
-  const [minimizeAnimation, setMinimizeAnimation] = useState({
-    x: 0,
-    y: 0,
-    width: 0,
-    height: 0,
-    borderRadius: 12,
-    opacity: 1,
-  });
-  const [minimizedPosition, setMinimizedPosition] = useState({
-    x: 24,
-    y: typeof window !== "undefined" ? window.innerHeight / 2 : 24,
-  });
-  const [minimizedTransitionOrigin, setMinimizedTransitionOrigin] = useState<{
-    x: number;
-    y: number;
-  } | null>(null);
+  const [minimizeAnimation, setMinimizeAnimation] =
+    useState(MINIMIZE_ANIMATION);
+  const [minimizedPosition, setMinimizedPosition] =
+    useState(MINIMIZED_POSITION);
+  const [minimizedTransitionOrigin, setMinimizedTransitionOrigin] =
+    useState<TypeMinimizedTransitionOrigin>(null);
 
   const inputRef = useRef<HTMLInputElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
