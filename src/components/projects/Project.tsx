@@ -40,7 +40,7 @@ export function Project({ project }: Props) {
         onClick={() => window.open(project.link, "_blank")}
       >
         <CardMedia
-          alt={project.title}
+          alt={t(project.title)}
           width="140"
           image={project.image}
           height="140"

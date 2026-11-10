@@ -1,5 +1,5 @@
+import { Modal } from "./Modal";
 import { useState } from "react";
-import { TerminalModal } from "./TerminalModal";
 import { useTranslation } from "react-i18next";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
@@ -63,7 +63,7 @@ export function Terminal({ hide = false }: Props) {
         </Tooltip>
       )}
 
-      <TerminalModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
+      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} />
     </>
   );
 }

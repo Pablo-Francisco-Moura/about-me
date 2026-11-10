@@ -1,4 +1,9 @@
-import type { TypeCMD, TypeHelpCommand } from "../types/terminal";
+import type {
+  TypeCMD,
+  TypeHelpCommand,
+  TypeMinimizeAnimation,
+  TypeMinimizedPosition,
+} from "../types/terminal";
 import { CONTACTS } from "./app";
 
 export const HELP_COMMAND: TypeHelpCommand = {
@@ -110,3 +115,38 @@ export const CMDS: TypeCMD[] = [
     description: "terminal.command.quit.description",
   },
 ] as const;
+
+export const TERMINAL_TIMINGS = {
+  waitClosingTerminal: 2000, // Wait 2s before closing the terminal.
+
+  waitNavigationAfterClosingTerminal: 500, // Performs the navigation 350 ms after closing the terminal.
+
+  minimizeAnimationDuration: 1000, // Duration of the minimize animation in 1s.
+} as const;
+
+export const MINIMIZE_ANIMATION: TypeMinimizeAnimation = {
+  x: 0,
+  y: 0,
+  width: 0,
+  height: 0,
+  opacity: 1,
+  borderRadius: 12,
+} as const;
+
+export const MINIMIZED_POSITION: TypeMinimizedPosition = {
+  x: 24,
+  y: typeof window !== "undefined" ? window.innerHeight / 2 : 24,
+} as const;
+
+export const TITLE_BAR_SX = {
+  px: 2,
+  py: 1.1,
+  cursor: "grab",
+  display: "flex",
+  bgcolor: "#161b22",
+  alignItems: "center",
+  userSelect: "none",
+  touchAction: "none",
+  borderBottom: "1px solid #30363d",
+  justifyContent: "space-between",
+};

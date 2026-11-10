@@ -26,6 +26,10 @@
     "share_info": "Clique para copiar o link",
     "open_info": "Clique para acessar o projeto"
   },
+  "task_manager": {
+    "title": "Task Manager",
+    "description": "Aplicação para organizar projetos e tarefas, acompanhar prazos e colaborar em workspaces compartilhados."
+  },
   "finance_manager": {
     "title": "Gerenciador Financeiro",
     "description": "Plataforma de gestão financeira para controle de despesas."
