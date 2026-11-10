@@ -26,6 +26,10 @@
     "share_info": "Click to copy the link",
     "open_info": "Click to access the project"
   },
+  "task_manager": {
+    "title": "Task Manager",
+    "description": "An app to organize projects and tasks, track deadlines, and collaborate in shared workspaces."
+  },
   "finance_manager": {
     "title": "Finance Manager",
     "description": "Financial management platform for expense control."

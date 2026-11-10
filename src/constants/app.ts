@@ -16,6 +16,7 @@ import whatsappImage from "../assets/contacts/whatsapp.png";
 import linkedInImage from "../assets/contacts/linkedin.png";
 import miniKanbanImage from "../assets/projects/miniKanban.png";
 import gitHubWhiteImage from "../assets/contacts/gitHubWhite.png";
+import taskManagerImage from "../assets/projects/taskManager.png";
 import myGuidelinesImage from "../assets/projects/myGuidelines.png";
 import financeManagerImage from "../assets/projects/financeManager.png";
 
@@ -162,6 +163,12 @@ export const CONTACTS: TypeContact[] = [
 ] as const;
 
 export const PROJECTS: TypeProject[] = [
+  {
+    link: "https://task-manager-pablo-moura.vercel.app/",
+    title: "task_manager.title",
+    image: taskManagerImage,
+    description: "task_manager.description",
+  },
   {
     link: "https://finance-manager-eight-beta.vercel.app",
     title: "finance_manager.title",
